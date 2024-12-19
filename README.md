@@ -12,5 +12,3 @@ Other: <br>
 ![image](https://img.shields.io/badge/maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
 ## Solved Problems
-
-## How to build the project on your own
