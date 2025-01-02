@@ -1,8 +1,8 @@
-package com.project.airbnb.controller;
+package com.project.airbnb.controllers;
 
 import com.github.javafaker.Faker;
-import com.project.airbnb.model.User;
-import com.project.airbnb.repository.UserRepository;
+import com.project.airbnb.models.User;
+import com.project.airbnb.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

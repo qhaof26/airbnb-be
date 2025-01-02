@@ -1,4 +1,4 @@
-package com.project.airbnb.model;
+package com.project.airbnb.models;
 
 import jakarta.persistence.*;
 import lombok.*;
