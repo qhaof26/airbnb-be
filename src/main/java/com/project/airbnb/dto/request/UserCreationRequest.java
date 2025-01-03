@@ -1,6 +1,5 @@
 package com.project.airbnb.dto.request;
 
-import com.project.airbnb.models.Role;
 import lombok.*;
 
 @Getter
@@ -11,7 +10,7 @@ import lombok.*;
 public class UserCreationRequest {
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private String email;
 }

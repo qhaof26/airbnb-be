@@ -1,7 +1,6 @@
 package com.project.airbnb.dto.response;
 
 import lombok.*;
-import org.springframework.http.HttpStatusCode;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -13,6 +12,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ErrorResponse implements Serializable {
     private Instant timestamp;
-    private HttpStatusCode statusCode;
+    private int statusCode;
     private String message;
 }

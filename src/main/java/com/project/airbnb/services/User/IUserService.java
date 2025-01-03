@@ -5,5 +5,5 @@ import com.project.airbnb.dto.response.APIResponse;
 import com.project.airbnb.dto.response.UserResponse;
 
 public interface IUserService {
-    //UserResponse createNewUser(UserCreationRequest request);
+    UserResponse createNewUser(UserCreationRequest request);
 }

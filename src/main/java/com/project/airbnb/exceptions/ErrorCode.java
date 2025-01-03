@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
+    //ROLE
+    ROLE_EXISTED(HttpStatus.BAD_REQUEST, "Role existed !"),
+    ROLE_NOT_EXISTED(HttpStatus.NOT_FOUND, "Role not existed !"),
     //USER
     USER_NOT_EXISTED(HttpStatus.NOT_FOUND, "User not found !"),
     EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed !"),
-    USERNAME_EXISTED(HttpStatus.BAD_REQUEST, "User existed !")
+    USERNAME_EXISTED(HttpStatus.BAD_REQUEST, "Username existed !")
     ;
 
     private final HttpStatusCode statusCode;
