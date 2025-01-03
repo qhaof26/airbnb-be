@@ -2,6 +2,7 @@ package com.project.airbnb.services.User;
 
 import com.project.airbnb.constants.PredefinedRole;
 import com.project.airbnb.dto.request.UserCreationRequest;
+import com.project.airbnb.dto.request.UserUpdateRequest;
 import com.project.airbnb.dto.response.PageResponse;
 import com.project.airbnb.dto.response.UserResponse;
 import com.project.airbnb.exceptions.AppException;
@@ -40,9 +41,24 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public PageResponse<List<UserResponse>> fetchAllUser(int pageNo, int pageSize) {
+    public PageResponse<List<UserResponse>> fetchAllUserActive(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<User> pageUser = userRepository.findAll(pageable);
+        Page<User> pageUser = userRepository.findAllUserActive(pageable);
+        List<UserResponse> userResponses = pageUser.getContent().stream().map(userMapper::toUserResponse).toList();
+
+        return PageResponse.<List<UserResponse>>builder()
+                .page(pageable.getPageNumber()+1)
+                .size(pageable.getPageSize())
+                .totalPage(pageUser.getTotalPages())
+                .totalElement(pageUser.getTotalElements())
+                .data(userResponses)
+                .build();
+    }
+
+    @Override
+    public PageResponse<List<UserResponse>> fetchAllUserBlock(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<User> pageUser = userRepository.findAllUserBlock(pageable);
         List<UserResponse> userResponses = pageUser.getContent().stream().map(userMapper::toUserResponse).toList();
 
         return PageResponse.<List<UserResponse>>builder()
@@ -82,10 +98,31 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @Transactional
+    public UserResponse changeStatus(String userId, boolean status) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setActive(status);
+        Role guestRole = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        UserHasRole userHasRole = UserHasRole.builder()
+                .role(guestRole)
+                .user(user)
+                .build();
+        userHasRoleRepository.save(userHasRole);
+
+        return userMapper.toUserResponse(user);
+    }
+
+
+    @Override
+    @Transactional
     public boolean removeUser(String userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         if(user.isActive()) user.setActive(false);
         userRepository.save(user);
+
+        List<String> userHasRoleId = userHasRoleRepository.findAllByUserId(userId).stream().map(UserHasRole::getId).toList();
+        if(!userHasRoleId.isEmpty()) userHasRoleRepository.deleteAllById(userHasRoleId);
+
         return true;
     }
 }

@@ -40,6 +40,7 @@ public class RoleUserInitializer {
         return args -> {
 
             if(!roleRepository.existsByRoleName(PredefinedRole.ADMIN_ROLE)){
+                log.info("In method init role ADMIN");
                 Role adminRole = Role.builder()
                         .roleName(PredefinedRole.ADMIN_ROLE)
                         .description("This is the administrator and has all the permissions")
@@ -63,6 +64,7 @@ public class RoleUserInitializer {
                         .user(adminUser)
                         .build();
                 userHasRoleRepository.save(userHasRole);
+                log.info("Done method init role ADMIN");
             }
 
             Optional<Role> hostRole = roleRepository.findByRoleName(PredefinedRole.HOST_ROLE);

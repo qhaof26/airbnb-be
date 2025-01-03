@@ -1,10 +1,11 @@
 package com.project.airbnb.controllers;
 
 import com.github.javafaker.Faker;
-import com.project.airbnb.models.User;
-import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.dto.request.UserCreationRequest;
+import com.project.airbnb.services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,24 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/fake")
 public class FakeApiController {
-    public final UserRepository userRepository;
-
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     @PostMapping
     public ResponseEntity<String> fakeUser(){
         Faker faker = new Faker();
-        for(int i = 0; i < 1000; i++){
-            String email = faker.internet().emailAddress();
-            if(userRepository.existsByEmail(email)){
-                continue;
-            }
-            User user = User.builder()
+        for(int i = 0; i < 100; i++){
+            String password = passwordEncoder.encode("123456");
+
+            UserCreationRequest request = UserCreationRequest.builder()
                     .firstName(faker.name().firstName())
                     .lastName(faker.name().lastName())
                     .username(faker.name().username())
-                    .email(email)
+                    .email(faker.internet().emailAddress())
+                    .password(password)
                     .build();
             try {
-                userRepository.save(user);
+                userService.createNewUser(request);
             } catch (Exception e){
                 return ResponseEntity.badRequest().body("Add user fail");
             }
