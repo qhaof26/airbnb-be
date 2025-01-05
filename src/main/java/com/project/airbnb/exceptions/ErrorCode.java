@@ -12,7 +12,10 @@ public enum ErrorCode {
     //USER
     USER_NOT_EXISTED(HttpStatus.NOT_FOUND, "User not found !"),
     EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed !"),
-    USERNAME_EXISTED(HttpStatus.BAD_REQUEST, "Username existed !")
+    USERNAME_EXISTED(HttpStatus.BAD_REQUEST, "Username existed !"),
+    //LOCATION
+    PROVINCE_NOT_EXISTED(HttpStatus.NOT_FOUND, "Province not found !"),
+    DISTRICT_NOT_EXISTED(HttpStatus.NOT_FOUND, "District not found !")
     ;
 
     private final HttpStatusCode statusCode;

@@ -13,11 +13,9 @@ import java.util.List;
 @Table(name = "tbl_district")
 public class District {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private String code;
 
     @ManyToOne
     @JoinColumn(name = "province_id")

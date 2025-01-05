@@ -14,3 +14,8 @@ spring:
 
 api:
   prefix: "/api/v1"
+
+url:
+  api-province: "https://provinces.open-api.vn/api/p"
+  api-district: "https://provinces.open-api.vn/api/d"
+  api-ward: "https://provinces.open-api.vn/api/w/"

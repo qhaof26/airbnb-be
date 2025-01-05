@@ -2,8 +2,6 @@ package com.project.airbnb.dto.response;
 
 import lombok.*;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @Builder

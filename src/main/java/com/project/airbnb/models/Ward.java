@@ -12,13 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_ward")
-public class Ward extends AbstractAuditingEntity{
+public class Ward{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String wardName;
-    private String code;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "district_id")
