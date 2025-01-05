@@ -18,7 +18,10 @@ public enum ErrorCode {
     DISTRICT_NOT_EXISTED(HttpStatus.NOT_FOUND, "District not existed !"),
     //CATEGORY
     CATEGORY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Category not existed !"),
-    CATEGORY_EXISTED(HttpStatus.BAD_REQUEST, "Category existed !")
+    CATEGORY_EXISTED(HttpStatus.BAD_REQUEST, "Category existed !"),
+    //AMENITY
+    AMENITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Amenity not existed !"),
+    AMENITY_EXISTED(HttpStatus.BAD_REQUEST, "Amenity existed !")
     ;
 
     private final HttpStatusCode statusCode;
