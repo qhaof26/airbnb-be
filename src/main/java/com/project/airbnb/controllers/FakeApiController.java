@@ -19,7 +19,7 @@ public class FakeApiController {
     @PostMapping
     public ResponseEntity<String> fakeUser(){
         Faker faker = new Faker();
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 50; i++){
             String password = passwordEncoder.encode("123456");
 
             UserCreationRequest request = UserCreationRequest.builder()

@@ -5,10 +5,9 @@ import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;
 import com.project.airbnb.models.User;
-import com.project.airbnb.models.UserHasRole;
 import com.project.airbnb.repositories.RoleRepository;
-import com.project.airbnb.repositories.UserHasRoleRepository;
 import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.services.Location.LocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +21,11 @@ import java.util.Optional;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class RoleUserInitializer {
+public class DatabaseInitializer {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserHasRoleRepository userHasRoleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LocationService provinceService;
 
     @NonFinal
     static final String ADMIN_EMAIL = "admin@gmail.com";
@@ -55,15 +54,10 @@ public class RoleUserInitializer {
                         .username(ADMIN_USERNAME)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .email(ADMIN_EMAIL)
-                        .isActive(true)
+                        .role(adminRole)
                         .build();
                 userRepository.save(adminUser);
 
-                UserHasRole userHasRole = UserHasRole.builder()
-                        .role(adminRole)
-                        .user(adminUser)
-                        .build();
-                userHasRoleRepository.save(userHasRole);
                 log.info("Done method init role ADMIN");
             }
 
@@ -82,6 +76,13 @@ public class RoleUserInitializer {
                         .description("This is guest role")
                         .permissions(null)
                         .build());
+            }
+
+            if(provinceService.getProvinces().isEmpty()){
+                provinceService.fetchAndSaveProvinces();
+                provinceService.fetchAndSaveDistricts();
+                provinceService.fetchAndSaveWards();
+                log.warn("Inside method init");
             }
         };
     }

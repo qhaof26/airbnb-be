@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Setter
 @JsonIgnoreProperties(value = {"createdDate", "lastModifiedDate" }, allowGetters = true)
-public abstract class AbstractAuditingEntity implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)

@@ -3,6 +3,7 @@ package com.project.airbnb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_role")
-public class Role extends AbstractAuditingEntity{
+public class Role extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -25,8 +26,13 @@ public class Role extends AbstractAuditingEntity{
     private String description;
 
     @OneToMany(mappedBy = "role")
-    private Set<UserHasRole> users;
+    private Set<User> users;
 
-    @OneToMany(mappedBy = "role")
-    private Set<RoleHasPermission> permissions;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions = new HashSet<>();
 }

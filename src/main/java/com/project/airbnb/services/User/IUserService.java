@@ -11,6 +11,6 @@ public interface IUserService {
     PageResponse<List<UserResponse>> fetchAllUserActive(int pageNo, int pageSize);
     PageResponse<List<UserResponse>> fetchAllUserBlock(int pageNo, int pageSize);
     UserResponse createNewUser(UserCreationRequest request);
-    UserResponse changeStatus(String userId, boolean status);
+    UserResponse changeStatus(String userId, Boolean status);
     boolean removeUser(String userId);
 }

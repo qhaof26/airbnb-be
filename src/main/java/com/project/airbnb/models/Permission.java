@@ -2,6 +2,7 @@ package com.project.airbnb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,6 @@ public class Permission {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "permission")
-    private Set<RoleHasPermission> roles;
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles = new HashSet<>();
 }

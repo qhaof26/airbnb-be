@@ -2,16 +2,13 @@ package com.project.airbnb.services.User;
 
 import com.project.airbnb.constants.PredefinedRole;
 import com.project.airbnb.dto.request.UserCreationRequest;
-import com.project.airbnb.dto.request.UserUpdateRequest;
 import com.project.airbnb.dto.response.PageResponse;
 import com.project.airbnb.dto.response.UserResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;
 import com.project.airbnb.models.User;
-import com.project.airbnb.models.UserHasRole;
 import com.project.airbnb.repositories.RoleRepository;
-import com.project.airbnb.repositories.UserHasRoleRepository;
 import com.project.airbnb.repositories.UserRepository;
 import com.project.airbnb.mapper.UserMapper;
 import jakarta.transaction.Transactional;
@@ -23,13 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService{
     private final UserRepository userRepository;
-    private final UserHasRoleRepository userHasRoleRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -75,6 +70,7 @@ public class UserService implements IUserService{
     public UserResponse createNewUser(UserCreationRequest request) {
         if(userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USERNAME_EXISTED);
         if(userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        Role role = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         String password = passwordEncoder.encode(request.getPassword());
         User newUser = User.builder()
@@ -83,32 +79,24 @@ public class UserService implements IUserService{
                 .username(request.getUsername())
                 .password(password)
                 .email(request.getEmail())
-                .isActive(true)
+                .role(role)
                 .build();
         userRepository.save(newUser);
-
-        Role guestRole = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        UserHasRole userHasRole = UserHasRole.builder()
-                .role(guestRole)
-                .user(newUser)
-                .build();
-        userHasRoleRepository.save(userHasRole);
 
         return userMapper.toUserResponse(newUser);
     }
 
     @Override
     @Transactional
-    public UserResponse changeStatus(String userId, boolean status) {
+    public UserResponse changeStatus(String userId, Boolean status) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        user.setActive(status);
-        Role guestRole = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        UserHasRole userHasRole = UserHasRole.builder()
-                .role(guestRole)
-                .user(user)
-                .build();
-        userHasRoleRepository.save(userHasRole);
+        user.setStatus(status);
+        if(user.getRole() == null){
+            Role role = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+            user.setRole(role);
+        }
 
+        userRepository.save(user);
         return userMapper.toUserResponse(user);
     }
 
@@ -117,11 +105,9 @@ public class UserService implements IUserService{
     @Transactional
     public boolean removeUser(String userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        if(user.isActive()) user.setActive(false);
+        if(user.getStatus()) user.setStatus(Boolean.FALSE);
+        user.setRole(null);
         userRepository.save(user);
-
-        List<String> userHasRoleId = userHasRoleRepository.findAllByUserId(userId).stream().map(UserHasRole::getId).toList();
-        if(!userHasRoleId.isEmpty()) userHasRoleRepository.deleteAllById(userHasRoleId);
 
         return true;
     }

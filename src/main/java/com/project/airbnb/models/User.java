@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_user")
-public class User extends AbstractAuditingEntity{
+public class User extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -38,9 +39,20 @@ public class User extends AbstractAuditingEntity{
     private Instant dateHostStarted;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private Boolean status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserHasRole> roles;
+    private List<Booking> bookings = new ArrayList<>();
+
+    @PrePersist
+    public void onCreate(){
+        if(status == null) {
+            this.status = Boolean.TRUE;
+        }
+    }
 
 }

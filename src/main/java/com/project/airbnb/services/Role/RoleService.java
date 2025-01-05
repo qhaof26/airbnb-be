@@ -7,9 +7,8 @@ import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.RoleMapper;
 import com.project.airbnb.models.Role;
-import com.project.airbnb.models.UserHasRole;
 import com.project.airbnb.repositories.RoleRepository;
-import com.project.airbnb.repositories.UserHasRoleRepository;
+import com.project.airbnb.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import java.util.List;
 @Slf4j
 public class RoleService implements IRoleService{
     private final RoleRepository roleRepository;
-    private final UserHasRoleRepository userHasRoleRepository;
+    private final UserRepository userRepository;
     private final RoleMapper roleMapper;
 
     @Override
@@ -65,9 +64,9 @@ public class RoleService implements IRoleService{
     @Transactional
     public boolean removeRole(String roleId) {
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        role.getUsers().forEach(user -> user.setRole(null));
+        userRepository.saveAll(role.getUsers());
 
-        List<String> userHasRoleId = userHasRoleRepository.findAllByRoleId(roleId).stream().map(UserHasRole::getId).toList();
-        if(!userHasRoleId.isEmpty()) userHasRoleRepository.deleteAllById(userHasRoleId);
         roleRepository.delete(role);
         return true;
     }
