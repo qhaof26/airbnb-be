@@ -23,7 +23,7 @@ public class RoleController {
         return APIResponse.<RoleResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Fetch role successful")
-                .data(roleService.fetchRoleByName(roleName))
+                .data(roleService.getRoleByName(roleName))
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class RoleController {
         return APIResponse.<PageResponse<List<RoleResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetch all role successful")
-                .data(roleService.fetchAllRole(pageNo, pageSize))
+                .data(roleService.getAllRole(pageNo, pageSize))
                 .build();
     }
 

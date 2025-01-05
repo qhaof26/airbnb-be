@@ -30,13 +30,13 @@ public class UserService implements IUserService{
     private final UserMapper userMapper;
 
     @Override
-    public UserResponse fetchUserById(String userId) {
+    public UserResponse getUserById(String userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
     }
 
     @Override
-    public PageResponse<List<UserResponse>> fetchAllUserActive(int pageNo, int pageSize) {
+    public PageResponse<List<UserResponse>> getAllUserActive(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<User> pageUser = userRepository.findAllUserActive(pageable);
         List<UserResponse> userResponses = pageUser.getContent().stream().map(userMapper::toUserResponse).toList();
@@ -51,7 +51,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public PageResponse<List<UserResponse>> fetchAllUserBlock(int pageNo, int pageSize) {
+    public PageResponse<List<UserResponse>> getAllUserBlock(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<User> pageUser = userRepository.findAllUserBlock(pageable);
         List<UserResponse> userResponses = pageUser.getContent().stream().map(userMapper::toUserResponse).toList();

@@ -19,35 +19,35 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public APIResponse<UserResponse> fetchUserById(@PathVariable String userId){
+    public APIResponse<UserResponse> getUserById(@PathVariable String userId){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Fetch user successful")
-                .data(userService.fetchUserById(userId))
+                .data(userService.getUserById(userId))
                 .build();
     }
 
     @GetMapping("/active")
-    public APIResponse<PageResponse<List<UserResponse>>> fetchAllUserActive(
+    public APIResponse<PageResponse<List<UserResponse>>> getAllUserActive(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ){
         return APIResponse.<PageResponse<List<UserResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetch all user active successful")
-                .data(userService.fetchAllUserActive(pageNo, pageSize))
+                .data(userService.getAllUserActive(pageNo, pageSize))
                 .build();
     }
 
     @GetMapping("/block")
-    public APIResponse<PageResponse<List<UserResponse>>> fetchAllUserBlock(
+    public APIResponse<PageResponse<List<UserResponse>>> getAllUserBlock(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ){
         return APIResponse.<PageResponse<List<UserResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetch all user block successful")
-                .data(userService.fetchAllUserBlock(pageNo, pageSize))
+                .data(userService.getAllUserBlock(pageNo, pageSize))
                 .build();
     }
 

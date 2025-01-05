@@ -7,9 +7,9 @@ import com.project.airbnb.dto.response.UserResponse;
 import java.util.List;
 
 public interface IUserService {
-    UserResponse fetchUserById(String userId);
-    PageResponse<List<UserResponse>> fetchAllUserActive(int pageNo, int pageSize);
-    PageResponse<List<UserResponse>> fetchAllUserBlock(int pageNo, int pageSize);
+    UserResponse getUserById(String userId);
+    PageResponse<List<UserResponse>> getAllUserActive(int pageNo, int pageSize);
+    PageResponse<List<UserResponse>> getAllUserBlock(int pageNo, int pageSize);
     UserResponse createNewUser(UserCreationRequest request);
     UserResponse changeStatus(String userId, Boolean status);
     boolean removeUser(String userId);

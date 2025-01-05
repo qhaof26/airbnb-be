@@ -20,6 +20,6 @@ public class Category extends AbstractEntity{
     @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Listing> listings;
 }

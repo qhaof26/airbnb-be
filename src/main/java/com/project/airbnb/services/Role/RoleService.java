@@ -28,13 +28,13 @@ public class RoleService implements IRoleService{
     private final RoleMapper roleMapper;
 
     @Override
-    public RoleResponse fetchRoleByName(String roleName) {
+    public RoleResponse getRoleByName(String roleName) {
         Role role = roleRepository.findByRoleName(roleName).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         return roleMapper.toRoleResponse(role);
     }
 
     @Override
-    public PageResponse<List<RoleResponse>> fetchAllRole(int pageNo, int pageSize) {
+    public PageResponse<List<RoleResponse>> getAllRole(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
         Page<Role> pageRole = roleRepository.findAll(pageable);
         List<RoleResponse> roleResponses = pageRole.stream().map(roleMapper::toRoleResponse).toList();
