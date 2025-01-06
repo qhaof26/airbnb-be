@@ -25,7 +25,10 @@ public enum ErrorCode {
     AMENITY_EXISTED(HttpStatus.BAD_REQUEST, "Amenity existed !"),
     //LISTING
     LISTING_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing not existed !"),
-    LISTING_EXISTED(HttpStatus.BAD_REQUEST, "Listing existed !")
+    LISTING_EXISTED(HttpStatus.BAD_REQUEST, "Listing existed !"),
+    //LISTING_AVAILABILITY
+    LISTING_AVAILABILITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing availability not existed !"),
+    LISTING_AVAILABILITY_EXISTED(HttpStatus.BAD_REQUEST, "Listing availability existed !"),
     ;
 
     private final HttpStatusCode statusCode;
