@@ -1,9 +1,6 @@
-package com.project.airbnb.dto.response;
+package com.project.airbnb.dtos.response;
 
-import com.project.airbnb.models.Role;
 import lombok.*;
-
-import java.util.Set;
 
 @Getter
 @Setter

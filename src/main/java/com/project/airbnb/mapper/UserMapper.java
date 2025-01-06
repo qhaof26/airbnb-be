@@ -1,6 +1,6 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dto.response.UserResponse;
+import com.project.airbnb.dtos.response.UserResponse;
 import com.project.airbnb.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

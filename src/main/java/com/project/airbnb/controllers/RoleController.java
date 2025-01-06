@@ -1,9 +1,9 @@
 package com.project.airbnb.controllers;
 
-import com.project.airbnb.dto.request.RoleCreationRequest;
-import com.project.airbnb.dto.response.APIResponse;
-import com.project.airbnb.dto.response.PageResponse;
-import com.project.airbnb.dto.response.RoleResponse;
+import com.project.airbnb.dtos.request.RoleCreationRequest;
+import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.dtos.response.RoleResponse;
 import com.project.airbnb.services.Role.RoleService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

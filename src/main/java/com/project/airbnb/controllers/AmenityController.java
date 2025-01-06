@@ -1,9 +1,9 @@
 package com.project.airbnb.controllers;
 
-import com.project.airbnb.dto.request.AmenityRequest;
-import com.project.airbnb.dto.response.APIResponse;
-import com.project.airbnb.dto.response.AmenityResponse;
-import com.project.airbnb.dto.response.PageResponse;
+import com.project.airbnb.dtos.request.AmenityRequest;
+import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.AmenityResponse;
+import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.services.Amenity.AmenityService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

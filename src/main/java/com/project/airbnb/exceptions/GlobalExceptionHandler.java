@@ -1,6 +1,6 @@
 package com.project.airbnb.exceptions;
 
-import com.project.airbnb.dto.response.ErrorResponse;
+import com.project.airbnb.dtos.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

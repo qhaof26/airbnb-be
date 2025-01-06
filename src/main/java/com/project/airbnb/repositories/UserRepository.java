@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
     boolean existsByEmail(String email);
 
+    Optional<User> findByEmail(String email);
+
     @Query(value = "select u from User u where u.id = :userId and u.status = TRUE ")
     Optional<User> findUserActive(String userId);
 

@@ -1,16 +1,19 @@
-package com.project.airbnb.dto.response;
+package com.project.airbnb.dtos.response;
 
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WardResponse {
+public class DistrictResponse {
     private Long code;
     private String name;
     private String division_type;
     private String codename;
-    private long district_code;
+    private long province_code;
+    private List<WardResponse> wards;
 }

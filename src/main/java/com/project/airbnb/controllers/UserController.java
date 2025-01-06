@@ -1,9 +1,9 @@
 package com.project.airbnb.controllers;
 
-import com.project.airbnb.dto.request.UserCreationRequest;
-import com.project.airbnb.dto.response.APIResponse;
-import com.project.airbnb.dto.response.PageResponse;
-import com.project.airbnb.dto.response.UserResponse;
+import com.project.airbnb.dtos.request.UserCreationRequest;
+import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.dtos.response.UserResponse;
 import com.project.airbnb.services.User.UserService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

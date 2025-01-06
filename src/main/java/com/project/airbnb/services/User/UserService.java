@@ -1,9 +1,9 @@
 package com.project.airbnb.services.User;
 
 import com.project.airbnb.constants.PredefinedRole;
-import com.project.airbnb.dto.request.UserCreationRequest;
-import com.project.airbnb.dto.response.PageResponse;
-import com.project.airbnb.dto.response.UserResponse;
+import com.project.airbnb.dtos.request.UserCreationRequest;
+import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.dtos.response.UserResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;

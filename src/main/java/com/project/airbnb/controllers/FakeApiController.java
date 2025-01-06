@@ -1,7 +1,7 @@
 package com.project.airbnb.controllers;
 
 import com.github.javafaker.Faker;
-import com.project.airbnb.dto.request.UserCreationRequest;
+import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

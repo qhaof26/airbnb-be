@@ -1,4 +1,4 @@
-package com.project.airbnb.dto.request;
+package com.project.airbnb.dtos.request;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.project.airbnb.dto.response;
+package com.project.airbnb.dtos.response;
 
 import lombok.*;
 
@@ -7,8 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AmenityResponse {
+public class CategoryResponse {
     private String id;
-    private String amenityName;
-
+    private String categoryName;
 }

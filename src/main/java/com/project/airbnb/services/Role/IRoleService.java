@@ -1,8 +1,8 @@
 package com.project.airbnb.services.Role;
 
-import com.project.airbnb.dto.request.RoleCreationRequest;
-import com.project.airbnb.dto.response.PageResponse;
-import com.project.airbnb.dto.response.RoleResponse;
+import com.project.airbnb.dtos.request.RoleCreationRequest;
+import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.dtos.response.RoleResponse;
 
 import java.util.List;
 

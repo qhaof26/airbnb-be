@@ -16,12 +16,16 @@ public enum ErrorCode {
     //LOCATION
     PROVINCE_NOT_EXISTED(HttpStatus.NOT_FOUND, "Province not existed !"),
     DISTRICT_NOT_EXISTED(HttpStatus.NOT_FOUND, "District not existed !"),
+    WARD_NOT_EXISTED(HttpStatus.NOT_FOUND, "Ward not existed !"),
     //CATEGORY
     CATEGORY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Category not existed !"),
     CATEGORY_EXISTED(HttpStatus.BAD_REQUEST, "Category existed !"),
     //AMENITY
     AMENITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Amenity not existed !"),
-    AMENITY_EXISTED(HttpStatus.BAD_REQUEST, "Amenity existed !")
+    AMENITY_EXISTED(HttpStatus.BAD_REQUEST, "Amenity existed !"),
+    //LISTING
+    LISTING_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing not existed !"),
+    LISTING_EXISTED(HttpStatus.BAD_REQUEST, "Listing existed !")
     ;
 
     private final HttpStatusCode statusCode;

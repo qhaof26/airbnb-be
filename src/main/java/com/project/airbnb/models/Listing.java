@@ -42,8 +42,11 @@ public class Listing extends AbstractEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "is_guest_favourite")
-    private boolean isGuestFavourite;
+    private Boolean isGuestFavourite;
 
     @ManyToOne
     @JoinColumn(name = "ward_id")

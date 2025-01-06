@@ -1,14 +1,15 @@
 package com.project.airbnb.services.Category;
 
-import com.project.airbnb.dto.request.CategoryRequest;
-import com.project.airbnb.dto.response.CategoryResponse;
-import com.project.airbnb.dto.response.PageResponse;
+import com.project.airbnb.dtos.request.CategoryRequest;
+import com.project.airbnb.dtos.response.CategoryResponse;
+import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.CategoryMapper;
 import com.project.airbnb.models.Category;
 import com.project.airbnb.repositories.CategoryRepository;
 import com.project.airbnb.repositories.ListingRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +45,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
         if(categoryRepository.existsByCategoryName(request.getCategoryName())){
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
@@ -56,6 +58,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @Transactional
     public CategoryResponse updateCategory(CategoryRequest request, String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         if(categoryRepository.existsByCategoryName(request.getCategoryName())){
@@ -66,6 +69,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @Transactional
     public void deleteCategory(String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         category.getListings().forEach(listing -> listing.setCategory(null));

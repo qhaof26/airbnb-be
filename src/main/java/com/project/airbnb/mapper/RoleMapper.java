@@ -1,6 +1,6 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dto.response.RoleResponse;
+import com.project.airbnb.dtos.response.RoleResponse;
 import com.project.airbnb.models.Role;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dto.response.CategoryResponse;
+import com.project.airbnb.dtos.response.CategoryResponse;
 import com.project.airbnb.models.Category;
 import org.mapstruct.Mapper;
 

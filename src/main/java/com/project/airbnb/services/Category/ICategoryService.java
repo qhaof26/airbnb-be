@@ -1,8 +1,8 @@
 package com.project.airbnb.services.Category;
 
-import com.project.airbnb.dto.request.CategoryRequest;
-import com.project.airbnb.dto.response.CategoryResponse;
-import com.project.airbnb.dto.response.PageResponse;
+import com.project.airbnb.dtos.request.CategoryRequest;
+import com.project.airbnb.dtos.response.CategoryResponse;
+import com.project.airbnb.dtos.response.PageResponse;
 
 import java.util.List;
 

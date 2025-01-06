@@ -1,9 +1,9 @@
 package com.project.airbnb.controllers;
 
-import com.project.airbnb.dto.request.CategoryRequest;
-import com.project.airbnb.dto.response.APIResponse;
-import com.project.airbnb.dto.response.CategoryResponse;
-import com.project.airbnb.dto.response.PageResponse;
+import com.project.airbnb.dtos.request.CategoryRequest;
+import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.CategoryResponse;
+import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.services.Category.CategoryService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

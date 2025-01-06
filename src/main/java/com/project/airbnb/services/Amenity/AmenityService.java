@@ -1,14 +1,15 @@
 package com.project.airbnb.services.Amenity;
 
-import com.project.airbnb.dto.request.AmenityRequest;
-import com.project.airbnb.dto.response.AmenityResponse;
-import com.project.airbnb.dto.response.PageResponse;
+import com.project.airbnb.dtos.request.AmenityRequest;
+import com.project.airbnb.dtos.response.AmenityResponse;
+import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.AmenityMapper;
 import com.project.airbnb.models.Amenity;
 import com.project.airbnb.repositories.AmenityRepository;
 import com.project.airbnb.repositories.ListingRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,7 @@ public class AmenityService implements IAmenityService{
     }
 
     @Override
+    @Transactional
     public AmenityResponse createAmenity(AmenityRequest request) {
         if(amenityRepository.existsByAmenityName(request.getAmenityName())){
             throw new AppException(ErrorCode.AMENITY_EXISTED);
@@ -57,6 +59,7 @@ public class AmenityService implements IAmenityService{
     }
 
     @Override
+    @Transactional
     public AmenityResponse updateAmenity(AmenityRequest request, String amenityId) {
         Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(() -> new AppException(ErrorCode.AMENITY_NOT_EXISTED));
         if(amenityRepository.existsByAmenityName(request.getAmenityName())){
@@ -67,6 +70,7 @@ public class AmenityService implements IAmenityService{
     }
 
     @Override
+    @Transactional
     public void deleteAmenity(String amenityId) {
         Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(() -> new AppException(ErrorCode.AMENITY_NOT_EXISTED));
         amenity.getListings().forEach(listing -> listing.setCategory(null));

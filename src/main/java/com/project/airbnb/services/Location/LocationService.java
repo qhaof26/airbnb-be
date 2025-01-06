@@ -2,9 +2,9 @@ package com.project.airbnb.services.Location;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.airbnb.dto.response.DistrictResponse;
-import com.project.airbnb.dto.response.ProvinceResponse;
-import com.project.airbnb.dto.response.WardResponse;
+import com.project.airbnb.dtos.response.DistrictResponse;
+import com.project.airbnb.dtos.response.ProvinceResponse;
+import com.project.airbnb.dtos.response.WardResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.District;
@@ -65,6 +65,7 @@ public class LocationService implements ILocationService {
     }
 
     @Override
+    @Transactional
     public void fetchAndSaveDistricts() {
         try {
             if(provinceRepository.count() > 0){
@@ -87,6 +88,7 @@ public class LocationService implements ILocationService {
     }
 
     @Override
+    @Transactional
     public void fetchAndSaveWards() {
         try {
             if(districtRepository.count() > 0){
