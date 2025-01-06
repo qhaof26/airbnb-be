@@ -2,9 +2,9 @@ package com.project.airbnb.services.Location;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.airbnb.dtos.response.DistrictResponse;
-import com.project.airbnb.dtos.response.ProvinceResponse;
-import com.project.airbnb.dtos.response.WardResponse;
+import com.project.airbnb.dtos.response.DistrictDTO;
+import com.project.airbnb.dtos.response.ProvinceDTO;
+import com.project.airbnb.dtos.response.WardDTO;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.District;
@@ -51,8 +51,8 @@ public class LocationService implements ILocationService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            ProvinceResponse[] provinceResponses = objectMapper.readValue(response, ProvinceResponse[].class);
-            for (ProvinceResponse dto : provinceResponses) {
+            ProvinceDTO[] provinceResponses = objectMapper.readValue(response, ProvinceDTO[].class);
+            for (ProvinceDTO dto : provinceResponses) {
                 Province province = new Province();
                 province.setId(dto.getCode());
                 province.setName(dto.getName());
@@ -72,8 +72,8 @@ public class LocationService implements ILocationService {
                 log.warn("In method save district");
                 ObjectMapper objectMapper = new ObjectMapper();
                 String responseDistrict = restTemplate.getForObject(apiDistrict, String.class);
-                DistrictResponse[] districtResponses = objectMapper.readValue(responseDistrict, DistrictResponse[].class);
-                for (DistrictResponse dto : districtResponses) {
+                DistrictDTO[] districtResponses = objectMapper.readValue(responseDistrict, DistrictDTO[].class);
+                for (DistrictDTO dto : districtResponses) {
                     District district = new District();
                     district.setId(dto.getCode());
                     district.setName(dto.getName());
@@ -95,8 +95,8 @@ public class LocationService implements ILocationService {
                 log.warn("In method save ward");
                 ObjectMapper objectMapper = new ObjectMapper();
                 String responseWard = restTemplate.getForObject(apiWard, String.class);
-                WardResponse[] wardResponses = objectMapper.readValue(responseWard, WardResponse[].class);
-                for (WardResponse dto : wardResponses) {
+                WardDTO[] wardResponses = objectMapper.readValue(responseWard, WardDTO[].class);
+                for (WardDTO dto : wardResponses) {
                     Ward ward = new Ward();
                     ward.setId(dto.getCode());
                     ward.setName(dto.getName());

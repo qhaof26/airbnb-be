@@ -25,8 +25,8 @@ public class ListingResponse {
     private String description;
     private String address;
 
-    private Ward ward;
-    private User user;
-    private Category category;
-    private Set<Amenity> amenities;
+    private WardResponse ward;
+    private UserResponse host;
+    private CategoryResponse category;
+    private Set<AmenityResponse> amenities;
 }

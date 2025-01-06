@@ -1,22 +1,28 @@
 package com.project.airbnb.mapper;
 
+import com.project.airbnb.dtos.response.AmenityResponse;
+import com.project.airbnb.dtos.response.CategoryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.models.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ListingMapper {
-    public ListingResponse toListingResponse(Listing listing){
-        Ward ward = null;
-        if(listing.getWard() != null){
-            ward = listing.getWard();
-        }
+    private final WardMapper wardMapper;
+    private final UserMapper userMapper;
+    private final AmenityMapper amenityMapper;
+    private final CategoryMapper categoryMapper;
 
-        Category category = null;
+    public ListingResponse toListingResponse(Listing listing){
+        CategoryResponse category = null;
         if(listing.getCategory() != null){
-            category = listing.getCategory();
+            category = categoryMapper.toCategoryResponse(listing.getCategory());
         }
 
         User user = null;
@@ -24,9 +30,9 @@ public class ListingMapper {
             user = listing.getUser();
         }
 
-        Set<Amenity> amenities = null;
+        Set<AmenityResponse> amenities = null;
         if(listing.getAmenities() != null){
-            amenities = listing.getAmenities();
+            amenities = listing.getAmenities().stream().map(amenityMapper::toAmenityResponse).collect(Collectors.toSet());
         }
         return ListingResponse.builder()
                 .id(listing.getId())
@@ -39,9 +45,9 @@ public class ListingMapper {
                 .address(listing.getAddress())
                 .description(listing.getDescription())
                 .amenities(amenities)
-                .ward(ward)
+                .ward(wardMapper.toWardResponse(listing.getWard()))
                 .category(category)
-                .user(user)
+                .host(userMapper.toUserResponse(Objects.requireNonNull(user)))
                 .build();
-    };
+    }
 }

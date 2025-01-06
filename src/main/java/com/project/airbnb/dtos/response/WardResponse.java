@@ -8,9 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WardResponse {
-    private Long code;
-    private String name;
-    private String division_type;
-    private String codename;
-    private long district_code;
+    private long id;
+    private String wardName;
+    private String districtName;
+    private String provinceName;
 }

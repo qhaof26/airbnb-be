@@ -38,7 +38,7 @@ public class User extends AbstractEntity {
     @Column(name = "date_host_started")
     private Instant dateHostStarted;
 
-    @Column(name = "is_active")
+    @Column(name = "status")
     private Boolean status;
 
     @ManyToOne(fetch = FetchType.EAGER)

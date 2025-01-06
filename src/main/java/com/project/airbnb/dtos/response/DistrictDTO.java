@@ -9,11 +9,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProvinceResponse {
-    private String name;
+public class DistrictDTO {
     private Long code;
+    private String name;
     private String division_type;
     private String codename;
-    private int phone_code;
-    private List<DistrictResponse> districts;
+    private long province_code;
+    private List<WardDTO> wards;
 }

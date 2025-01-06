@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +58,12 @@ public class ListingService implements IListingService{
         User user = userRepository.findByEmail("admin@gmail.com").orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
-        Set<Amenity> amenities = new HashSet<>();
-        for(Amenity amenity : request.getAmenities()){
-            if(amenityRepository.existsById(amenity.getId())){
-                amenities.add(amenity);
-            }
-        }
+
+        Set<String> amenityIds = request.getAmenities().stream()
+                .map(Amenity::getId)
+                .collect(Collectors.toSet());
+        List<Amenity> amenityList = amenityRepository.findAllById(amenityIds);
+        Set<Amenity> amenities = new HashSet<>(amenityList);
 
         Listing listing = Listing.builder()
                 .listingName(request.getListingName())

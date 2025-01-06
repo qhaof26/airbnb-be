@@ -1,4 +1,5 @@
 package com.project.airbnb.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Amenity extends AbstractEntity {
     @Column(name = "amenity_name")
     private String amenityName;
 
-    @ManyToMany(mappedBy = "amenities")
+    @ManyToMany(mappedBy = "amenities", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Listing> listings = new HashSet<>();
 }
