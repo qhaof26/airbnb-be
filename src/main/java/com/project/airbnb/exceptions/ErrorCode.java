@@ -26,9 +26,15 @@ public enum ErrorCode {
     //LISTING
     LISTING_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing not existed !"),
     LISTING_EXISTED(HttpStatus.BAD_REQUEST, "Listing existed !"),
+    LISTING_NOT_EMPTY(HttpStatus.BAD_REQUEST, "Listing not empty !"),
+    GUEST_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "The number of guests has exceeded the prescribed limit"),
     //LISTING_AVAILABILITY
     LISTING_AVAILABILITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing availability not existed !"),
     LISTING_AVAILABILITY_EXISTED(HttpStatus.BAD_REQUEST, "Listing availability existed !"),
+    //BOOKING
+    BOOKING_NOT_EXISTED(HttpStatus.NOT_FOUND, "Booking not existed !"),
+    BOOKING_EXISTED(HttpStatus.BAD_REQUEST, "Booking existed !")
+
     ;
 
     private final HttpStatusCode statusCode;

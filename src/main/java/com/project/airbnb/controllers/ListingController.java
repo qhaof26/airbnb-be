@@ -57,4 +57,13 @@ public class ListingController {
                 .data(listingService.updateListing(listingId, request))
                 .build();
     }
+
+    @DeleteMapping("/delete/{listingId}")
+    public APIResponse<Void> deleteListing(@PathVariable String listingId){
+        listingService.deleteListing(listingId);
+        return APIResponse.<Void>builder()
+                .status(HttpStatus.OK.value())
+                .message("Delete listing")
+                .build();
+    }
 }

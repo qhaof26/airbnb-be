@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -70,6 +71,9 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     @Transactional
     public ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        if(listingAvailabilityRepository.existsByDate(request.getDate())){
+            throw new AppException(ErrorCode.LISTING_AVAILABILITY_EXISTED);
+        }
         ListingAvailability listingAvailability = ListingAvailability.builder()
                 .date(request.getDate())
                 .price(request.getPrice())
@@ -86,6 +90,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
         ListingAvailability listingAvailability = listingAvailabilityRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED));
         listingAvailability.setPrice(request.getPrice());
         listingAvailability.setStatus(request.getStatus());
+        listingAvailability.setUpdatedAt(LocalDateTime.now());
         listingAvailabilityRepository.save(listingAvailability);
         return listingAvailabilityMapper.toListingAvailabilityResponse(listingAvailability);
     }

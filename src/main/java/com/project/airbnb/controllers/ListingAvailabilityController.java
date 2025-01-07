@@ -5,7 +5,6 @@ import com.project.airbnb.dtos.request.ListingAvailabilityUpdateRequest;
 import com.project.airbnb.dtos.response.APIResponse;
 import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.services.Listing.ListingService;
 import com.project.airbnb.services.ListingAvailability.ListingAvailabilityService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/listing-availability")
+@RequestMapping("${api.prefix}/listing-availabilities")
 public class ListingAvailabilityController {
-    private final ListingService listingService;
     private final ListingAvailabilityService listingAvailabilityService;
 
     @GetMapping("/{id}")

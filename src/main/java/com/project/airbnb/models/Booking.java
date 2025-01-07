@@ -3,8 +3,6 @@ package com.project.airbnb.models;
 import com.project.airbnb.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_booking")
-public class Booking {
+public class Booking extends AbstractEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -42,7 +40,7 @@ public class Booking {
     @Column(name = "note")
     private String note;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private BookingStatus status;
 

@@ -12,7 +12,7 @@ import java.time.Instant;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler({Exception.class, IllegalArgumentException.class})
     public ResponseEntity<ErrorResponse> handlingRuntimeException(RuntimeException exception){
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(

@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class ListingService implements IListingService{
     private final WardRepository wardRepository;
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
+    private final ListingAvailabilityRepository availabilityRepository;
     private final ListingMapper listingMapper;
 
     @Override
@@ -107,6 +109,7 @@ public class ListingService implements IListingService{
         listing.setWard(ward);
         listing.setCategory(category);
         listing.setAmenities(amenities);
+        listing.setUpdatedAt(LocalDateTime.now());
         listingRepository.save(listing);
         return listingMapper.toListingResponse(listing);
     }
@@ -114,6 +117,12 @@ public class ListingService implements IListingService{
     @Override
     @Transactional
     public void deleteListing(String listingId) {
-
+        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+//        listing.getListingAvailabilities().forEach(listingAvailability -> listingAvailability.get);
+//        listing.getAmenities().forEach(amenity -> amenity.setListings(null));
+//        amenityRepository.saveAll(listing.getAmenities());
+//        listing.getListingAvailabilities().forEach(listingAvailability -> listingAvailability.setListing(null));
+//        availabilityRepository.saveAll(listing.getListingAvailabilities());
+        listingRepository.delete(listing);
     }
 }

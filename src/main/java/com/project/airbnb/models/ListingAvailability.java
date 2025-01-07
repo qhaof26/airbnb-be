@@ -2,8 +2,6 @@ package com.project.airbnb.models;
 import com.project.airbnb.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +21,7 @@ public class ListingAvailability extends AbstractEntity {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ListingStatus status;
 

@@ -1,5 +1,6 @@
 package com.project.airbnb.repositories;
 
+import com.project.airbnb.enums.ListingStatus;
 import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.ListingAvailability;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ListingAvailabilityRepository extends JpaRepository<ListingAvailability, String>, JpaSpecificationExecutor<ListingAvailability> {
     Page<ListingAvailability> findByListing(Listing listing, Pageable pageable);
+    boolean existsByDate(LocalDate date);
+    boolean existsByListing(Listing listing);
+
+    @Query("select la from ListingAvailability la where la.listing.id = :listingId and la.date between :startDate and :endDate and la.status = :status")
+    List<ListingAvailability> checkListingAndDateRangeAndStatus(
+            @Param("listingId") String listingId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("status")ListingStatus status
+            );
 
     @Query("select la from ListingAvailability la where la.listing.id = :listingId and la.date between :startDate and :endDate")
     Page<ListingAvailability> findByListingAndDateRange(

@@ -2,9 +2,9 @@ package com.project.airbnb.services.Location;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.airbnb.dtos.response.DistrictDTO;
-import com.project.airbnb.dtos.response.ProvinceDTO;
-import com.project.airbnb.dtos.response.WardDTO;
+import com.project.airbnb.dtos.response.Location.DistrictDTO;
+import com.project.airbnb.dtos.response.Location.ProvinceDTO;
+import com.project.airbnb.dtos.response.Location.WardDTO;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.District;

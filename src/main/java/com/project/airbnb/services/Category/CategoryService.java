@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -65,6 +66,8 @@ public class CategoryService implements ICategoryService{
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
         category.setCategoryName(request.getCategoryName());
+        category.setUpdatedAt(LocalDateTime.now());
+        categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);
     }
 

@@ -1,4 +1,4 @@
-package com.project.airbnb.dtos.response;
+package com.project.airbnb.dtos.response.Location;
 
 import lombok.*;
 
