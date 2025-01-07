@@ -1,8 +1,7 @@
 package com.project.airbnb.enums;
 
 public enum ListingStatus {
-    AVAILABLE,
-    BOOKED,
-    BLOCKED,
-    UNAVAILABLE
+    AVAILABLE, //Có sẵn
+    BOOKED,  //Đã đặt
+    UNAVAILABLE  //Ko có sẵn
 }

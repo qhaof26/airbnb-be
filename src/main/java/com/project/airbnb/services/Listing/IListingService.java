@@ -4,7 +4,6 @@ import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
