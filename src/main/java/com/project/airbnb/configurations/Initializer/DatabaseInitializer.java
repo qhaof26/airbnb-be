@@ -16,7 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,7 +47,8 @@ public class DatabaseInitializer {
                         .description("This is the administrator and has all the permissions")
                         .build();
                 roleRepository.save(adminRole);
-
+                Set<Role> roles = new HashSet<>();
+                roles.add(adminRole);
                 if(userRepository.existsByEmail(ADMIN_EMAIL)) throw new AppException(ErrorCode.EMAIL_EXISTED);
                 if(userRepository.existsByUsername(ADMIN_USERNAME)) throw new AppException(ErrorCode.USERNAME_EXISTED);
                 User adminUser = User.builder()
@@ -54,7 +57,7 @@ public class DatabaseInitializer {
                         .username(ADMIN_USERNAME)
                         .password(passwordEncoder.encode(ADMIN_PASSWORD))
                         .email(ADMIN_EMAIL)
-                        .role(adminRole)
+                        .roles(roles)
                         .build();
                 userRepository.save(adminUser);
 

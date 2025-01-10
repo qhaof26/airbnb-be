@@ -1,5 +1,6 @@
 package com.project.airbnb.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,9 @@ public class Role extends AbstractEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "role")
-    private Set<User> users;
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private Set<User> users = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(

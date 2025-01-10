@@ -64,7 +64,7 @@ public class RoleService implements IRoleService{
     @Transactional
     public boolean removeRole(String roleId) {
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
-        role.getUsers().forEach(user -> user.setRole(null));
+        role.getUsers().forEach(user -> user.setRoles(null));
         userRepository.saveAll(role.getUsers());
 
         roleRepository.delete(role);

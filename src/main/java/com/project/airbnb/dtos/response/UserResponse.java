@@ -2,6 +2,8 @@ package com.project.airbnb.dtos.response;
 
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -13,5 +15,5 @@ public class UserResponse {
     private String lastName;
     private String username;
     private String email;
-    private String role;
+    private Set<String> roles;
 }
