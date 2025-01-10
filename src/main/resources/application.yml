@@ -15,6 +15,11 @@ spring:
 api:
   prefix: "/api/v1"
 
+jwt:
+  signerKey: "vZ0fUpFQ4ctcn0YkHjdpfBqlgSjW0V38vW/peMlzIBjyxO4sQRF2iqh829Lre/jq"
+  valid-duration: 3600 #in second
+  refreshable-duration: 36000 #in second
+
 url:
   api-province: "https://provinces.open-api.vn/api/p"
   api-district: "https://provinces.open-api.vn/api/d"
