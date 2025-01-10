@@ -30,7 +30,8 @@ public class SecurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
 
     private final String[] PUBLIC_ENDPOINTS = {
-            "api/v1/auth/log-in"
+            "api/v1/auth/log-in",
+            "api/v1/auth/log-out"
     };
     @Bean
     PasswordEncoder passwordEncoder(){

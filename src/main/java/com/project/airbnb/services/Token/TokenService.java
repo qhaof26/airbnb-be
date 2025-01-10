@@ -10,6 +10,7 @@ import com.project.airbnb.dtos.response.IntrospectResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.User;
+import com.project.airbnb.repositories.InvalidatedTokenRepository;
 import com.project.airbnb.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -29,7 +30,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class TokenService implements ITokenService{
-    private final UserRepository userRepository;
+    private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -98,7 +99,7 @@ public class TokenService implements ITokenService{
         return stringJoiner.toString();
     }
 
-    private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+    public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expiryTime = (isRefresh)
@@ -110,8 +111,8 @@ public class TokenService implements ITokenService{
         if(!(verified && expiryTime.after(new Date()))){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-//        if(invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
-//            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        if(invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return signedJWT;
     }
