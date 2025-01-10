@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
+    //AUTH
+    UNAUTHENTICATED(HttpStatus.UNAUTHORIZED,"Unauthenticated"),
+    UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission"),
     //ROLE
     ROLE_EXISTED(HttpStatus.BAD_REQUEST, "Role existed !"),
     ROLE_NOT_EXISTED(HttpStatus.NOT_FOUND, "Role not existed !"),

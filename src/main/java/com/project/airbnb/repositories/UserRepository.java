@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
     boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 
     @Query(value = "select u from User u where u.id = :userId and u.status = TRUE ")
     Optional<User> findUserActive(String userId);
