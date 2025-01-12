@@ -17,11 +17,13 @@ import com.project.airbnb.repositories.BookingRepository;
 import com.project.airbnb.repositories.ListingAvailabilityRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -44,6 +46,7 @@ public class BookingService implements IBookingService{
     private final UserRepository userRepository;
     private final ListingAvailabilityRepository availabilityRepository;
     private final BookingMapper bookingMapper;
+    private final SecurityUtils securityUtils;
 
     @Override
     public BookingResponse getBookingById(String bookingId) {
@@ -109,7 +112,8 @@ public class BookingService implements IBookingService{
         BigDecimal totalPrice = (listing.getNightlyPrice()).multiply(BigDecimal.valueOf(numDays));
 
         //User is logging (JWT)
-        User userBooking = userRepository.findByEmail("admin@gmail.com").orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User userBooking = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         Booking booking = Booking.builder()
                 .checkinDate(request.getCheckinDate())

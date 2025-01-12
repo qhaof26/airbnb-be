@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
                 ErrorResponse.builder()
                         .timestamp(Instant.now())
                         .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .message(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                        .message(exception.getLocalizedMessage())
                         .build()
         );
     }

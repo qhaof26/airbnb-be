@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +39,7 @@ public class User extends AbstractEntity {
     private String email;
 
     @Column(name = "date_host_started")
-    private Instant dateHostStarted;
+    private LocalDate dateHostStarted;
 
     @Column(name = "status")
     private Boolean status;

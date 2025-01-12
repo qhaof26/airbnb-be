@@ -10,4 +10,5 @@ import java.text.ParseException;
 public interface IAuthenticationService {
     AuthenticationResponse isAuthenticate(AuthenticationRequest request);
     void logout(LogoutRequest request) throws ParseException, JOSEException;
+    void registerHost(); //GUEST -> HOST
 }

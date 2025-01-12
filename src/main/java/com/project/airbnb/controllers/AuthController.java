@@ -40,4 +40,13 @@ public class AuthController {
                 .message("Logout")
                 .build();
     }
+
+    @PostMapping("/register-host")
+    public APIResponse<Void> registerHost() {
+        authenticationService.registerHost();
+        return APIResponse.<Void>builder()
+                .status(HttpStatus.OK.value())
+                .message("Register host airbnb")
+                .build();
+    }
 }

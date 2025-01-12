@@ -9,11 +9,13 @@ import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingMapper;
 import com.project.airbnb.models.*;
 import com.project.airbnb.repositories.*;
+import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,9 +57,11 @@ public class ListingService implements IListingService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingResponse createListing(ListingCreationRequest request) {
-        User user = userRepository.findByEmail("admin@gmail.com").orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
 
