@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -68,6 +69,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
@@ -85,6 +87,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingAvailabilityResponse updateListingAvailability(String id, ListingAvailabilityUpdateRequest request) {
         ListingAvailability listingAvailability = listingAvailabilityRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED));

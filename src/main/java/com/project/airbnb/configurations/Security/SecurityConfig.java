@@ -31,7 +31,17 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
             "api/v1/auth/log-in",
-            "api/v1/auth/log-out"
+            "api/v1/auth/log-out",
+            "api/v1/users/register",
+            "api/v1/amenities/{amenityId}",
+            "api/v1/amenities",
+            "api/v1/categories",
+            "api/v1/categories/{categoryId}",
+            "api/v1/listings",
+            "api/v1/listings/{listingId}",
+            "api/v1/listing-availabilities/{id}",
+            "api/v1/listing-availabilities/listing/{listingId}",
+            "api/v1/listing-availabilities/time/{listingId}"
     };
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -41,7 +51,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->

@@ -8,9 +8,9 @@ import com.project.airbnb.dtos.response.PageResponse;
 import java.util.List;
 
 public interface IListingService {
-    ListingResponse getListingById(String listingId);
-    PageResponse<List<ListingResponse>> getAllListings(int pageNo, int pageSize);
-    ListingResponse createListing(ListingCreationRequest request);
-    ListingResponse updateListing(String listingId, ListingUpdateRequest request);
-    void deleteListing(String listingId);
+    ListingResponse getListingById(String listingId); //GUEST, HOST, ADMIN
+    PageResponse<List<ListingResponse>> getAllListings(int pageNo, int pageSize); //GUEST, HOST, ADMIN
+    ListingResponse createListing(ListingCreationRequest request); //HOST, ADMIN
+    ListingResponse updateListing(String listingId, ListingUpdateRequest request); //HOST, ADMIN
+    void deleteListing(String listingId); //HOST, ADMIN
 }

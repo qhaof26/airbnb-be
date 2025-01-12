@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<List<UserResponse>> getAllUserActive(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<User> pageUser = userRepository.findAllUserActive(pageable);
@@ -56,6 +58,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<List<UserResponse>> getAllUserBlock(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<User> pageUser = userRepository.findAllUserBlock(pageable);
@@ -93,6 +96,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public UserResponse changeStatus(String userId, Boolean status) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -110,6 +114,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public boolean removeUser(String userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

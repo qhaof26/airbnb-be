@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,6 +47,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
         if(categoryRepository.existsByCategoryName(request.getCategoryName())){
@@ -59,6 +61,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public CategoryResponse updateCategory(CategoryRequest request, String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
@@ -72,6 +75,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public void deleteCategory(String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));

@@ -54,10 +54,10 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public PageResponse<List<BookingResponse>> getAllBookingByGuest(User user, int pageNo, int pageSize) {
-        if(!userRepository.existsById(user.getId())){
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-        }
+    @PreAuthorize("hasRole('GUEST') or hasRole('ADMIN')")
+    public PageResponse<List<BookingResponse>> getGuestBookings(int pageNo, int pageSize) {
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
         Page<Booking> bookingPage = bookingRepository.findAllByUser(user, pageable);
         List<BookingResponse> bookingResponses = bookingPage.getContent().stream().map(bookingMapper::toBookingResponse).toList();
@@ -72,12 +72,13 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public PageResponse<List<BookingResponse>> getAllBookingByHost(String userId, int pageNo, int pageSize) {
-        if(!userRepository.existsById(userId)){
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-        }
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    public PageResponse<List<BookingResponse>> getHostBookings(int pageNo, int pageSize) {
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
-        Page<Booking> bookingPage = bookingRepository.findAllByHost(userId, pageable);
+        Page<Booking> bookingPage = bookingRepository.findAllByHost(user.getId(), pageable);
         List<BookingResponse> bookingResponses = bookingPage.getContent().stream().map(bookingMapper::toBookingResponse).toList();
 
         return PageResponse.<List<BookingResponse>>builder()
@@ -90,6 +91,7 @@ public class BookingService implements IBookingService{
     }
 
     @Override
+    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public BookingResponse createBooking(BookingCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
@@ -135,6 +137,7 @@ public class BookingService implements IBookingService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST')")
     @Transactional
     public BookingResponse updateBooking(BookingUpdateRequest request) {
         Booking booking = bookingRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));

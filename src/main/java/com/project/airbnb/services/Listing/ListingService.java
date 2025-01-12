@@ -90,6 +90,7 @@ public class ListingService implements IListingService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingResponse updateListing(String listingId, ListingUpdateRequest request) {
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
@@ -119,14 +120,10 @@ public class ListingService implements IListingService{
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public void deleteListing(String listingId) {
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-//        listing.getListingAvailabilities().forEach(listingAvailability -> listingAvailability.get);
-//        listing.getAmenities().forEach(amenity -> amenity.setListings(null));
-//        amenityRepository.saveAll(listing.getAmenities());
-//        listing.getListingAvailabilities().forEach(listingAvailability -> listingAvailability.setListing(null));
-//        availabilityRepository.saveAll(listing.getListingAvailabilities());
         listingRepository.delete(listing);
     }
 }

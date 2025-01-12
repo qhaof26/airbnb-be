@@ -31,27 +31,25 @@ public class BookingController {
 
     @GetMapping("/guest")
     public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingsOfGuest(
-            @RequestBody User user,
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ){
         return APIResponse.<PageResponse<List<BookingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get all booking of Guest")
-                .data(bookingService.getAllBookingByGuest(user, pageNo, pageSize))
+                .data(bookingService.getGuestBookings(pageNo, pageSize))
                 .build();
     }
 
-    @GetMapping("/host/{userId}")
+    @GetMapping("/host")
     public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingOfHost(
-            @PathVariable String userId,
             @Min(value = 1)@RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ){
         return APIResponse.<PageResponse<List<BookingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get all booking of host")
-                .data(bookingService.getAllBookingByHost(userId, pageNo, pageSize))
+                .data(bookingService.getHostBookings(pageNo, pageSize))
                 .build();
     }
 

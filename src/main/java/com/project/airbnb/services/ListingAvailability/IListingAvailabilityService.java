@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IListingAvailabilityService {
-    ListingAvailabilityResponse getListingAvailability(String id);
-    PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByListing(String listingId, int pageNo, int pageSize);
-    PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByTime(String listingId, LocalDate startDate, LocalDate endDate, int pageNo, int pageSize);
-    ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request);
-    ListingAvailabilityResponse updateListingAvailability(String id, ListingAvailabilityUpdateRequest request);
+    ListingAvailabilityResponse getListingAvailability(String id); //GUEST, HOST, ADMIN
+    PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByListing(String listingId, int pageNo, int pageSize); //GUEST, HOST, ADMIN
+    PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByTime(String listingId, LocalDate startDate, LocalDate endDate, int pageNo, int pageSize); //GUEST, HOST, ADMIN
+    ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request); //HOST, ADMIN
+    ListingAvailabilityResponse updateListingAvailability(String id, ListingAvailabilityUpdateRequest request); //HOST, ADMIN
 }
