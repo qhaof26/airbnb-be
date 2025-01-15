@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
+    //FILE
+    FILE_ERROR(HttpStatus.BAD_REQUEST, "Could not read file "),
+
     //AUTH
     UNAUTHENTICATED(HttpStatus.UNAUTHORIZED,"Unauthenticated"),
     UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission"),

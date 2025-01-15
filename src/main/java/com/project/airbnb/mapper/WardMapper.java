@@ -1,7 +1,7 @@
 package com.project.airbnb.mapper;
 
 import com.project.airbnb.dtos.response.WardResponse;
-import com.project.airbnb.models.Ward;
+import com.project.airbnb.models.Location.Ward;
 import org.springframework.stereotype.Component;
 
 @Component

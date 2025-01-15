@@ -1,5 +1,6 @@
 package com.project.airbnb.models;
 
+import com.project.airbnb.models.Location.Ward;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -2,13 +2,17 @@ package com.project.airbnb.services.Listing;
 
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
+import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.enums.ObjectType;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingMapper;
 import com.project.airbnb.models.*;
+import com.project.airbnb.models.Location.Ward;
 import com.project.airbnb.repositories.*;
+import com.project.airbnb.services.Cloudinary.CloudinaryService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -27,12 +33,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ListingService implements IListingService{
+    private final CloudinaryService cloudinaryService;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
     private final WardRepository wardRepository;
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
-    private final ListingAvailabilityRepository availabilityRepository;
     private final ListingMapper listingMapper;
 
     @Override
@@ -87,6 +93,14 @@ public class ListingService implements IListingService{
                 .build();
         listingRepository.save(listing);
         return listingMapper.toListingResponse(listing);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    @Transactional
+    public CloudinaryResponse uploadImage(String listingId, ObjectType objectType, MultipartFile file) throws IOException {
+
+        return cloudinaryService.uploadImage(listingId, objectType, file);
     }
 
     @Override

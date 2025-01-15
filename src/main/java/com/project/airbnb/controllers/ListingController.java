@@ -3,14 +3,18 @@ package com.project.airbnb.controllers;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.enums.ObjectType;
 import com.project.airbnb.services.Listing.ListingService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -46,6 +50,19 @@ public class ListingController {
                 .status(HttpStatus.CREATED.value())
                 .message("Created listing successful")
                 .data(listingService.createListing(request))
+                .build();
+    }
+
+    @PostMapping("/images")
+    public APIResponse<CloudinaryResponse> createListing(
+            @RequestParam("id") String id,
+            @RequestParam("type") ObjectType type,
+            @RequestParam("image")MultipartFile image
+            ) throws IOException {
+        return APIResponse.<CloudinaryResponse>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Uploaded image listing successful")
+                .data(listingService.uploadImage(id, type, image))
                 .build();
     }
 

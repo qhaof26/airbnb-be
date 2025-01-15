@@ -1,6 +1,7 @@
 package com.project.airbnb.dtos.request;
 
 import com.project.airbnb.models.*;
+import com.project.airbnb.models.Location.Ward;
 import lombok.*;
 
 import java.math.BigDecimal;

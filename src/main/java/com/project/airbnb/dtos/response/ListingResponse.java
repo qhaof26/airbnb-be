@@ -1,9 +1,5 @@
 package com.project.airbnb.dtos.response;
 
-import com.project.airbnb.models.Amenity;
-import com.project.airbnb.models.Category;
-import com.project.airbnb.models.User;
-import com.project.airbnb.models.Ward;
 import lombok.*;
 
 import java.math.BigDecimal;

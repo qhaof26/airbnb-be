@@ -20,6 +20,12 @@ jwt:
   valid-duration: 3600 #in second
   refreshable-duration: 36000 #in second
 
+## Cloudinary
+cloudinary:
+  cloud_name: "dkxwnkii4"
+  api_key: "122237874773556"
+  api_secret: "GHD93O9ICu6_e3AP3Mp1IvEP_Lk"
+
 url:
   api-province: "https://provinces.open-api.vn/api/p"
   api-district: "https://provinces.open-api.vn/api/d"

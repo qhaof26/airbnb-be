@@ -7,7 +7,7 @@ import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Amenity;
 import com.project.airbnb.models.Category;
-import com.project.airbnb.models.Ward;
+import com.project.airbnb.models.Location.Ward;
 import com.project.airbnb.repositories.AmenityRepository;
 import com.project.airbnb.repositories.CategoryRepository;
 import com.project.airbnb.repositories.WardRepository;

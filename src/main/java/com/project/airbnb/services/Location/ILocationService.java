@@ -1,6 +1,6 @@
 package com.project.airbnb.services.Location;
 
-import com.project.airbnb.models.Province;
+import com.project.airbnb.models.Location.Province;
 
 import java.util.List;
 
