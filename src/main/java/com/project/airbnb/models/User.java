@@ -37,6 +37,9 @@ public class User extends AbstractEntity {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "otp")
+    private String otp;
+
     @Column(name = "date_host_started")
     private LocalDate dateHostStarted;
 
@@ -57,7 +60,7 @@ public class User extends AbstractEntity {
     @PrePersist
     public void onCreate(){
         if(status == null) {
-            this.status = Boolean.TRUE;
+            this.status = Boolean.FALSE;
         }
     }
 

@@ -3,15 +3,14 @@ package com.project.airbnb.controllers;
 import com.nimbusds.jose.JOSEException;
 import com.project.airbnb.dtos.request.AuthenticationRequest;
 import com.project.airbnb.dtos.request.LogoutRequest;
+import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.dtos.response.APIResponse;
 import com.project.airbnb.dtos.response.AuthenticationResponse;
+import com.project.airbnb.dtos.response.RegisterResponse;
 import com.project.airbnb.services.Auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -30,6 +29,29 @@ public class AuthController {
                 .data(response)
                 .build();
     }
+
+    @PostMapping("/register")
+    public APIResponse<RegisterResponse> registerAccount(@RequestBody UserCreationRequest request){
+
+        return APIResponse.<RegisterResponse>builder()
+                .status(HttpStatus.OK.value())
+                .message("Register account")
+                .data(authenticationService.registerAccount(request))
+                .build();
+    }
+
+    @PostMapping("/verify")
+    public APIResponse<Boolean> verifyAccount(
+            @RequestParam("email") String email,
+            @RequestParam("otp") String otp
+    ){
+        return APIResponse.<Boolean>builder()
+                .status(HttpStatus.OK.value())
+                .message("Verify account")
+                .data(authenticationService.verifyAccount(email, otp))
+                .build();
+    }
+
 
     @PostMapping("/log-out")
     public APIResponse<Void> logout(@RequestBody LogoutRequest request)

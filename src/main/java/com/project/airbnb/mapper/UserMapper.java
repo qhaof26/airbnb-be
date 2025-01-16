@@ -1,5 +1,6 @@
 package com.project.airbnb.mapper;
 
+import com.project.airbnb.dtos.response.RegisterResponse;
 import com.project.airbnb.dtos.response.UserResponse;
 import com.project.airbnb.models.Role;
 import com.project.airbnb.models.User;
@@ -27,6 +28,17 @@ public class UserMapper {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .roles(roleName)
+                .build();
+    }
+
+    public RegisterResponse toRegisterResponse(User user){
+        return RegisterResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .status(user.getStatus())
                 .build();
     }
 }
