@@ -1,5 +1,6 @@
 package com.project.airbnb.services.Listing;
 
+import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ListingService implements IListingService{
     private final CloudinaryService cloudinaryService;
+    private final ImageRepository imageRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
     private final WardRepository wardRepository;
@@ -99,7 +101,10 @@ public class ListingService implements IListingService{
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public CloudinaryResponse uploadImage(String listingId, ObjectType objectType, MultipartFile file) throws IOException {
-
+        List<Image> images = imageRepository.findByObjectId(listingId);
+        if(images.size() >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
+            throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
+        }
         return cloudinaryService.uploadImage(listingId, objectType, file);
     }
 

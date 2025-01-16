@@ -1,13 +1,13 @@
 package com.project.airbnb.services.Cloudinary;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.enums.ObjectType;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.exceptions.FileUploadException;
 import com.project.airbnb.models.Image;
-import com.project.airbnb.models.Listing;
 import com.project.airbnb.repositories.ImageRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
@@ -41,6 +41,10 @@ public class CloudinaryService {
 
         //assert file.getOriginalFilename() != null;
         if(file.getOriginalFilename() == null) {
+            throw new FileUploadException(ErrorCode.FILE_ERROR);
+        }
+        boolean isValid = isAllowedFileType(file.getOriginalFilename());
+        if(!isValid){
             throw new FileUploadException(ErrorCode.FILE_ERROR);
         }
         String publicValue = generatePublicValue(file.getOriginalFilename());
@@ -85,6 +89,11 @@ public class CloudinaryService {
         } catch (IOException e) {
             log.error("Error");
         }
+    }
+
+    public boolean isAllowedFileType(String originalName) {
+        return AppConst.ALLOWED_IMAGE_EXTENSIONS.stream()
+                .anyMatch(extension -> originalName.toLowerCase().endsWith(extension));
     }
 
     public String generatePublicValue(String originalName){

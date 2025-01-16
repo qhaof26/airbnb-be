@@ -3,6 +3,7 @@ package com.project.airbnb.services.Auth;
 import com.nimbusds.jose.JOSEException;
 import com.project.airbnb.dtos.request.AuthenticationRequest;
 import com.project.airbnb.dtos.request.LogoutRequest;
+import com.project.airbnb.dtos.request.RefreshToken;
 import com.project.airbnb.dtos.response.AuthenticationResponse;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
@@ -53,6 +54,13 @@ public class AuthenticationService implements IAuthenticationService{
                 .token(token)
                 .isAuthenticated(true)
                 .build();
+    }
+
+    @Override
+    public AuthenticationResponse refreshToken(RefreshToken token)
+            {
+
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.project.airbnb.exceptions;
 
+import com.project.airbnb.constants.AppConst;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,6 +35,8 @@ public enum ErrorCode {
     LISTING_EXISTED(HttpStatus.BAD_REQUEST, "Listing existed !"),
     LISTING_NOT_EMPTY(HttpStatus.BAD_REQUEST, "Listing not empty !"),
     GUEST_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "The number of guests has exceeded the prescribed limit"),
+    LISTING_IMAGE_MAX_QUANTITY(HttpStatus.BAD_REQUEST, "Number of images listing must be <= " + AppConst.MAXIMUM_IMAGE_PER_LISTING),
+
     //LISTING_AVAILABILITY
     LISTING_AVAILABILITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing availability not existed !"),
     LISTING_AVAILABILITY_EXISTED(HttpStatus.BAD_REQUEST, "Listing availability existed !"),
