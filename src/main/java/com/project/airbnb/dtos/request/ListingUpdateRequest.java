@@ -22,7 +22,7 @@ public class ListingUpdateRequest {
     private int numGuests;
     private String description;
     private String address;
-
+    private Boolean status;
     private Ward ward;
     private Category category;
     private Set<Amenity> amenities;

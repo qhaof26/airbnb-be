@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class UserController {
     public APIResponse<UserResponse> getUserById(@PathVariable String userId){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Fetch user successful")
+                .message("Fetch user")
                 .data(userService.getUserById(userId))
                 .build();
     }
@@ -30,24 +31,50 @@ public class UserController {
     @GetMapping("/active")
     public APIResponse<PageResponse<List<UserResponse>>> getAllUserActive(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = "10", required = false) int pageSize
+            @RequestParam(defaultValue = "10", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
     ){
         return APIResponse.<PageResponse<List<UserResponse>>>builder()
                 .status(HttpStatus.OK.value())
-                .message("Fetch all user active successful")
-                .data(userService.getAllUserActive(pageNo, pageSize))
+                .message("Fetch all user active")
+                .data(userService.getAllUserActive(pageNo, pageSize, sortBy))
                 .build();
     }
 
     @GetMapping("/block")
     public APIResponse<PageResponse<List<UserResponse>>> getAllUserBlock(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = "10", required = false) int pageSize
+            @RequestParam(defaultValue = "10", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
     ){
         return APIResponse.<PageResponse<List<UserResponse>>>builder()
                 .status(HttpStatus.OK.value())
-                .message("Fetch all user block successful")
-                .data(userService.getAllUserBlock(pageNo, pageSize))
+                .message("Fetch all user block")
+                .data(userService.getAllUserBlock(pageNo, pageSize, sortBy))
+                .build();
+    }
+
+    @GetMapping("/search")
+    public APIResponse<PageResponse<List<UserResponse>>> searchUserByKeyword(
+            @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
+            @RequestParam(defaultValue = "10", required = false) int pageSize,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sortBy
+
+    ){
+        return APIResponse.<PageResponse<List<UserResponse>>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Search users by keyword")
+                .data(userService.searchUsers(pageNo, pageSize, keyword, sortBy))
+                .build();
+    }
+
+    @GetMapping("/filters")
+    public APIResponse<PageResponse<List<UserResponse>>> filterUsers(@RequestParam Map<Object, String> filters){
+        return APIResponse.<PageResponse<List<UserResponse>>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Filter users")
+                .data(userService.filterUsers(filters))
                 .build();
     }
 
@@ -55,7 +82,7 @@ public class UserController {
     public APIResponse<UserResponse> createUser(@RequestBody UserCreationRequest request){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Created user successful")
+                .message("Created user")
                 .data(userService.createNewUser(request))
                 .build();
     }
@@ -65,7 +92,7 @@ public class UserController {
             ){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.OK.value())
-                .message("Change status user successful")
+                .message("Change status user")
                 .data(userService.changeStatus(userId, status))
                 .build();
     }

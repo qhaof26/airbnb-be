@@ -17,5 +17,6 @@ public interface IListingService {
     ListingResponse createListing(ListingCreationRequest request); //HOST, ADMIN
     CloudinaryResponse uploadImage(String listingId, ObjectType objectType, MultipartFile file) throws IOException; //HOST, ADMIN
     ListingResponse updateListing(String listingId, ListingUpdateRequest request); //HOST, ADMIN
+    ListingResponse changeStatus(String listingId, Boolean status); //HOST, ADMIN
     void deleteListing(String listingId); //HOST, ADMIN
 }

@@ -20,6 +20,7 @@ public class ListingResponse {
     private int numGuests;
     private String description;
     private String address;
+    private Boolean status;
 
     private WardResponse ward;
     private UserResponse host;

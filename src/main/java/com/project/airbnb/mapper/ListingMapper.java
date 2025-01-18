@@ -44,6 +44,7 @@ public class ListingMapper {
                 .numBedrooms(listing.getNumBedrooms())
                 .address(listing.getAddress())
                 .description(listing.getDescription())
+                .status(listing.getStatus())
                 .amenities(amenities)
                 .ward(wardMapper.toWardResponse(listing.getWard()))
                 .category(category)

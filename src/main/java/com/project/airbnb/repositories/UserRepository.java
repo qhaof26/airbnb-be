@@ -3,6 +3,7 @@ package com.project.airbnb.repositories;
 import com.project.airbnb.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,13 +16,14 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
 
-    @Query(value = "select u from User u where u.id = :userId and u.status = TRUE ")
+    @Query(value = "select u from User u join fetch u.roles where u.id = :userId and u.status = TRUE ")
     Optional<User> findUserActive(String userId);
 
-    @Query(value = "select u from User u where u.status = TRUE ")
+    //@EntityGraph(attributePaths = {"roles"})
+    @Query(value = "select u from User u join fetch u.roles where u.status = TRUE ")
     Page<User> findAllUserActive(Pageable pageable);
 
-    @Query(value = "select u from User u where u.status = FALSE ")
+    @Query(value = "select u from User u join fetch u.roles where u.status = FALSE ")
     Page<User> findAllUserBlock(Pageable pageable);
 
     boolean existsByUsername(String username);

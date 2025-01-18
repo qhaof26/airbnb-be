@@ -46,6 +46,9 @@ public class Listing extends AbstractEntity {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @Column(name = "is_guest_favourite")
     private Boolean isGuestFavourite;
 
@@ -74,4 +77,11 @@ public class Listing extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
     private Set<Amenity> amenities = new HashSet<>();
+
+    @PrePersist
+    public void onCreate(){
+        if(this.status == null){
+            this.status = Boolean.FALSE;
+        }
+    }
 }

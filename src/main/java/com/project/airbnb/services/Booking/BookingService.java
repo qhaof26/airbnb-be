@@ -27,6 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -96,6 +97,9 @@ public class BookingService implements IBookingService{
     public BookingResponse createBooking(BookingCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         if(!availabilityRepository.existsByListing(request.getListing())) throw new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED);
+        if(!request.getCheckinDate().isAfter(LocalDate.now())){
+            throw new IllegalArgumentException("Check-in date must be after today");
+        }
         if(!request.getCheckoutDate().isAfter(request.getCheckinDate())){
             throw new IllegalArgumentException("Check-out date must be after Check-in date");
         }
@@ -113,7 +117,6 @@ public class BookingService implements IBookingService{
         BigDecimal serviceFee = BigDecimal.valueOf(100000);
         BigDecimal totalPrice = (listing.getNightlyPrice()).multiply(BigDecimal.valueOf(numDays));
 
-        //User is logging (JWT)
         String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         User userBooking = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 

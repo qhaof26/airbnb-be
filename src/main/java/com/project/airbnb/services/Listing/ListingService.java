@@ -130,10 +130,21 @@ public class ListingService implements IListingService{
         listing.setNumBathrooms(request.getNumBathrooms());
         listing.setAddress(request.getAddress());
         listing.setDescription(request.getDescription());
+        listing.setStatus(request.getStatus());
         listing.setWard(ward);
         listing.setCategory(category);
         listing.setAmenities(amenities);
         listing.setUpdatedAt(LocalDateTime.now());
+        listingRepository.save(listing);
+        return listingMapper.toListingResponse(listing);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    @Transactional
+    public ListingResponse changeStatus(String listingId, Boolean status) {
+        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        listing.setStatus(status);
         listingRepository.save(listing);
         return listingMapper.toListingResponse(listing);
     }
