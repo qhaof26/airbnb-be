@@ -37,7 +37,7 @@ public class BookingController {
         return APIResponse.<PageResponse<List<BookingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get all booking of Guest")
-                .data(bookingService.getGuestBookings(pageNo, pageSize))
+                .data(bookingService.getBookingsOfGuest(pageNo, pageSize))
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class BookingController {
         return APIResponse.<PageResponse<List<BookingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get all booking of host")
-                .data(bookingService.getHostBookings(pageNo, pageSize))
+                .data(bookingService.getBookingsOfHost(pageNo, pageSize))
                 .build();
     }
 

@@ -18,7 +18,6 @@ public class ListingAvailabilityResponse {
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private ListingStatus status;
-    private BigDecimal price;
     private Listing listing;
 
     @Getter

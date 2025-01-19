@@ -4,6 +4,7 @@ import com.project.airbnb.dtos.request.ListingAvailabilityCreationRequest;
 import com.project.airbnb.dtos.request.ListingAvailabilityUpdateRequest;
 import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
 import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.enums.ListingStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingAvailabilityMapper;
@@ -25,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,12 +40,15 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     public ListingAvailabilityResponse getListingAvailability(String id) {
         return listingAvailabilityMapper.toListingAvailabilityResponse(listingAvailabilityRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED)));
     }
 
     @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     public PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByListing(String listingId, int pageNo, int pageSize) {
+        verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
         Page<ListingAvailability> listingAvailabilityPage = listingAvailabilityRepository.findByListing(listing, pageable);
@@ -87,7 +93,6 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
         }
         ListingAvailability listingAvailability = ListingAvailability.builder()
                 .date(request.getDate())
-                .price(request.getPrice())
                 .status(request.getStatus())
                 .listing(listing)
                 .build();
@@ -100,10 +105,52 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     @Transactional
     public ListingAvailabilityResponse updateListingAvailability(String id, ListingAvailabilityUpdateRequest request) {
         ListingAvailability listingAvailability = listingAvailabilityRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED));
-        listingAvailability.setPrice(request.getPrice());
+        verifyHostOfListing(listingAvailability.getListing().getId());
         listingAvailability.setStatus(request.getStatus());
         listingAvailability.setUpdatedAt(LocalDateTime.now());
         listingAvailabilityRepository.save(listingAvailability);
         return listingAvailabilityMapper.toListingAvailabilityResponse(listingAvailability);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    @Transactional
+    public void createListingAvailabilityForMonth(String listingId, int year, int month) {
+        verifyHostOfListing(listingId);
+        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        List<LocalDate> days = generateDaysOfMonth(year, month);
+        List<ListingAvailability> availabilities = days.stream()
+                .map(day -> {
+                    ListingAvailability availability = ListingAvailability.builder()
+                            .listing(listing)
+                            .date(day)
+                            .status(ListingStatus.AVAILABLE)
+                            .build();
+                    return availability;
+                }).toList();
+        listingAvailabilityRepository.saveAll(availabilities);
+    }
+
+    public List<LocalDate> generateDaysOfMonth(int year, int month) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        List<LocalDate> days = new ArrayList<>();
+        while (!start.isAfter(end)) {
+            days.add(start);
+            start = start.plusDays(1);
+        }
+        return days;
+    }
+
+    private User getUserLogin(){
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        return userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+    private void verifyHostOfListing(String listingId){
+        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        if(!listing.getUser().equals(getUserLogin())){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
     }
 }

@@ -13,7 +13,6 @@ public class ListingAvailabilityMapper {
         return ListingAvailabilityResponse.builder()
                 .id(listingAvailability.getId())
                 .date(listingAvailability.getDate())
-                .price(listingAvailability.getPrice())
                 .status(listingAvailability.getStatus())
                 .listing(listing)
                 .build();

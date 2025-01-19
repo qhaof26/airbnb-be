@@ -4,6 +4,7 @@ import com.project.airbnb.dtos.request.ListingAvailabilityCreationRequest;
 import com.project.airbnb.dtos.request.ListingAvailabilityUpdateRequest;
 import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
 import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.models.Listing;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,4 +15,5 @@ public interface IListingAvailabilityService {
     PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByTime(String listingId, LocalDate startDate, LocalDate endDate, int pageNo, int pageSize); //GUEST, HOST, ADMIN
     ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request); //HOST, ADMIN
     ListingAvailabilityResponse updateListingAvailability(String id, ListingAvailabilityUpdateRequest request); //HOST, ADMIN
+    void createListingAvailabilityForMonth(String listingId, int year, int month);
 }

@@ -15,6 +15,5 @@ import java.time.LocalDate;
 public class ListingAvailabilityCreationRequest {
     private LocalDate date;
     private ListingStatus status;
-    private BigDecimal price;
     private Listing listing;
 }

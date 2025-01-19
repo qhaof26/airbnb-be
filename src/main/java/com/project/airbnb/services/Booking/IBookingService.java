@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface IBookingService {
     BookingResponse getBookingById(String bookingId);
-    PageResponse<List<BookingResponse>> getGuestBookings(int pageNo, int pageSize); //GUEST
-    PageResponse<List<BookingResponse>> getHostBookings(int pageNo, int pageSize); //HOST
+    PageResponse<List<BookingResponse>> getBookingsOfGuest(int pageNo, int pageSize); //GUEST
+    PageResponse<List<BookingResponse>> getBookingsOfHost(int pageNo, int pageSize); //HOST
     BookingResponse createBooking(BookingCreationRequest request); //GUEST
     BookingResponse updateBooking(BookingUpdateRequest request); //HOST
 }

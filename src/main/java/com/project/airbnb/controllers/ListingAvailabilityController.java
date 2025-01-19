@@ -74,4 +74,17 @@ public class ListingAvailabilityController {
                 .data(listingAvailabilityService.updateListingAvailability(listingId, request))
                 .build();
     }
+
+    @PostMapping("/auto")
+    public APIResponse<Void> createListingAvailabilityForMonth(
+            @RequestParam("id") String id,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month
+    ){
+        listingAvailabilityService.createListingAvailabilityForMonth(id, year, month);
+        return APIResponse.<Void>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Created listing availability for month")
+                .build();
+    }
 }

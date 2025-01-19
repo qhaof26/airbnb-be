@@ -56,7 +56,7 @@ public class BookingService implements IBookingService{
 
     @Override
     @PreAuthorize("hasRole('GUEST') or hasRole('ADMIN')")
-    public PageResponse<List<BookingResponse>> getGuestBookings(int pageNo, int pageSize) {
+    public PageResponse<List<BookingResponse>> getBookingsOfGuest(int pageNo, int pageSize) {
         String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
@@ -74,7 +74,7 @@ public class BookingService implements IBookingService{
 
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
-    public PageResponse<List<BookingResponse>> getHostBookings(int pageNo, int pageSize) {
+    public PageResponse<List<BookingResponse>> getBookingsOfHost(int pageNo, int pageSize) {
         String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 

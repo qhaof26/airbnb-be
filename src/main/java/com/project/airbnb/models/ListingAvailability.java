@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "tbl_listing_availability")
 public class ListingAvailability extends AbstractEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

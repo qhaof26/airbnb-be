@@ -13,5 +13,4 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ListingAvailabilityUpdateRequest {
     private ListingStatus status;
-    private BigDecimal price;
 }
