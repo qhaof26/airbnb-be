@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -113,6 +115,18 @@ public class LocationService implements ILocationService {
     @Override
     public List<Province> getProvinces() {
         return provinceRepository.findAll();
+    }
+
+    public Map<String, List<?>> searchLocation(String keyword){
+        List<Province> provinces = provinceRepository.findByNameContainingIgnoreCase(keyword);
+        List<District> districts = districtRepository.findByNameContainingIgnoreCase(keyword);
+        List<Ward> wards = wardRepository.findByNameContainingIgnoreCase(keyword);
+
+        Map<String, List<?>> results = new HashMap<>();
+        results.put("provinces", provinces);
+        results.put("districts", districts);
+        results.put("wards", wards);
+        return results;
     }
 
 }

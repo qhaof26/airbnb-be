@@ -14,16 +14,9 @@ public class ListingResponse {
     private String id;
     private String listingName;
     private BigDecimal nightlyPrice;
-    private int numBeds;
-    private int numBedrooms;
-    private int numBathrooms;
-    private int numGuests;
-    private String description;
     private String address;
     private Boolean status;
-
     private WardResponse ward;
-    private UserResponse host;
-    private CategoryResponse category;
-    private Set<AmenityResponse> amenities;
+    private String image;
+
 }

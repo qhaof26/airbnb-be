@@ -17,7 +17,7 @@ public class District {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "province_id")
     private Province province;
 

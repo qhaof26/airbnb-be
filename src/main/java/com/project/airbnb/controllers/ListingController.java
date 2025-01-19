@@ -2,10 +2,7 @@ package com.project.airbnb.controllers;
 
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
-import com.project.airbnb.dtos.response.APIResponse;
-import com.project.airbnb.dtos.response.CloudinaryResponse;
-import com.project.airbnb.dtos.response.ListingResponse;
-import com.project.airbnb.dtos.response.PageResponse;
+import com.project.airbnb.dtos.response.*;
 import com.project.airbnb.enums.ObjectType;
 import com.project.airbnb.services.Listing.ListingService;
 import jakarta.validation.constraints.Min;
@@ -16,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +21,18 @@ import java.util.List;
 public class ListingController {
     private final ListingService listingService;
 
+    @GetMapping("/search")
+    public APIResponse<PageResponse<List<ListingResponse>>> searchListing(@RequestParam Map<Object, String> filters){
+        return APIResponse.<PageResponse<List<ListingResponse>>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Search listings")
+                .data(listingService.searchListing(filters))
+                .build();
+    }
+
     @GetMapping("/{listingId}")
-    public APIResponse<ListingResponse> getListingById(@PathVariable String listingId){
-        return APIResponse.<ListingResponse>builder()
+    public APIResponse<ListingResponseDetail> getListingById(@PathVariable String listingId){
+        return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get listing by id successful")
                 .data(listingService.getListingById(listingId))
@@ -45,8 +52,8 @@ public class ListingController {
     }
 
     @PostMapping("/create")
-    public APIResponse<ListingResponse> createListing(@RequestBody ListingCreationRequest request){
-        return APIResponse.<ListingResponse>builder()
+    public APIResponse<ListingResponseDetail> createListing(@RequestBody ListingCreationRequest request){
+        return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Created listing successful")
                 .data(listingService.createListing(request))
@@ -67,8 +74,8 @@ public class ListingController {
     }
 
     @PatchMapping("/update/{listingId}")
-    public APIResponse<ListingResponse> updateListing(@RequestBody ListingUpdateRequest request, @PathVariable String listingId){
-        return APIResponse.<ListingResponse>builder()
+    public APIResponse<ListingResponseDetail> updateListing(@RequestBody ListingUpdateRequest request, @PathVariable String listingId){
+        return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.OK.value())
                 .message("Updated listing successful")
                 .data(listingService.updateListing(listingId, request))

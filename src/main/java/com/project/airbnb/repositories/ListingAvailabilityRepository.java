@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface ListingAvailabilityRepository extends JpaRepository<ListingAvailability, String>, JpaSpecificationExecutor<ListingAvailability> {
     Page<ListingAvailability> findByListing(Listing listing, Pageable pageable);
-    boolean existsByDate(LocalDate date);
+    boolean existsByDateAndListingId(LocalDate date, String listingId);
     boolean existsByListing(Listing listing);
 
     @Query("select la from ListingAvailability la where la.listing.id = :listingId and la.date between :startDate and :endDate and la.status = :status")
@@ -34,10 +34,15 @@ public interface ListingAvailabilityRepository extends JpaRepository<ListingAvai
             Pageable pageable
     );
 
-    @Query("SELECT la FROM ListingAvailability la WHERE la.listing.id = :listingId AND la.status = :status")
-    Page<ListingAvailability> findByListingAndStatus(
-            @Param("listingId") String listingId,
-            @Param("status") String status,
-            Pageable pageable
-    );
+    @Query("select la.listing.id from ListingAvailability la " +
+            "where la.date between :startDate and :endDate " +
+            "and la.status = :status " +
+            "group by la.listing.id " +
+            "having count(la.date) = :totalDays")
+    List<String> findAvailableListingIds(@Param("startDate") LocalDate startDate,
+                                       @Param("endDate") LocalDate endDate,
+                                       @Param("totalDays") long totalDays,
+                                       @Param("status") ListingStatus status);
+
+
 }

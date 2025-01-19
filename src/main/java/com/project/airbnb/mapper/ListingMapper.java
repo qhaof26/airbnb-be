@@ -3,7 +3,9 @@ package com.project.airbnb.mapper;
 import com.project.airbnb.dtos.response.AmenityResponse;
 import com.project.airbnb.dtos.response.CategoryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
+import com.project.airbnb.dtos.response.ListingResponseDetail;
 import com.project.airbnb.models.*;
+import com.project.airbnb.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +20,23 @@ public class ListingMapper {
     private final UserMapper userMapper;
     private final AmenityMapper amenityMapper;
     private final CategoryMapper categoryMapper;
+    private final ImageRepository imageRepository;
 
     public ListingResponse toListingResponse(Listing listing){
+        String url = imageRepository.findAvatarListing(listing.getId()).orElse(null);
+
+        return ListingResponse.builder()
+                .id(listing.getId())
+                .listingName(listing.getListingName())
+                .nightlyPrice(listing.getNightlyPrice())
+                .address(listing.getAddress())
+                .status(listing.getStatus())
+                .ward(wardMapper.toWardResponse(listing.getWard()))
+                .image(url)
+                .build();
+    }
+
+    public ListingResponseDetail toListingResponseDetail(Listing listing){
         CategoryResponse category = null;
         if(listing.getCategory() != null){
             category = categoryMapper.toCategoryResponse(listing.getCategory());
@@ -34,7 +51,8 @@ public class ListingMapper {
         if(listing.getAmenities() != null){
             amenities = listing.getAmenities().stream().map(amenityMapper::toAmenityResponse).collect(Collectors.toSet());
         }
-        return ListingResponse.builder()
+        Set<String> images = imageRepository.findImagesListing(listing.getId()).orElse(null);
+        return ListingResponseDetail.builder()
                 .id(listing.getId())
                 .nightlyPrice(listing.getNightlyPrice())
                 .listingName(listing.getListingName())
@@ -49,6 +67,7 @@ public class ListingMapper {
                 .ward(wardMapper.toWardResponse(listing.getWard()))
                 .category(category)
                 .host(userMapper.toUserResponse(Objects.requireNonNull(user)))
+                .images(images)
                 .build();
     }
 }

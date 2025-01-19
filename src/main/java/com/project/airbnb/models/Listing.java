@@ -52,7 +52,7 @@ public class Listing extends AbstractEntity {
     @Column(name = "is_guest_favourite")
     private Boolean isGuestFavourite;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ward_id")
     private Ward ward;
 

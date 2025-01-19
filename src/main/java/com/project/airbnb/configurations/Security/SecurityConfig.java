@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final CustomJwtDecoder customJwtDecoder;
 
     private final String[] PUBLIC_ENDPOINTS = {
+            "api/v1/fake/search",
             "api/v1/auth/**",
             "api/v1/users/register",
             "api/v1/amenities/{amenityId}",

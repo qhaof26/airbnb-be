@@ -37,6 +37,7 @@ public enum ErrorCode {
     LISTING_NOT_EMPTY(HttpStatus.BAD_REQUEST, "Listing not empty !"),
     GUEST_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "The number of guests has exceeded the prescribed limit"),
     LISTING_IMAGE_MAX_QUANTITY(HttpStatus.BAD_REQUEST, "Number of images listing must be <= " + AppConst.MAXIMUM_IMAGE_PER_LISTING),
+    IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Image not found"),
 
     //LISTING_AVAILABILITY
     LISTING_AVAILABILITY_NOT_EXISTED(HttpStatus.NOT_FOUND, "Listing availability not existed !"),

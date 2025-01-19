@@ -9,8 +9,11 @@ import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingAvailabilityMapper;
 import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.ListingAvailability;
+import com.project.airbnb.models.User;
 import com.project.airbnb.repositories.ListingAvailabilityRepository;
 import com.project.airbnb.repositories.ListingRepository;
+import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     private final ListingAvailabilityRepository listingAvailabilityRepository;
     private final ListingRepository listingRepository;
     private final ListingAvailabilityMapper listingAvailabilityMapper;
+    private final UserRepository userRepository;
 
     @Override
     public ListingAvailabilityResponse getListingAvailability(String id) {
@@ -72,8 +76,13 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingAvailabilityResponse createListingAvailability(ListingAvailabilityCreationRequest request) {
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        if(listingAvailabilityRepository.existsByDate(request.getDate())){
+        if(!listing.getUser().equals(user)){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        if(listingAvailabilityRepository.existsByDateAndListingId(request.getDate(), listing.getId())){
             throw new AppException(ErrorCode.LISTING_AVAILABILITY_EXISTED);
         }
         ListingAvailability listingAvailability = ListingAvailability.builder()

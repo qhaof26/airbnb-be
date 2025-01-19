@@ -12,13 +12,12 @@ import com.project.airbnb.repositories.AmenityRepository;
 import com.project.airbnb.repositories.CategoryRepository;
 import com.project.airbnb.repositories.WardRepository;
 import com.project.airbnb.services.Listing.ListingService;
+import com.project.airbnb.services.Location.LocationService;
 import com.project.airbnb.services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -30,6 +29,7 @@ public class FakeApiController {
     private final UserService userService;
     private final ListingService listingService;
     private final WardRepository wardRepository;
+    private final LocationService locationService;
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
     private final PasswordEncoder passwordEncoder;
@@ -104,5 +104,10 @@ public class FakeApiController {
         return ResponseEntity.ok().body("Added listing");
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> searchLocations(@RequestParam String keyword) {
+
+        return ResponseEntity.ok(locationService.searchLocation(keyword));
+    }
 
 }

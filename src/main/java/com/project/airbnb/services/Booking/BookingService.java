@@ -94,7 +94,7 @@ public class BookingService implements IBookingService{
     @Override
     @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public BookingResponse createBooking(BookingCreationRequest request) {
+    public BookingResponse createBooking(final BookingCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         if(!availabilityRepository.existsByListing(request.getListing())) throw new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED);
         if(!request.getCheckinDate().isAfter(LocalDate.now())){
@@ -105,7 +105,7 @@ public class BookingService implements IBookingService{
         }
         List<ListingAvailability> listingAvailabilities = availabilityRepository.checkListingAndDateRangeAndStatus(request.getListing().getId(),request.getCheckinDate(), request.getCheckoutDate(), ListingStatus.AVAILABLE);
 
-        long totalDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate()) + 1;
+        final long totalDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate()) + 1;
         if(listingAvailabilities.size() != totalDays){
             throw new AppException(ErrorCode.LISTING_NOT_EMPTY);
         }
@@ -113,7 +113,7 @@ public class BookingService implements IBookingService{
             throw new AppException(ErrorCode.GUEST_LIMIT_EXCEEDED);
         }
 
-        long numDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate());
+        final long numDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate());
         BigDecimal serviceFee = BigDecimal.valueOf(100000);
         BigDecimal totalPrice = (listing.getNightlyPrice()).multiply(BigDecimal.valueOf(numDays));
 

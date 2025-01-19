@@ -12,7 +12,13 @@ spring:
       ddl-auto: update
     show-sql: true
 
-## Email
+## File
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  ## Email
   mail:
     host: smtp.gmail.com
     port: 587
