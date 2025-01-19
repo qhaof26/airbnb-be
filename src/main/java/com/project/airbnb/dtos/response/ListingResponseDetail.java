@@ -28,4 +28,15 @@ public class ListingResponseDetail {
     private CategoryResponse category;
     private Set<AmenityResponse> amenities;
     private Set<String> images;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserResponse{
+        private String firstName;
+        private String lastName;
+        private String email;
+    }
 }

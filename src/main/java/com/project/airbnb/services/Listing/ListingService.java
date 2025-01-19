@@ -52,7 +52,7 @@ public class ListingService implements IListingService{
     private final ListingMapper listingMapper;
 
     @Override
-    public PageResponse<List<ListingResponse>> searchListing(Map<Object, String> filters) {
+    public PageResponse<List<ListingResponse>> filterListings(Map<Object, String> filters) {
         int pageNo, pageSize;
         try {
             pageNo = Integer.parseInt(filters.getOrDefault("pageNo", "1"));
@@ -84,9 +84,9 @@ public class ListingService implements IListingService{
 
         log.info("keyword: {}, numGuests: {}, checkinDate: {}, checkoutDate: {}, amenities: {}", keyword, numGuests, checkinDate, checkoutDate, amenities);
         log.info("numBeds: {}, numBedrooms: {}, numBathrooms: {}, minPrice: {}, maxPrice: {}", numBeds, numBedrooms, numBathrooms, minPrice, maxPrice);
-//        if(!checkinDate.isAfter(LocalDate.now())){
-//            throw new IllegalArgumentException("Check-in date must be after today");
-//        }
+        if(!checkinDate.isAfter(LocalDate.now())){
+            throw new IllegalArgumentException("Check-in date must be after today");
+        }
         if(!checkoutDate.isAfter(checkinDate)){
             throw new IllegalArgumentException("Check-out date must be after Check-in date");
         }
@@ -108,12 +108,6 @@ public class ListingService implements IListingService{
                 .totalPage(listingPage.getTotalPages())
                 .data(listingResponses)
                 .build();
-    }
-
-    @Override
-    public PageResponse<List<ListingResponseDetail>> filterListings(Map<Object, String> filters) {
-
-        return null;
     }
 
     @Override
@@ -139,10 +133,25 @@ public class ListingService implements IListingService{
 
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    public PageResponse<List<ListingResponse>> getAllListingsOfHost(int pageNo, int pageSize) {
+        final User host = getUserLogin();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Listing> listingsOfHost = listingRepository.findByUser(host, pageable);
+        List<ListingResponse> listingResponses = listingsOfHost.getContent().stream().map(listingMapper::toListingResponse).toList();
+
+        return PageResponse.<List<ListingResponse>>builder()
+                .page(pageable.getPageNumber() + 1)
+                .size(pageable.getPageSize())
+                .totalElement(listingsOfHost.getTotalElements())
+                .totalPage(listingsOfHost.getTotalPages())
+                .data(listingResponses)
+                .build();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingResponseDetail createListing(ListingCreationRequest request) {
-        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
 
@@ -163,7 +172,7 @@ public class ListingService implements IListingService{
                 .description(request.getDescription())
                 .ward(ward)
                 .category(category)
-                .user(user)
+                .user(getUserLogin())
                 .amenities(amenities)
                 .build();
         listingRepository.save(listing);
@@ -174,6 +183,7 @@ public class ListingService implements IListingService{
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public CloudinaryResponse uploadImage(String listingId, ObjectType objectType, MultipartFile file) throws IOException {
+        verifyHostOfListing(listingId);
         final int images = imageRepository.countByObjectId(listingId);
         if(images >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
             throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
@@ -185,6 +195,7 @@ public class ListingService implements IListingService{
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingResponseDetail updateListing(String listingId, ListingUpdateRequest request) {
+        verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
@@ -215,18 +226,20 @@ public class ListingService implements IListingService{
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public ListingResponseDetail changeStatus(String listingId, Boolean status) {
-        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        listing.setStatus(status);
-        listingRepository.save(listing);
-        return listingMapper.toListingResponseDetail(listing);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
-    @Transactional
     public void deleteListing(String listingId) {
+        verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         listingRepository.delete(listing);
+    }
+
+    private User getUserLogin(){
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        return userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+    private void verifyHostOfListing(String listingId){
+        Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        if(!listing.getUser().equals(getUserLogin())){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
     }
 }

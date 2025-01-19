@@ -9,7 +9,6 @@ import com.project.airbnb.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ListingMapper {
     private final WardMapper wardMapper;
-    private final UserMapper userMapper;
     private final AmenityMapper amenityMapper;
     private final CategoryMapper categoryMapper;
     private final ImageRepository imageRepository;
@@ -42,15 +40,20 @@ public class ListingMapper {
             category = categoryMapper.toCategoryResponse(listing.getCategory());
         }
 
-        User user = null;
+        ListingResponseDetail.UserResponse host = null;
         if(listing.getUser() != null){
-            user = listing.getUser();
+            host = ListingResponseDetail.UserResponse.builder()
+                    .firstName(listing.getUser().getFirstName())
+                    .lastName(listing.getUser().getLastName())
+                    .email(listing.getUser().getEmail())
+                    .build();
         }
 
         Set<AmenityResponse> amenities = null;
         if(listing.getAmenities() != null){
             amenities = listing.getAmenities().stream().map(amenityMapper::toAmenityResponse).collect(Collectors.toSet());
         }
+
         Set<String> images = imageRepository.findImagesListing(listing.getId()).orElse(null);
         return ListingResponseDetail.builder()
                 .id(listing.getId())
@@ -66,7 +69,7 @@ public class ListingMapper {
                 .amenities(amenities)
                 .ward(wardMapper.toWardResponse(listing.getWard()))
                 .category(category)
-                .host(userMapper.toUserResponse(Objects.requireNonNull(user)))
+                .host(host)
                 .images(images)
                 .build();
     }

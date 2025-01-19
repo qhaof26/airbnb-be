@@ -22,11 +22,11 @@ public class ListingController {
     private final ListingService listingService;
 
     @GetMapping("/search")
-    public APIResponse<PageResponse<List<ListingResponse>>> searchListing(@RequestParam Map<Object, String> filters){
+    public APIResponse<PageResponse<List<ListingResponse>>> filterListings(@RequestParam Map<Object, String> filters){
         return APIResponse.<PageResponse<List<ListingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Search listings")
-                .data(listingService.searchListing(filters))
+                .data(listingService.filterListings(filters))
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class ListingController {
     public APIResponse<ListingResponseDetail> getListingById(@PathVariable String listingId){
         return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.OK.value())
-                .message("Get listing by id successful")
+                .message("Get listing by id")
                 .data(listingService.getListingById(listingId))
                 .build();
     }
@@ -46,8 +46,20 @@ public class ListingController {
     ){
         return APIResponse.<PageResponse<List<ListingResponse>>>builder()
                 .status(HttpStatus.OK.value())
-                .message("Get all listings successful")
+                .message("Get all listings")
                 .data(listingService.getAllListings(pageNo, pageSize))
+                .build();
+    }
+
+    @GetMapping("/host")
+    public APIResponse<PageResponse<List<ListingResponse>>> getAllListingsOfHost(
+            @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
+            @RequestParam(defaultValue = "10", required = false) int pageSize
+    ){
+        return APIResponse.<PageResponse<List<ListingResponse>>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Get all listings of host")
+                .data(listingService.getAllListingsOfHost(pageNo, pageSize))
                 .build();
     }
 
