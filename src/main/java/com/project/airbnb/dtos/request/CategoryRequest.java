@@ -1,5 +1,6 @@
 package com.project.airbnb.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,5 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryRequest {
+    @NotBlank
     private String categoryName;
 }

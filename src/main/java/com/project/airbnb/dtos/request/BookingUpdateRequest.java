@@ -1,10 +1,9 @@
 package com.project.airbnb.dtos.request;
 
 import com.project.airbnb.enums.BookingStatus;
-import com.project.airbnb.models.Listing;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -12,6 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingUpdateRequest {
+    @NotBlank
     private String id;
+    @NotNull
     private BookingStatus status;
 }

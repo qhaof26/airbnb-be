@@ -1,5 +1,6 @@
 package com.project.airbnb.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleCreationRequest {
+    @NotBlank
     private String roleName;
     private String description;
 }

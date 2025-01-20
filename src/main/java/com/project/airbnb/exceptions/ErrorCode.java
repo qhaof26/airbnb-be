@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 public enum ErrorCode {
+    INVALID_KEY(HttpStatus.BAD_REQUEST, "Uncategorized error"),
     //FILE
     FILE_ERROR(HttpStatus.BAD_REQUEST, "Could not read file "),
 

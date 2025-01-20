@@ -1,5 +1,6 @@
 package com.project.airbnb.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,7 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateRequest {
+    @NotBlank
     private String id;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
 }
