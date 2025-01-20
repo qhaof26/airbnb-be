@@ -19,7 +19,7 @@ public class Amenity extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "amenity_name")
+    @Column(name = "amenity_name", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String amenityName;
 
     @ManyToMany(mappedBy = "amenities", fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.project.airbnb.services.Booking;
 
+import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.request.BookingCreationRequest;
 import com.project.airbnb.dtos.request.BookingUpdateRequest;
 import com.project.airbnb.dtos.response.BookingResponse;
@@ -17,6 +18,7 @@ import com.project.airbnb.repositories.BookingRepository;
 import com.project.airbnb.repositories.ListingAvailabilityRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.services.Email.EmailService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +48,8 @@ public class BookingService implements IBookingService{
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
     private final ListingAvailabilityRepository availabilityRepository;
+    private final EmailService emailService;
     private final BookingMapper bookingMapper;
-    private final SecurityUtils securityUtils;
 
     @Override
     public BookingResponse getBookingById(String bookingId) {
@@ -94,7 +96,7 @@ public class BookingService implements IBookingService{
     @Override
     @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public BookingResponse createBooking(final BookingCreationRequest request) {
+    public BookingResponse createBooking(BookingCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         if(!availabilityRepository.existsByListing(request.getListing())) throw new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED);
         if(!request.getCheckinDate().isAfter(LocalDate.now())){
@@ -117,9 +119,6 @@ public class BookingService implements IBookingService{
         BigDecimal serviceFee = BigDecimal.valueOf(100000);
         BigDecimal totalPrice = (listing.getNightlyPrice()).multiply(BigDecimal.valueOf(numDays));
 
-        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
-        User userBooking = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         Booking booking = Booking.builder()
                 .checkinDate(request.getCheckinDate())
                 .checkoutDate(request.getCheckoutDate())
@@ -130,12 +129,15 @@ public class BookingService implements IBookingService{
                 .note(request.getNote())
                 .status(BookingStatus.PENDING)
                 .listing(listing)
-                .user(userBooking)
+                .user(getUserLogin())
                 .build();
         bookingRepository.save(booking);
-
         listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingStatus.BOOKED));
         availabilityRepository.saveAll(listingAvailabilities);
+
+        User host = listing.getUser();
+        sendVerificationEmail(host.getEmail(), listing, booking);
+        sendVerificationEmail(getUserLogin().getEmail(), listing, booking);
         return bookingMapper.toBookingResponse(booking);
     }
 
@@ -144,10 +146,23 @@ public class BookingService implements IBookingService{
     @Transactional
     public BookingResponse updateBooking(BookingUpdateRequest request) {
         Booking booking = bookingRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
+        if(!getUserLogin().equals(booking.getListing().getUser())){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
         booking.setStatus(request.getStatus());
         booking.setUpdatedAt(LocalDateTime.now());
         bookingRepository.save(booking);
         return bookingMapper.toBookingResponse(booking);
     }
 
+    private User getUserLogin(){
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        return userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+
+    private void sendVerificationEmail(String email, Listing listing, Booking booking){
+        String subject = AppConst.TITTLE_BOOKING;
+        String body = "Id booking : " + booking.getId() + " - Listing Name: " + listing.getListingName();
+        emailService.sendOtpRegister(email, subject, body);
+    }
 }

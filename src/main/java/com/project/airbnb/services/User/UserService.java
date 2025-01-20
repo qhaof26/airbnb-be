@@ -99,8 +99,7 @@ public class UserService implements IUserService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<List<UserResponse>> filterUsers(Map<Object, String> filters) {
-        int pageNo = 1;
-        int pageSize = 10;
+        int pageNo, pageSize;
         try {
             pageNo = Integer.parseInt(filters.getOrDefault("pageNo", "1"));
             pageSize = Integer.parseInt(filters.getOrDefault("pageSize", "10"));
@@ -181,26 +180,6 @@ public class UserService implements IUserService{
 
         return true;
     }
-
-//    private List<Sort.Order> handleSort(String... sorts){
-//        // Handle sort by Multiple Columns
-//        List<Sort.Order> orders = new ArrayList<>();
-//        for(String sortBy : sorts){
-//            log.info("sortBy: {}", sortBy);
-//            if(StringUtils.hasLength(sortBy)){
-//                Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
-//                Matcher matcher = pattern.matcher(sortBy);
-//                if(matcher.find()){
-//                    if(matcher.group(3).equalsIgnoreCase("asc")){
-//                        orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-//                    } else if(matcher.group(3).equalsIgnoreCase("desc")){
-//                        orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-//                    }
-//                }
-//            }
-//        }
-//        return orders;
-//    }
 
     private List<Sort.Order> handleSort(String sortBy){
         // Handle sort by Multiple Columns

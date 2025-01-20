@@ -18,7 +18,7 @@ public class Category extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "category_name", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String categoryName;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)

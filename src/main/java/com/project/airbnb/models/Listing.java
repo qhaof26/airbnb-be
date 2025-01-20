@@ -43,7 +43,7 @@ public class Listing extends AbstractEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "address")
+    @Column(name = "address", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String address;
 
     @Column(name = "status")

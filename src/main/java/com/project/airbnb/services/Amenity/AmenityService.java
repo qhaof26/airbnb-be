@@ -56,6 +56,7 @@ public class AmenityService implements IAmenityService{
                 .amenityName(request.getAmenityName())
                 .build();
         amenityRepository.save(amenity);
+
         return amenityMapper.toAmenityResponse(amenity);
     }
 

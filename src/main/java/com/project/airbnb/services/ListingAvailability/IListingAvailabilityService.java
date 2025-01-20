@@ -4,7 +4,6 @@ import com.project.airbnb.dtos.request.ListingAvailabilityCreationRequest;
 import com.project.airbnb.dtos.request.ListingAvailabilityUpdateRequest;
 import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.models.Listing;
 
 import java.time.LocalDate;
 import java.util.List;
