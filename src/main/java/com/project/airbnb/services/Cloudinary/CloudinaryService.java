@@ -3,8 +3,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
-import com.project.airbnb.enums.ObjectType;
-import com.project.airbnb.exceptions.AppException;
+import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.exceptions.FileUploadException;
 import com.project.airbnb.models.Image;
@@ -32,12 +31,12 @@ public class CloudinaryService {
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
 
-    public CloudinaryResponse uploadImage(String objectId, ObjectType objectType, MultipartFile file) throws IOException{
-        if(objectType.equals(ObjectType.LISTING) && !listingRepository.existsById(objectId)){
-            throw new AppException(ErrorCode.LISTING_NOT_EXISTED);
-        } else if(objectType.equals(ObjectType.USER) && !userRepository.existsById(objectId)){
-            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-        }
+    public CloudinaryResponse uploadImage(String objectId, MultipartFile file, ImageType isAvatar) throws IOException{
+//        if(objectType.equals(ObjectType.LISTING) && !listingRepository.existsById(objectId)){
+//            throw new AppException(ErrorCode.LISTING_NOT_EXISTED);
+//        } else if(objectType.equals(ObjectType.USER) && !userRepository.existsById(objectId)){
+//            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+//        }
 
         //assert file.getOriginalFilename() != null;
         if(file.getOriginalFilename() == null) {
@@ -59,8 +58,7 @@ public class CloudinaryService {
 
         Image image = Image.builder()
                 .objectId(objectId)
-                .objectType(objectType)
-                .publicId(publicValue)
+                .isAvatar(isAvatar.getValue())
                 .url(url)
                 .build();
         imageRepository.save(image);

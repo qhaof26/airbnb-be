@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum BookingStatus {
-    DRAFT(0),
-    BOOKED(1),
-    COMPLETED(2),
-    CANCELLED(3)
+public enum ListingAvailabilityStatus {
+    AVAILABLE(0),
+    HELD(1),
+    BOOKED(2),
+    SERVED(3)
     ;
 
     private final int value;

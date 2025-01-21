@@ -1,6 +1,6 @@
 package com.project.airbnb.repositories.specification;
 
-import com.project.airbnb.enums.ListingStatus;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.ListingAvailability;
 import jakarta.persistence.criteria.JoinType;
@@ -20,7 +20,7 @@ public class ListingAvailabilitySpecification {
         };
     }
 
-    public static Specification<ListingAvailability> isActive(ListingStatus status){
+    public static Specification<ListingAvailability> isActive(ListingAvailabilityStatus status){
         return (root, query, criteriaBuilder) -> {
           if(Objects.isNull(status)){
               return criteriaBuilder.conjunction();
@@ -41,7 +41,7 @@ public class ListingAvailabilitySpecification {
         };
     }
 
-    public static Specification<ListingAvailability> filterAvailability(Listing listing, ListingStatus status, LocalDate checkIn, LocalDate checkOut){
+    public static Specification<ListingAvailability> filterAvailability(Listing listing, ListingAvailabilityStatus status, LocalDate checkIn, LocalDate checkOut){
         return Specification.where(hasListing(listing))
                 .and(isActive(status))
                 .and(hasDate(checkIn, checkOut));

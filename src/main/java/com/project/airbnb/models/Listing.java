@@ -1,14 +1,12 @@
 package com.project.airbnb.models;
 
-import com.project.airbnb.models.Location.Ward;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
+import org.locationtech.jts.geom.Point;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -43,18 +41,27 @@ public class Listing extends AbstractEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "longitude")
+    private Double longitude;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "geom", columnDefinition = "geometry(Point, 3857)")
+    private Point geom;
+
     @Column(name = "address", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String address;
 
+    @Column(name = "images", columnDefinition = "text[]")
+    @Type(ListArrayType.class)
+    private List<String> images;
+
     @Column(name = "status")
-    private Boolean status;
+    private int status;
 
-    @Column(name = "is_guest_favourite")
-    private Boolean isGuestFavourite;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ward_id")
-    private Ward ward;
+    @Column(name = "average_rating")
+    private Float averageRating;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -80,8 +87,6 @@ public class Listing extends AbstractEntity {
 
     @PrePersist
     public void onCreate(){
-        if(this.status == null){
-            this.status = Boolean.FALSE;
-        }
+        this.status = 1;
     }
 }

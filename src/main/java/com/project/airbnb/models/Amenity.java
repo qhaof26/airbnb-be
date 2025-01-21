@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_amenity")
+@Table(name = "amenities") //amenities
 public class Amenity extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

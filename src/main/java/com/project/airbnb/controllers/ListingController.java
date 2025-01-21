@@ -3,7 +3,7 @@ package com.project.airbnb.controllers;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.*;
-import com.project.airbnb.enums.ObjectType;
+import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.services.Listing.ListingService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -73,15 +73,15 @@ public class ListingController {
     }
 
     @PostMapping("/images")
-    public APIResponse<CloudinaryResponse> createListing(
+    public APIResponse<CloudinaryResponse> uploadImage(
             @RequestParam("id") String id,
-            @RequestParam("type") ObjectType type,
-            @RequestParam("image")MultipartFile image
+            @RequestParam("image")MultipartFile image,
+            @RequestParam("isAvatar") ImageType isAvatar
             ) throws IOException {
         return APIResponse.<CloudinaryResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Uploaded image listing successful")
-                .data(listingService.uploadImage(id, type, image))
+                .data(listingService.uploadImage(id, image, isAvatar))
                 .build();
     }
 

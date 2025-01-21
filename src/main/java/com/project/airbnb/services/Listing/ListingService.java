@@ -7,8 +7,8 @@ import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.ListingResponseDetail;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.enums.ListingStatus;
-import com.project.airbnb.enums.ObjectType;
+import com.project.airbnb.enums.ImageType;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingMapper;
@@ -93,7 +93,7 @@ public class ListingService implements IListingService{
 
         final long totalDays = ChronoUnit.DAYS.between(checkinDate, checkoutDate) + 1;
         List<String> availableListingIds = listingAvailabilityRepository.findAvailableListingIds(
-                checkinDate, checkoutDate, totalDays, ListingStatus.AVAILABLE);
+                checkinDate, checkoutDate, totalDays, ListingAvailabilityStatus.AVAILABLE);
 
         Specification<Listing> spec = Specification.where(ListingSpecification.filterListings(keyword, categoryName, amenities, numBeds, numBedrooms, numBathrooms, numGuests, minPrice, maxPrice))
                 .and((root, query, criteriaBuilder) -> root.get("id").in(availableListingIds));
@@ -170,7 +170,6 @@ public class ListingService implements IListingService{
                 .numBathrooms(request.getNumBathrooms())
                 .address(request.getAddress())
                 .description(request.getDescription())
-                .ward(ward)
                 .category(category)
                 .user(getUserLogin())
                 .amenities(amenities)
@@ -182,13 +181,13 @@ public class ListingService implements IListingService{
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public CloudinaryResponse uploadImage(String listingId, ObjectType objectType, MultipartFile file) throws IOException {
+    public CloudinaryResponse uploadImage(String listingId, MultipartFile file, ImageType isAvatar) throws IOException {
         verifyHostOfListing(listingId);
         final int images = imageRepository.countByObjectId(listingId);
         if(images >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
             throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
         }
-        return cloudinaryService.uploadImage(listingId, objectType, file);
+        return cloudinaryService.uploadImage(listingId, file, isAvatar);
     }
 
     @Override
@@ -197,7 +196,7 @@ public class ListingService implements IListingService{
     public ListingResponseDetail updateListing(String listingId, ListingUpdateRequest request) {
         verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
+        //Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         Set<Amenity> amenities = new HashSet<>();
         for(Amenity amenity : request.getAmenities()){
@@ -215,7 +214,6 @@ public class ListingService implements IListingService{
         listing.setAddress(request.getAddress());
         listing.setDescription(request.getDescription());
         listing.setStatus(request.getStatus());
-        listing.setWard(ward);
         listing.setCategory(category);
         listing.setAmenities(amenities);
         listing.setUpdatedAt(LocalDateTime.now());

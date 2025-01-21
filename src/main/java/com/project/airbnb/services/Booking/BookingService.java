@@ -6,7 +6,7 @@ import com.project.airbnb.dtos.request.BookingUpdateRequest;
 import com.project.airbnb.dtos.response.BookingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.enums.BookingStatus;
-import com.project.airbnb.enums.ListingStatus;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.BookingMapper;
@@ -105,7 +105,7 @@ public class BookingService implements IBookingService{
         if(!request.getCheckoutDate().isAfter(request.getCheckinDate())){
             throw new IllegalArgumentException("Check-out date must be after Check-in date");
         }
-        List<ListingAvailability> listingAvailabilities = availabilityRepository.checkListingAndDateRangeAndStatus(request.getListing().getId(),request.getCheckinDate(), request.getCheckoutDate(), ListingStatus.AVAILABLE);
+        List<ListingAvailability> listingAvailabilities = availabilityRepository.checkListingAndDateRangeAndStatus(request.getListing().getId(),request.getCheckinDate(), request.getCheckoutDate(), ListingAvailabilityStatus.AVAILABLE);
 
         final long totalDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate()) + 1;
         if(listingAvailabilities.size() != totalDays){
@@ -132,7 +132,7 @@ public class BookingService implements IBookingService{
                 .user(getUserLogin())
                 .build();
         bookingRepository.save(booking);
-        listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingStatus.BOOKED));
+        listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingAvailabilityStatus.BOOKED));
         availabilityRepository.saveAll(listingAvailabilities);
 
         User host = listing.getUser();

@@ -1,5 +1,5 @@
 package com.project.airbnb.models;
-import com.project.airbnb.enums.ListingStatus;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +23,7 @@ public class ListingAvailability extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private ListingStatus status;
+    private ListingAvailabilityStatus status;
 
 //    @Column(name = "price", precision = 15, scale = 2)
 //    private BigDecimal price;

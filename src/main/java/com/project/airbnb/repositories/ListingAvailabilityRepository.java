@@ -1,6 +1,6 @@
 package com.project.airbnb.repositories;
 
-import com.project.airbnb.enums.ListingStatus;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.ListingAvailability;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ public interface ListingAvailabilityRepository extends JpaRepository<ListingAvai
             @Param("listingId") String listingId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
-            @Param("status")ListingStatus status
+            @Param("status") ListingAvailabilityStatus status
             );
 
     @Query("select la from ListingAvailability la where la.listing.id = :listingId and la.date between :startDate and :endDate")
@@ -42,7 +42,7 @@ public interface ListingAvailabilityRepository extends JpaRepository<ListingAvai
     List<String> findAvailableListingIds(@Param("startDate") LocalDate startDate,
                                        @Param("endDate") LocalDate endDate,
                                        @Param("totalDays") long totalDays,
-                                       @Param("status") ListingStatus status);
+                                       @Param("status") ListingAvailabilityStatus status);
 
 
 }

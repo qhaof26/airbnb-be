@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_category")
+@Table(name = "categories")
 public class Category extends AbstractEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

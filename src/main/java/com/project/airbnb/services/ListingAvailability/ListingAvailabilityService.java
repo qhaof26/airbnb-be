@@ -4,7 +4,7 @@ import com.project.airbnb.dtos.request.ListingAvailabilityCreationRequest;
 import com.project.airbnb.dtos.request.ListingAvailabilityUpdateRequest;
 import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.enums.ListingStatus;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingAvailabilityMapper;
@@ -28,7 +28,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -124,7 +123,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
                     ListingAvailability availability = ListingAvailability.builder()
                             .listing(listing)
                             .date(day)
-                            .status(ListingStatus.AVAILABLE)
+                            .status(ListingAvailabilityStatus.AVAILABLE)
                             .build();
                     return availability;
                 }).toList();

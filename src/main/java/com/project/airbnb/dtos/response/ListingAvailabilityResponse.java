@@ -1,12 +1,10 @@
 package com.project.airbnb.dtos.response;
 
-import com.project.airbnb.enums.ListingStatus;
-import com.project.airbnb.models.Listing;
+import com.project.airbnb.enums.ListingAvailabilityStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 @Getter
 @Setter
@@ -17,7 +15,7 @@ public class ListingAvailabilityResponse {
     private String id;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
-    private ListingStatus status;
+    private ListingAvailabilityStatus status;
     private Listing listing;
 
     @Getter
