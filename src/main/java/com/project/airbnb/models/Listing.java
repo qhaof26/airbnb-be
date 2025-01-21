@@ -19,8 +19,8 @@ import java.util.*;
 @Table(name = "listings")
 public class Listing extends AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "listing_name", nullable = false)
     private String listingName;
@@ -52,7 +52,7 @@ public class Listing extends AbstractEntity {
     @Column(name = "geom", columnDefinition = "geometry(Point, 3857)")
     private Point geom;
 
-    @Column(name = "address", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    @Column(name = "address", unique = true)
     private String address;
 
     @Column(name = "images", columnDefinition = "text[]")
@@ -82,7 +82,7 @@ public class Listing extends AbstractEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "listing_amenity",
+            name = "listing_amenities",
             joinColumns = @JoinColumn(name = "listing_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )

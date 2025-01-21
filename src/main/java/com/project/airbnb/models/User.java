@@ -28,13 +28,13 @@ public class User extends AbstractEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "user_name", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    @Column(name = "user_name", unique = true)
     private String username;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "avatar")

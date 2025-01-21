@@ -26,7 +26,7 @@ public class AmenityService implements IAmenityService{
     private final AmenityMapper amenityMapper;
 
     @Override
-    public AmenityResponse getAmenityById(String amenityId) {
+    public AmenityResponse getAmenityById(Long amenityId) {
         return amenityMapper.toAmenityResponse(amenityRepository.findById(amenityId).orElseThrow(() -> new AppException(ErrorCode.AMENITY_NOT_EXISTED)));
     }
 
@@ -63,7 +63,7 @@ public class AmenityService implements IAmenityService{
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public AmenityResponse updateAmenity(AmenityRequest request, String amenityId) {
+    public AmenityResponse updateAmenity(AmenityRequest request, Long amenityId) {
         Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(() -> new AppException(ErrorCode.AMENITY_NOT_EXISTED));
         if(amenityRepository.existsByAmenityName(request.getAmenityName())){
             throw new AppException(ErrorCode.AMENITY_EXISTED);
@@ -76,7 +76,7 @@ public class AmenityService implements IAmenityService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public void deleteAmenity(String amenityId) {
+    public void deleteAmenity(Long amenityId) {
         Amenity amenity = amenityRepository.findById(amenityId).orElseThrow(() -> new AppException(ErrorCode.AMENITY_NOT_EXISTED));
         amenity.getListings().forEach(listing -> listing.getAmenities().remove(amenity));
         amenityRepository.delete(amenity);

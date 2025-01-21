@@ -10,20 +10,20 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
 
     @Query(value = "select u from User u join fetch u.roles where u.id = :userId and u.status = TRUE ")
-    Optional<User> findUserActive(String userId);
+    Optional<User> findUserActive(Long userId);
 
     //@EntityGraph(attributePaths = {"roles"})
     @Query(value = "select u from User u join fetch u.roles where u.status = TRUE ")
     Page<User> findAllUserActive(Pageable pageable);
 
-    @Query(value = "select u from User u join fetch u.roles where u.status = FALSE ")
+    @Query(value = "select u from User u join fetch u.roles where u.status = false ")
     Page<User> findAllUserBlock(Pageable pageable);
 
     boolean existsByUsername(String username);

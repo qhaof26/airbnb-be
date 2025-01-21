@@ -122,12 +122,12 @@ public class BookingService implements IBookingService{
         Booking booking = Booking.builder()
                 .checkinDate(request.getCheckinDate())
                 .checkoutDate(request.getCheckoutDate())
-                .nightlyPrice(listing.getNightlyPrice())
-                .serviceFee(BigDecimal.valueOf(100000))
-                .totalPrice(totalPrice.add(serviceFee))
+                //.nightlyPrice(listing.getNightlyPrice())
+                //.serviceFee(BigDecimal.valueOf(100000))
+                //.totalPrice(totalPrice.add(serviceFee))
                 .numGuests(request.getNumGuests())
                 .note(request.getNote())
-                .status(BookingStatus.PENDING)
+                .status(BookingStatus.DRAFT)
                 .listing(listing)
                 .user(getUserLogin())
                 .build();
@@ -135,7 +135,7 @@ public class BookingService implements IBookingService{
         listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingAvailabilityStatus.BOOKED));
         availabilityRepository.saveAll(listingAvailabilities);
 
-        User host = listing.getUser();
+        User host = listing.getHost();
         sendVerificationEmail(host.getEmail(), listing, booking);
         sendVerificationEmail(getUserLogin().getEmail(), listing, booking);
         return bookingMapper.toBookingResponse(booking);
@@ -146,7 +146,7 @@ public class BookingService implements IBookingService{
     @Transactional
     public BookingResponse updateBooking(BookingUpdateRequest request) {
         Booking booking = bookingRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
-        if(!getUserLogin().equals(booking.getListing().getUser())){
+        if(!getUserLogin().equals(booking.getListing().getHost())){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         booking.setStatus(request.getStatus());

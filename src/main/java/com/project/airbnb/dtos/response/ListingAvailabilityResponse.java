@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListingAvailabilityResponse {
-    private String id;
+    private Long id;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private ListingAvailabilityStatus status;

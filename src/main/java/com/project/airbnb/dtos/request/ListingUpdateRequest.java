@@ -1,8 +1,8 @@
 package com.project.airbnb.dtos.request;
 
+import com.project.airbnb.enums.ListingStatus;
 import com.project.airbnb.models.Amenity;
 import com.project.airbnb.models.Category;
-import com.project.airbnb.models.Location.Ward;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,9 +32,7 @@ public class ListingUpdateRequest {
     @NotBlank
     private String address;
     @NotNull
-    private Boolean status;
-    @NotNull
-    private Ward ward;
+    private ListingStatus status;
     @NotNull
     private Category category;
     private Set<Amenity> amenities;

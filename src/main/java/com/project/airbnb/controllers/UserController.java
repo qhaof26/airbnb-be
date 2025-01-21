@@ -2,14 +2,19 @@ package com.project.airbnb.controllers;
 
 import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.dtos.response.APIResponse;
+import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.UserResponse;
+import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.services.User.UserService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public APIResponse<UserResponse> getUserById(@PathVariable String userId){
+    public APIResponse<UserResponse> getUserById(@PathVariable Long userId){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Fetch user")
@@ -78,8 +83,8 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/register")
-    public APIResponse<UserResponse> createUser(@RequestBody UserCreationRequest request){
+    @PostMapping("/create")
+    public APIResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Created user")
@@ -88,7 +93,7 @@ public class UserController {
     }
 
     @PatchMapping("/change-status/{userId}")
-    public APIResponse<UserResponse> changeStatus(@PathVariable String userId, @RequestParam(required = false) boolean status
+    public APIResponse<UserResponse> changeStatus(@PathVariable Long userId, @RequestParam(required = false) boolean status
             ){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.OK.value())
@@ -98,11 +103,23 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public APIResponse<Boolean> removeUser(@PathVariable String userId){
+    public APIResponse<Boolean> removeUser(@PathVariable Long userId){
         return APIResponse.<Boolean>builder()
                 .status(HttpStatus.OK.value())
                 .message("Deleted user")
                 .data(userService.removeUser(userId))
+                .build();
+    }
+
+    @PostMapping("/images")
+    public APIResponse<CloudinaryResponse> uploadImage(
+            @RequestParam("id") Long id,
+            @RequestParam("image") MultipartFile image
+    ) throws IOException {
+        return APIResponse.<CloudinaryResponse>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Uploaded avatar")
+                .data(userService.uploadAvatar(id, image))
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.project.airbnb.dtos.response;
 
+import com.project.airbnb.enums.ListingStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -21,13 +22,12 @@ public class ListingResponseDetail {
     private int numGuests;
     private String description;
     private String address;
-    private Boolean status;
+    private ListingStatus status;
 
-    private WardResponse ward;
     private UserResponse host;
     private CategoryResponse category;
     private Set<AmenityResponse> amenities;
-    private Set<String> images;
+    private List<String> images;
 
     @Getter
     @Setter

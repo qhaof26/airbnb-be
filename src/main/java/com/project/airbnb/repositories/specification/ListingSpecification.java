@@ -2,9 +2,6 @@ package com.project.airbnb.repositories.specification;
 
 import com.project.airbnb.models.Amenity;
 import com.project.airbnb.models.Listing;
-import com.project.airbnb.models.Location.District;
-import com.project.airbnb.models.Location.Province;
-import com.project.airbnb.models.Location.Ward;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -89,34 +86,33 @@ public class ListingSpecification {
         };
     }
 
-    public static Specification<Listing> filterByKeyword(String keyword) {
-        return (root, query, criteriaBuilder) -> {
-            if(keyword == null || keyword.isEmpty()){
-                return criteriaBuilder.conjunction();
-            }
-            Join<Listing, Ward> wardJoin = root.join("ward");
-            Join<Ward, District> districtJoin = wardJoin.join("district");
-            Join<District, Province> provinceJoin = districtJoin.join("province");
-
-            return criteriaBuilder.or(
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("listingName")), "%" + keyword.toLowerCase() + "%"),
-                    criteriaBuilder.like(criteriaBuilder.lower(provinceJoin.get("name")), "%" + keyword.toLowerCase() + "%"),
-                    criteriaBuilder.like(criteriaBuilder.lower(districtJoin.get("name")), "%" + keyword.toLowerCase() + "%"),
-                    criteriaBuilder.like(criteriaBuilder.lower(wardJoin.get("name")), "%" + keyword.toLowerCase() + "%")
-            );
-        };
-    }
+//    public static Specification<Listing> filterByKeyword(String keyword) {
+//        return (root, query, criteriaBuilder) -> {
+//            if(keyword == null || keyword.isEmpty()){
+//                return criteriaBuilder.conjunction();
+//            }
+//            Join<Listing, Ward> wardJoin = root.join("ward");
+//            Join<Ward, District> districtJoin = wardJoin.join("district");
+//            Join<District, Province> provinceJoin = districtJoin.join("province");
+//
+//            return criteriaBuilder.or(
+//                    criteriaBuilder.like(criteriaBuilder.lower(root.get("listingName")), "%" + keyword.toLowerCase() + "%"),
+//                    criteriaBuilder.like(criteriaBuilder.lower(provinceJoin.get("name")), "%" + keyword.toLowerCase() + "%"),
+//                    criteriaBuilder.like(criteriaBuilder.lower(districtJoin.get("name")), "%" + keyword.toLowerCase() + "%"),
+//                    criteriaBuilder.like(criteriaBuilder.lower(wardJoin.get("name")), "%" + keyword.toLowerCase() + "%")
+//            );
+//        };
+//    }
 
     public static Specification<Listing> filterListings(String keyword, String categoryName, Set<String> amenityNames,
                                                         Integer numBeds, Integer numBedrooms, Integer numBathrooms, Integer guestCount,
                                                         BigDecimal minPrice, BigDecimal maxPrice){
-        return Specification.where(filterByKeyword(keyword))
+        return Specification.where(hasGuest(guestCount))
                 .and(hasCategory(categoryName))
                 .and(hasAmenities(amenityNames))
                 .and(hasNumBed(numBeds))
                 .and(hasNumBedRoom(numBedrooms))
                 .and(hasNumBathRoom(numBathrooms))
-                .and(hasGuest(guestCount))
                 .and(hasPrice(minPrice, maxPrice));
     }
 

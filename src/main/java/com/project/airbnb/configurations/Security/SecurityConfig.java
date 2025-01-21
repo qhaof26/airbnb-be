@@ -32,7 +32,6 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "api/v1/fake/**",
             "api/v1/auth/**",
-            "api/v1/users/register",
             "api/v1/amenities/{amenityId}",
             "api/v1/amenities",
             "api/v1/categories",

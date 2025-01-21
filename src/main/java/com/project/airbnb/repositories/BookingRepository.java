@@ -14,7 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, String>, JpaSp
 
     @Query("select b from Booking b " +
             "join Listing l on l.id = b.listing.id " +
-            "join User u on u.id = l.user.id " +
+            "join User u on u.id = l.host.id " +
             "where u.id = :userId")
-    Page<Booking> findAllByHost(String userId, Pageable pageable);
+    Page<Booking> findAllByHost(Long userId, Pageable pageable);
 }

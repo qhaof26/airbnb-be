@@ -4,12 +4,15 @@ import com.cloudinary.utils.ObjectUtils;
 import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.enums.ImageType;
+import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.exceptions.FileUploadException;
-import com.project.airbnb.models.Image;
+import com.project.airbnb.models.Listing;
+import com.project.airbnb.models.User;
 import com.project.airbnb.repositories.ImageRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,8 @@ public class CloudinaryService {
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
 
-    public CloudinaryResponse uploadImage(String objectId, MultipartFile file, ImageType isAvatar) throws IOException{
+    @Transactional
+    public CloudinaryResponse uploadImage(String objectId, MultipartFile file) throws IOException{
 //        if(objectType.equals(ObjectType.LISTING) && !listingRepository.existsById(objectId)){
 //            throw new AppException(ErrorCode.LISTING_NOT_EXISTED);
 //        } else if(objectType.equals(ObjectType.USER) && !userRepository.existsById(objectId)){
@@ -56,13 +60,21 @@ public class CloudinaryService {
         cleanDisk(fileUpload);
         String url = cloudinary.url().generate(publicValue + "." + extension);
 
-        Image image = Image.builder()
-                .objectId(objectId)
-                .isAvatar(isAvatar.getValue())
-                .url(url)
-                .build();
-        imageRepository.save(image);
-
+//        Image image = Image.builder()
+//                .objectId(objectId)
+//                .isAvatar(isAvatar.getValue())
+//                .url(url)
+//                .build();
+//        imageRepository.save(image);
+        if(listingRepository.existsById(objectId)){
+            Listing listing = listingRepository.findById(objectId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+            listing.getImages().add(url);
+            listingRepository.save(listing);
+        } else if(userRepository.existsById(Long.valueOf(objectId))){
+            User user = userRepository.findById(Long.valueOf(objectId)).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+            user.setAvatar(url);
+            userRepository.save(user);
+        }
         return CloudinaryResponse.builder()
                 .publicId(publicValue)
                 .url(url)

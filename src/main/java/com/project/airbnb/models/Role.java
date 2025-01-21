@@ -17,7 +17,6 @@ import java.util.Set;
 public class Role extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "role_name", nullable = false, unique = true)

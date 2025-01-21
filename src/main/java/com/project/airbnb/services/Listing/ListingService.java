@@ -13,7 +13,6 @@ import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingMapper;
 import com.project.airbnb.models.*;
-import com.project.airbnb.models.Location.Ward;
 import com.project.airbnb.repositories.*;
 import com.project.airbnb.repositories.specification.ListingSpecification;
 import com.project.airbnb.services.Cloudinary.CloudinaryService;
@@ -46,7 +45,6 @@ public class ListingService implements IListingService{
     private final ImageRepository imageRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
-    private final WardRepository wardRepository;
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
     private final ListingMapper listingMapper;
@@ -136,7 +134,7 @@ public class ListingService implements IListingService{
     public PageResponse<List<ListingResponse>> getAllListingsOfHost(int pageNo, int pageSize) {
         final User host = getUserLogin();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<Listing> listingsOfHost = listingRepository.findByUser(host, pageable);
+        Page<Listing> listingsOfHost = listingRepository.findByHost(host, pageable);
         List<ListingResponse> listingResponses = listingsOfHost.getContent().stream().map(listingMapper::toListingResponse).toList();
 
         return PageResponse.<List<ListingResponse>>builder()
@@ -152,10 +150,9 @@ public class ListingService implements IListingService{
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
     public ListingResponseDetail createListing(ListingCreationRequest request) {
-        Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
 
-        Set<String> amenityIds = request.getAmenities().stream()
+        Set<Long> amenityIds = request.getAmenities().stream()
                 .map(Amenity::getId)
                 .collect(Collectors.toSet());
         List<Amenity> amenityList = amenityRepository.findAllById(amenityIds);
@@ -171,7 +168,7 @@ public class ListingService implements IListingService{
                 .address(request.getAddress())
                 .description(request.getDescription())
                 .category(category)
-                .user(getUserLogin())
+                .host(getUserLogin())
                 .amenities(amenities)
                 .build();
         listingRepository.save(listing);
@@ -181,13 +178,14 @@ public class ListingService implements IListingService{
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public CloudinaryResponse uploadImage(String listingId, MultipartFile file, ImageType isAvatar) throws IOException {
+    public CloudinaryResponse uploadImage(String listingId, MultipartFile file) throws IOException {
         verifyHostOfListing(listingId);
-        final int images = imageRepository.countByObjectId(listingId);
+        final Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        final int images = listing.getImages().size();
         if(images >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
             throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
         }
-        return cloudinaryService.uploadImage(listingId, file, isAvatar);
+        return cloudinaryService.uploadImage(listingId, file);
     }
 
     @Override
@@ -196,7 +194,6 @@ public class ListingService implements IListingService{
     public ListingResponseDetail updateListing(String listingId, ListingUpdateRequest request) {
         verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        //Ward ward = wardRepository.findById(request.getWard().getId()).orElseThrow(() -> new AppException(ErrorCode.WARD_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         Set<Amenity> amenities = new HashSet<>();
         for(Amenity amenity : request.getAmenities()){
@@ -236,7 +233,7 @@ public class ListingService implements IListingService{
     }
     private void verifyHostOfListing(String listingId){
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        if(!listing.getUser().equals(getUserLogin())){
+        if(!listing.getHost().equals(getUserLogin())){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
     }

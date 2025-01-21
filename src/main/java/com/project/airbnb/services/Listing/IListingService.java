@@ -19,7 +19,7 @@ public interface IListingService {
     PageResponse<List<ListingResponse>> getAllListings(int pageNo, int pageSize); //GUEST, HOST, ADMIN
     PageResponse<List<ListingResponse>> getAllListingsOfHost(int pageNo, int pageSize); //GUEST, HOST, ADMIN
     ListingResponseDetail createListing(ListingCreationRequest request); //HOST, ADMIN
-    CloudinaryResponse uploadImage(String listingId, MultipartFile file, ImageType isAvatar) throws IOException; //HOST, ADMIN
+    CloudinaryResponse uploadImage(String listingId, MultipartFile file) throws IOException; //HOST, ADMIN
     ListingResponseDetail updateListing(String listingId, ListingUpdateRequest request); //HOST, ADMIN
     void deleteListing(String listingId); //HOST, ADMIN
 }

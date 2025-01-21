@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryResponse {
-    private String id;
+    private Long id;
     private String categoryName;
 }

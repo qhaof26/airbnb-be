@@ -27,7 +27,7 @@ public class CategoryService implements ICategoryService{
     private final ListingRepository listingRepository;
     private final CategoryMapper categoryMapper;
     @Override
-    public CategoryResponse getCategoryById(String categoryId) {
+    public CategoryResponse getCategoryById(Long categoryId) {
         return categoryMapper.toCategoryResponse(categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
     }
 
@@ -63,7 +63,7 @@ public class CategoryService implements ICategoryService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public CategoryResponse updateCategory(CategoryRequest request, String categoryId) {
+    public CategoryResponse updateCategory(CategoryRequest request, Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         if(categoryRepository.existsByCategoryName(request.getCategoryName())){
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
@@ -77,7 +77,7 @@ public class CategoryService implements ICategoryService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public void deleteCategory(String categoryId) {
+    public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         category.getListings().forEach(listing -> listing.setCategory(null));
         listingRepository.saveAll(category.getListings());

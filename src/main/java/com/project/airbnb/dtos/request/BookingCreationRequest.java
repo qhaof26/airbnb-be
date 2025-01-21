@@ -21,6 +21,6 @@ public class BookingCreationRequest {
     @NotNull
     private Listing listing;
     @Min(1)
-    private Short numGuests;
+    private int numGuests;
     private String note;
 }

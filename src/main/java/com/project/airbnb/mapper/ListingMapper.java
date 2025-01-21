@@ -9,19 +9,17 @@ import com.project.airbnb.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class ListingMapper {
-    private final WardMapper wardMapper;
     private final AmenityMapper amenityMapper;
     private final CategoryMapper categoryMapper;
-    private final ImageRepository imageRepository;
 
     public ListingResponse toListingResponse(Listing listing){
-        String url = imageRepository.findAvatarListing(listing.getId()).orElse(null);
 
         return ListingResponse.builder()
                 .id(listing.getId())
@@ -29,8 +27,7 @@ public class ListingMapper {
                 .nightlyPrice(listing.getNightlyPrice())
                 .address(listing.getAddress())
                 .status(listing.getStatus())
-                .ward(wardMapper.toWardResponse(listing.getWard()))
-                .image(url)
+                .image(listing.getImages().get(0))
                 .build();
     }
 
@@ -41,11 +38,11 @@ public class ListingMapper {
         }
 
         ListingResponseDetail.UserResponse host = null;
-        if(listing.getUser() != null){
+        if(listing.getHost() != null){
             host = ListingResponseDetail.UserResponse.builder()
-                    .firstName(listing.getUser().getFirstName())
-                    .lastName(listing.getUser().getLastName())
-                    .email(listing.getUser().getEmail())
+                    .firstName(listing.getHost().getFirstName())
+                    .lastName(listing.getHost().getLastName())
+                    .email(listing.getHost().getEmail())
                     .build();
         }
 
@@ -54,7 +51,10 @@ public class ListingMapper {
             amenities = listing.getAmenities().stream().map(amenityMapper::toAmenityResponse).collect(Collectors.toSet());
         }
 
-        Set<String> images = imageRepository.findImagesListing(listing.getId()).orElse(null);
+        List<String> images = listing.getImages();
+        if(images.isEmpty()){
+            images = null;
+        }
         return ListingResponseDetail.builder()
                 .id(listing.getId())
                 .nightlyPrice(listing.getNightlyPrice())
@@ -67,7 +67,6 @@ public class ListingMapper {
                 .description(listing.getDescription())
                 .status(listing.getStatus())
                 .amenities(amenities)
-                .ward(wardMapper.toWardResponse(listing.getWard()))
                 .category(category)
                 .host(host)
                 .images(images)

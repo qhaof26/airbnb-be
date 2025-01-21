@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleResponse {
-    private String id;
+    private Long id;
     private String roleName;
     private String description;
 }

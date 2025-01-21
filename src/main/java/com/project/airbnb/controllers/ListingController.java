@@ -75,13 +75,12 @@ public class ListingController {
     @PostMapping("/images")
     public APIResponse<CloudinaryResponse> uploadImage(
             @RequestParam("id") String id,
-            @RequestParam("image")MultipartFile image,
-            @RequestParam("isAvatar") ImageType isAvatar
+            @RequestParam("image")MultipartFile image
             ) throws IOException {
         return APIResponse.<CloudinaryResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Uploaded image listing successful")
-                .data(listingService.uploadImage(id, image, isAvatar))
+                .data(listingService.uploadImage(id, image))
                 .build();
     }
 

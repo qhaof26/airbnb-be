@@ -19,7 +19,7 @@ public class AmenityController {
     private final AmenityService amenityService;
 
     @GetMapping("/{amenityId}")
-    public APIResponse<AmenityResponse> getCategoryById(@PathVariable String amenityId){
+    public APIResponse<AmenityResponse> getCategoryById(@PathVariable Long amenityId){
         return APIResponse.<AmenityResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get amenity by id successful")
@@ -49,7 +49,7 @@ public class AmenityController {
     }
 
     @PatchMapping("/update/{amenityId}")
-    public APIResponse<AmenityResponse> updateCategory(@RequestBody AmenityRequest request, @PathVariable String amenityId){
+    public APIResponse<AmenityResponse> updateCategory(@RequestBody AmenityRequest request, @PathVariable Long amenityId){
         return APIResponse.<AmenityResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Updated amenity successful")
@@ -58,7 +58,7 @@ public class AmenityController {
     }
 
     @DeleteMapping("/{amenityId}")
-    public APIResponse<Void> deleteCategory(@PathVariable String amenityId){
+    public APIResponse<Void> deleteCategory(@PathVariable Long amenityId){
         amenityService.deleteAmenity(amenityId);
         return APIResponse.<Void>builder()
                 .status(HttpStatus.OK.value())

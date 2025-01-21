@@ -2,8 +2,10 @@ package com.project.airbnb.services.User;
 
 import com.project.airbnb.constants.PredefinedRole;
 import com.project.airbnb.dtos.request.UserCreationRequest;
+import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.UserResponse;
+import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;
@@ -12,6 +14,8 @@ import com.project.airbnb.repositories.RoleRepository;
 import com.project.airbnb.repositories.UserRepository;
 import com.project.airbnb.mapper.UserMapper;
 import com.project.airbnb.repositories.specification.UserSpecification;
+import com.project.airbnb.services.Cloudinary.CloudinaryService;
+import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +28,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -38,10 +44,11 @@ public class UserService implements IUserService{
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse getUserById(String userId) {
+    public UserResponse getUserById(Long userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
     }
@@ -130,6 +137,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public UserResponse createNewUser(UserCreationRequest request) {
         if(userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USERNAME_EXISTED);
@@ -154,7 +162,7 @@ public class UserService implements IUserService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public UserResponse changeStatus(String userId, Boolean status) {
+    public UserResponse changeStatus(Long userId, Boolean status) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         user.setStatus(status);
         if(user.getRoles().isEmpty()){
@@ -172,13 +180,23 @@ public class UserService implements IUserService{
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public boolean removeUser(String userId) {
+    public boolean removeUser(Long userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         if(user.getStatus()) user.setStatus(Boolean.FALSE);
         user.setRoles(null);
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public CloudinaryResponse uploadAvatar(Long userId, MultipartFile file) throws IOException {
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if(!user.getId().equals(userId)){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        return cloudinaryService.uploadImage(String.valueOf(userId), file);
     }
 
     private List<Sort.Order> handleSort(String sortBy){

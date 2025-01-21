@@ -84,7 +84,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
         String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
         User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        if(!listing.getUser().equals(user)){
+        if(!listing.getHost().equals(user)){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         if(listingAvailabilityRepository.existsByDateAndListingId(request.getDate(), listing.getId())){
@@ -148,7 +148,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     }
     private void verifyHostOfListing(String listingId){
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        if(!listing.getUser().equals(getUserLogin())){
+        if(!listing.getHost().equals(getUserLogin())){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
     }

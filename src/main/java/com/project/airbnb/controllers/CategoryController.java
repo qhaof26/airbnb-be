@@ -19,7 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{categoryId}")
-    public APIResponse<CategoryResponse> getCategoryById(@PathVariable String categoryId){
+    public APIResponse<CategoryResponse> getCategoryById(@PathVariable Long categoryId){
         return APIResponse.<CategoryResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Get category by id successful")
@@ -49,7 +49,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/update/{categoryId}")
-    public APIResponse<CategoryResponse> updateCategory(@RequestBody CategoryRequest request, @PathVariable String categoryId){
+    public APIResponse<CategoryResponse> updateCategory(@RequestBody CategoryRequest request, @PathVariable Long categoryId){
         return APIResponse.<CategoryResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Updated category successful")
@@ -58,7 +58,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
-    public APIResponse<Void> deleteCategory(@PathVariable String categoryId){
+    public APIResponse<Void> deleteCategory(@PathVariable Long categoryId){
         categoryService.deleteCategory(categoryId);
         return APIResponse.<Void>builder()
                 .status(HttpStatus.OK.value())

@@ -10,5 +10,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Set;
 
 public interface ListingRepository extends JpaRepository<Listing, String> , JpaSpecificationExecutor<Listing> {
-    Page<Listing> findByUser(User user, Pageable pageable);
+    Page<Listing> findByHost(User user, Pageable pageable);
+
 }

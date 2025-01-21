@@ -47,18 +47,18 @@ public class DatabaseInitializer {
                 roleRepository.save(adminRole);
                 Set<Role> roles = new HashSet<>();
                 roles.add(adminRole);
-                if(userRepository.existsByEmail(ADMIN_EMAIL)) throw new AppException(ErrorCode.EMAIL_EXISTED);
-                if(userRepository.existsByUsername(ADMIN_USERNAME)) throw new AppException(ErrorCode.USERNAME_EXISTED);
-                User adminUser = User.builder()
-                        .firstName("Quoc")
-                        .lastName("Hao")
-                        .username(ADMIN_USERNAME)
-                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
-                        .email(ADMIN_EMAIL)
-                        .roles(roles)
-                        .build();
-                userRepository.save(adminUser);
-
+                if(!userRepository.existsByUsername(ADMIN_USERNAME) || !userRepository.existsByEmail(ADMIN_EMAIL)){
+                    User adminUser = User.builder()
+                            .firstName("Quoc")
+                            .lastName("Hao")
+                            .username(ADMIN_USERNAME)
+                            .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                            .email(ADMIN_EMAIL)
+                            .roles(roles)
+                            .status(Boolean.TRUE)
+                            .build();
+                    userRepository.save(adminUser);
+                }
                 log.info("Done method init role ADMIN");
             }
 

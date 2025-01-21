@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AmenityResponse {
-    private String id;
+    private Long id;
     private String amenityName;
-
 }

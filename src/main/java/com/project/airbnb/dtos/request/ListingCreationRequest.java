@@ -1,7 +1,6 @@
 package com.project.airbnb.dtos.request;
 
 import com.project.airbnb.models.*;
-import com.project.airbnb.models.Location.Ward;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,8 +30,6 @@ public class ListingCreationRequest {
     @NotBlank
     private String address;
 
-    @NotNull
-    private Ward ward;
     @NotNull
     private Category category;
     private Set<Amenity> amenities;
