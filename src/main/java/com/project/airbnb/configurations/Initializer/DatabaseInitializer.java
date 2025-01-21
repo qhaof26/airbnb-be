@@ -7,7 +7,6 @@ import com.project.airbnb.models.Role;
 import com.project.airbnb.models.User;
 import com.project.airbnb.repositories.RoleRepository;
 import com.project.airbnb.repositories.UserRepository;
-import com.project.airbnb.services.Location.LocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,6 @@ public class DatabaseInitializer {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final LocationService provinceService;
 
     @NonFinal
     static final String ADMIN_EMAIL = "admin@gmail.com";
@@ -79,13 +77,6 @@ public class DatabaseInitializer {
                         .description("This is guest role")
                         .permissions(null)
                         .build());
-            }
-
-            if(provinceService.getProvinces().isEmpty()){
-                provinceService.fetchAndSaveProvinces();
-                provinceService.fetchAndSaveDistricts();
-                provinceService.fetchAndSaveWards();
-                log.warn("Inside method init");
             }
         };
     }

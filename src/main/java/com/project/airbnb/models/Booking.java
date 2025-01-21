@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_booking")
+@Table(name = "bookings")
 public class Booking extends AbstractEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,22 +25,16 @@ public class Booking extends AbstractEntity{
     @Column(name = "checkout_date", nullable = false)
     private LocalDate checkoutDate;
 
-    @Column(name = "nightly_price", precision = 15, scale = 2)
-    private BigDecimal nightlyPrice;
-
-    @Column(name = "service_fee", precision = 15, scale = 2)
-    private BigDecimal serviceFee;
-
-    @Column(name = "total_price", precision = 15, scale = 2)
-    private BigDecimal totalPrice;
-
     @Column(name = "num_guests", nullable = false)
-    private int numGuests;
+    private Integer numGuests;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
     @Column(name = "note")
     private String note;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
     private BookingStatus status;
 

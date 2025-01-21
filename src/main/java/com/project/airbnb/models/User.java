@@ -15,12 +15,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_user")
+@Table(name = "users")
 public class User extends AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -36,6 +36,9 @@ public class User extends AbstractEntity {
 
     @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String email;
+
+    @Column(name = "avatar")
+    private String avatar;
 
     @Column(name = "otp")
     private String otp;

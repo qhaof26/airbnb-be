@@ -1,5 +1,7 @@
 package com.project.airbnb.models;
 
+import com.project.airbnb.enums.ListingStatus;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -14,11 +16,11 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_listing")
+@Table(name = "listings")
 public class Listing extends AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "listing_name", nullable = false)
     private String listingName;
@@ -58,14 +60,15 @@ public class Listing extends AbstractEntity {
     private List<String> images;
 
     @Column(name = "status")
-    private int status;
+    @Enumerated(EnumType.ORDINAL)
+    private ListingStatus status;
 
     @Column(name = "average_rating")
     private Float averageRating;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User host;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -87,6 +90,6 @@ public class Listing extends AbstractEntity {
 
     @PrePersist
     public void onCreate(){
-        this.status = 1;
+        this.status = ListingStatus.OPEN;
     }
 }

@@ -2,23 +2,18 @@ package com.project.airbnb.controllers;
 
 import com.github.javafaker.Faker;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
-import com.project.airbnb.dtos.request.ListingRequest;
 import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Amenity;
 import com.project.airbnb.models.Category;
 import com.project.airbnb.models.Location.Ward;
-import com.project.airbnb.models.Room;
 import com.project.airbnb.repositories.AmenityRepository;
 import com.project.airbnb.repositories.CategoryRepository;
-import com.project.airbnb.repositories.RoomRepository;
-import com.project.airbnb.repositories.WardRepository;
 import com.project.airbnb.services.Listing.ListingService;
 import com.project.airbnb.services.Location.LocationService;
 import com.project.airbnb.services.User.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +33,6 @@ public class FakeApiController {
     private final AmenityRepository amenityRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final RoomRepository roomRepository;
     @PostMapping("/user")
     public ResponseEntity<String> fakeUser(){
         Faker faker = new Faker();
@@ -116,20 +110,20 @@ public class FakeApiController {
     }
 
 
-    @PostMapping("/listings")
-    @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<String> createListing(@RequestBody ListingRequest listingRequest) {
-        double latitude = listingRequest.getLatitude();
-        double longitude = listingRequest.getLongitude();
-        String address = listingRequest.getAddress();
-
-        Room room = Room.builder()
-                .latitude(latitude)
-                .longitude(longitude)
-                .address(address)
-                .build();
-        roomRepository.save(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body("lat: " + latitude + " - long: " + longitude + ", address: " + address);
-    }
+//    @PostMapping("/listings")
+//    @CrossOrigin(origins = "http://127.0.0.1:5500")
+//    public ResponseEntity<String> createListing(@RequestBody ListingRequest listingRequest) {
+//        double latitude = listingRequest.getLatitude();
+//        double longitude = listingRequest.getLongitude();
+//        String address = listingRequest.getAddress();
+//
+//        Room room = Room.builder()
+//                .latitude(latitude)
+//                .longitude(longitude)
+//                .address(address)
+//                .build();
+//        roomRepository.save(room);
+//        return ResponseEntity.status(HttpStatus.CREATED).body("lat: " + latitude + " - long: " + longitude + ", address: " + address);
+//    }
 
 }

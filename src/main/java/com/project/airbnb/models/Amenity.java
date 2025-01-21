@@ -16,8 +16,8 @@ import java.util.Set;
 @Table(name = "amenities") //amenities
 public class Amenity extends AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "amenity_name", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String amenityName;

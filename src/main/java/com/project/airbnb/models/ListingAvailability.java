@@ -3,6 +3,7 @@ import com.project.airbnb.enums.ListingAvailabilityStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -11,22 +12,22 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_listing_availability")
+@Table(name = "listing_availabilities")
 public class ListingAvailability extends AbstractEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
     private ListingAvailabilityStatus status;
 
-//    @Column(name = "price", precision = 15, scale = 2)
-//    private BigDecimal price;
+    @Column(name = "price", precision = 15, scale = 2)
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "listing_id")

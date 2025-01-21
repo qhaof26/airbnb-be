@@ -2,7 +2,6 @@ package com.project.airbnb.configurations.Security;
 
 import com.nimbusds.jose.JOSEException;
 import com.project.airbnb.dtos.request.IntrospectRequest;
-import com.project.airbnb.services.Auth.AuthenticationService;
 import com.project.airbnb.services.Token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
