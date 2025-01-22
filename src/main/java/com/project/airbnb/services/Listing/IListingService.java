@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IListingService {
+    PageResponse<List<ListingResponse>> searchListings(Map<Object, String> filters);
     PageResponse<List<ListingResponse>> filterListings(Map<Object, String> filters);
     ListingResponseDetail getListingById(String listingId); //GUEST, HOST, ADMIN
     PageResponse<List<ListingResponse>> getAllListings(int pageNo, int pageSize); //GUEST, HOST, ADMIN

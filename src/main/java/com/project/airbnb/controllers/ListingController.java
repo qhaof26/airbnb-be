@@ -21,10 +21,19 @@ public class ListingController {
     private final ListingService listingService;
 
     @GetMapping("/search")
-    public APIResponse<PageResponse<List<ListingResponse>>> filterListings(@RequestParam Map<Object, String> filters){
+    public APIResponse<PageResponse<List<ListingResponse>>> searchListings(@RequestParam Map<Object, String> filters){
         return APIResponse.<PageResponse<List<ListingResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Search listings")
+                .data(listingService.searchListings(filters))
+                .build();
+    }
+
+    @GetMapping("/filters")
+    public APIResponse<PageResponse<List<ListingResponse>>> filterListings(@RequestParam Map<Object, String> filters){
+        return APIResponse.<PageResponse<List<ListingResponse>>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Filter listings")
                 .data(listingService.filterListings(filters))
                 .build();
     }

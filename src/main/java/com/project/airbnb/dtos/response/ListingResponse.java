@@ -4,7 +4,6 @@ import com.project.airbnb.enums.ListingStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -19,4 +18,6 @@ public class ListingResponse {
     private ListingStatus status;
     private String image;
 
+    public ListingResponse(ListingDTO listingDTO) {
+    }
 }

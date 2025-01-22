@@ -11,4 +11,13 @@ public enum ListingStatus {
     ;
 
     private final int value;
+
+    public static ListingStatus fromCode(int code) {
+        for (ListingStatus status : ListingStatus.values()) {
+            if (status.value == code) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for code: " + code);
+    }
 }

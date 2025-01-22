@@ -1,9 +1,11 @@
 package com.project.airbnb.mapper;
 
+import com.project.airbnb.dtos.response.ListingDTO;
 import com.project.airbnb.dtos.response.AmenityResponse;
 import com.project.airbnb.dtos.response.CategoryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.ListingResponseDetail;
+import com.project.airbnb.enums.ListingStatus;
 import com.project.airbnb.models.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,14 +21,17 @@ public class ListingMapper {
     private final CategoryMapper categoryMapper;
 
     public ListingResponse toListingResponse(Listing listing){
-
+        String image = null;
+        if(!listing.getImages().isEmpty()){
+            image = listing.getImages().get(0);
+        }
         return ListingResponse.builder()
                 .id(listing.getId())
                 .listingName(listing.getListingName())
                 .nightlyPrice(listing.getNightlyPrice())
                 .address(listing.getAddress())
                 .status(listing.getStatus())
-                .image(listing.getImages().get(0))
+                .image(image)
                 .build();
     }
 
@@ -69,6 +74,17 @@ public class ListingMapper {
                 .category(category)
                 .host(host)
                 .images(images)
+                .build();
+    }
+
+    public ListingResponse convertDTO(ListingDTO listingDTO){
+        return ListingResponse.builder()
+                .id(listingDTO.getId())
+                .listingName(listingDTO.getListingName())
+                .nightlyPrice(listingDTO.getNightlyPrice())
+                .address(listingDTO.getAddress())
+                .status(ListingStatus.fromCode(listingDTO.getStatus()))
+                .image(listingDTO.getImage())
                 .build();
     }
 }

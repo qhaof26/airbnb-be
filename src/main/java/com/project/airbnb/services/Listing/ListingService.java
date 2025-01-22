@@ -1,6 +1,7 @@
 package com.project.airbnb.services.Listing;
 
 import com.project.airbnb.constants.AppConst;
+import com.project.airbnb.dtos.response.ListingDTO;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
@@ -28,10 +29,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Coordinate;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -52,7 +49,43 @@ public class ListingService implements IListingService{
     private final AmenityRepository amenityRepository;
     private final ListingMapper listingMapper;
 
-    private final GeometryFactory geometryFactory = new GeometryFactory();
+    @Override
+    public PageResponse<List<ListingResponse>> searchListings(Map<Object, String> filters) {
+        int pageNo, pageSize;
+        try {
+            pageNo = Integer.parseInt(filters.getOrDefault("pageNo", "1"));
+            pageSize = Integer.parseInt(filters.getOrDefault("pageSize", "10"));
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("NumberFormatException pageNo, pageSize");
+        }
+        final Double longitude = filters.get("longitude") != null ? Double.parseDouble(filters.get("longitude")) : 105.85224820802452;
+        final Double latitude = filters.get("latitude") != null ? Double.parseDouble(filters.get("latitude")) : 21.03080879604984;
+        final Double radius = filters.get("radius") != null ? Double.parseDouble(filters.get("radius")) : 0.1;
+        final LocalDate checkinDate = (filters.get("checkinDate") != null && !filters.get("checkinDate").isEmpty()) ?
+                LocalDate.parse(filters.get("checkinDate")) : LocalDate.now().plusDays(1);
+        final LocalDate checkoutDate = (filters.get("checkoutDate") != null && !filters.get("checkoutDate").isEmpty()) ?
+                LocalDate.parse(filters.get("checkoutDate")) : checkinDate.plusDays(7);
+        final Integer guests = filters.get("guests") != null ? Integer.parseInt(filters.get("guests")) : 1;
+        final Integer nights = filters.get("nights") != null ? Integer.parseInt(filters.get("nights")) : 1;
+
+        if(!checkinDate.isAfter(LocalDate.now())){
+            throw new IllegalArgumentException("Check-in date must be after today");
+        }
+        if(!checkoutDate.isAfter(checkinDate)){
+            throw new IllegalArgumentException("Check-out date must be after Check-in date");
+        }
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+        Page<ListingDTO> listingPage = listingRepository.searchListing(longitude, latitude, radius, checkinDate,checkoutDate, nights, guests, pageable);
+        List<ListingResponse> listingResponses = listingPage.getContent().stream().map(listingMapper::convertDTO).toList();
+
+        return PageResponse.<List<ListingResponse>>builder()
+                .page(pageable.getPageNumber() + 1)
+                .size(pageable.getPageSize())
+                .totalElement(listingPage.getTotalElements())
+                .totalPage(listingPage.getTotalPages())
+                .data(listingResponses)
+                .build();
+    }
 
     @Override
     public PageResponse<List<ListingResponse>> filterListings(Map<Object, String> filters) {
@@ -162,14 +195,10 @@ public class ListingService implements IListingService{
         List<Amenity> amenityList = amenityRepository.findAllById(amenityIds);
         Set<Amenity> amenities = new HashSet<>(amenityList);
 
-//        Point point = geometryFactory.createPoint(new Coordinate(request.getLongitude(), request.getLatitude()));
-//        point.setSRID(3857);
-
         Listing listing = Listing.builder()
                 .listingName(request.getListingName())
                 .longitude(request.getLongitude())
                 .latitude(request.getLatitude())
-                //.geom(point)
                 .images(null)
                 .nightlyPrice(request.getNightlyPrice())
                 .numGuests(request.getNumGuests())
