@@ -7,8 +7,8 @@ import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.ListingResponseDetail;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.enums.ListingAvailabilityStatus;
+import com.project.airbnb.enums.ListingStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.ListingMapper;
@@ -28,6 +28,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,12 +46,13 @@ import java.util.stream.Collectors;
 public class ListingService implements IListingService{
     private final ListingAvailabilityRepository listingAvailabilityRepository;
     private final CloudinaryService cloudinaryService;
-    private final ImageRepository imageRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
     private final ListingMapper listingMapper;
+
+    private final GeometryFactory geometryFactory = new GeometryFactory();
 
     @Override
     public PageResponse<List<ListingResponse>> filterListings(Map<Object, String> filters) {
@@ -151,15 +156,21 @@ public class ListingService implements IListingService{
     @Transactional
     public ListingResponseDetail createListing(ListingCreationRequest request) {
         Category category = categoryRepository.findById(request.getCategory().getId()).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
-
         Set<Long> amenityIds = request.getAmenities().stream()
                 .map(Amenity::getId)
                 .collect(Collectors.toSet());
         List<Amenity> amenityList = amenityRepository.findAllById(amenityIds);
         Set<Amenity> amenities = new HashSet<>(amenityList);
 
+//        Point point = geometryFactory.createPoint(new Coordinate(request.getLongitude(), request.getLatitude()));
+//        point.setSRID(3857);
+
         Listing listing = Listing.builder()
                 .listingName(request.getListingName())
+                .longitude(request.getLongitude())
+                .latitude(request.getLatitude())
+                //.geom(point)
+                .images(null)
                 .nightlyPrice(request.getNightlyPrice())
                 .numGuests(request.getNumGuests())
                 .numBeds(request.getNumBeds())
@@ -170,6 +181,7 @@ public class ListingService implements IListingService{
                 .category(category)
                 .host(getUserLogin())
                 .amenities(amenities)
+                .status(ListingStatus.OPEN)
                 .build();
         listingRepository.save(listing);
         return listingMapper.toListingResponseDetail(listing);
@@ -181,8 +193,7 @@ public class ListingService implements IListingService{
     public CloudinaryResponse uploadImage(String listingId, MultipartFile file) throws IOException {
         verifyHostOfListing(listingId);
         final Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
-        final int images = listing.getImages().size();
-        if(images >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
+        if((listing.getImages() != null) && listing.getImages().size() >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
             throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
         }
         return cloudinaryService.uploadImage(listingId, file);

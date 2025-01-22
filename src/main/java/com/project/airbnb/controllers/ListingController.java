@@ -3,7 +3,6 @@ package com.project.airbnb.controllers;
 import com.project.airbnb.dtos.request.ListingCreationRequest;
 import com.project.airbnb.dtos.request.ListingUpdateRequest;
 import com.project.airbnb.dtos.response.*;
-import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.services.Listing.ListingService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

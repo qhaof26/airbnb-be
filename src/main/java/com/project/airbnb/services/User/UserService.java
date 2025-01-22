@@ -5,7 +5,6 @@ import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.UserResponse;
-import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;

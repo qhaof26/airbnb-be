@@ -6,6 +6,7 @@ import com.project.airbnb.dtos.request.BookingUpdateRequest;
 import com.project.airbnb.dtos.response.BookingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.enums.BookingStatus;
+import com.project.airbnb.enums.Currency;
 import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
@@ -115,24 +116,21 @@ public class BookingService implements IBookingService{
             throw new AppException(ErrorCode.GUEST_LIMIT_EXCEEDED);
         }
 
-        final long numDays = ChronoUnit.DAYS.between(request.getCheckinDate(), request.getCheckoutDate());
-        BigDecimal serviceFee = BigDecimal.valueOf(100000);
-        BigDecimal totalPrice = (listing.getNightlyPrice()).multiply(BigDecimal.valueOf(numDays));
+        BigDecimal totalAmount = calculate(listingAvailabilities);
 
         Booking booking = Booking.builder()
                 .checkinDate(request.getCheckinDate())
                 .checkoutDate(request.getCheckoutDate())
-                //.nightlyPrice(listing.getNightlyPrice())
-                //.serviceFee(BigDecimal.valueOf(100000))
-                //.totalPrice(totalPrice.add(serviceFee))
                 .numGuests(request.getNumGuests())
+                .totalAmount(totalAmount)
+                .currency(Currency.VND.getValue())
                 .note(request.getNote())
                 .status(BookingStatus.DRAFT)
                 .listing(listing)
                 .user(getUserLogin())
                 .build();
         bookingRepository.save(booking);
-        listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingAvailabilityStatus.BOOKED));
+        listingAvailabilities.forEach(listingAvailability -> listingAvailability.setStatus(ListingAvailabilityStatus.HELD));
         availabilityRepository.saveAll(listingAvailabilities);
 
         User host = listing.getHost();
@@ -164,5 +162,13 @@ public class BookingService implements IBookingService{
         String subject = AppConst.TITTLE_BOOKING;
         String body = "Id booking : " + booking.getId() + " - Listing Name: " + listing.getListingName();
         emailService.sendOtpRegister(email, subject, body);
+    }
+
+    private BigDecimal calculate(final List<ListingAvailability> availabilities){
+        var subtotal = BigDecimal.ZERO;
+        for(var aDay : availabilities){
+            subtotal = subtotal.add(aDay.getPrice());
+        }
+        return subtotal;
     }
 }

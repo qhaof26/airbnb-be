@@ -31,6 +31,9 @@ public class Booking extends AbstractEntity{
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
+    @Column(name = "currency")
+    private String currency;
+
     @Column(name = "note")
     private String note;
 

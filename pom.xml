@@ -89,8 +89,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-spatial</artifactId>
-			<version>6.6.5.Final</version>
-			<type>pom</type>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63 -->
 		<dependency>

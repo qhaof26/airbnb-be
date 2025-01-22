@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,13 +40,11 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     private final UserRepository userRepository;
 
     @Override
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     public ListingAvailabilityResponse getListingAvailability(String id) {
         return listingAvailabilityMapper.toListingAvailabilityResponse(listingAvailabilityRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.LISTING_AVAILABILITY_NOT_EXISTED)));
     }
 
     @Override
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     public PageResponse<List<ListingAvailabilityResponse>> fetchAvailabilityByListing(String listingId, int pageNo, int pageSize) {
         verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(()->new AppException(ErrorCode.LISTING_NOT_EXISTED));
@@ -114,7 +113,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
     @Override
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @Transactional
-    public void createListingAvailabilityForMonth(String listingId, int year, int month) {
+    public void createListingAvailabilityForMonth(String listingId, int year, int month, BigDecimal price) {
         verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
         List<LocalDate> days = generateDaysOfMonth(year, month);
@@ -124,6 +123,7 @@ public class ListingAvailabilityService implements IListingAvailabilityService{
                             .listing(listing)
                             .date(day)
                             .status(ListingAvailabilityStatus.AVAILABLE)
+                            .price(price)
                             .build();
                     return availability;
                 }).toList();

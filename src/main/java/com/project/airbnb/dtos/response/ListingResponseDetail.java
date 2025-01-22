@@ -4,6 +4,7 @@ import com.project.airbnb.enums.ListingStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class ListingResponseDetail {
     private UserResponse host;
     private CategoryResponse category;
     private Set<AmenityResponse> amenities;
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
     @Getter
     @Setter

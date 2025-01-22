@@ -17,6 +17,10 @@ import java.util.Set;
 public class ListingCreationRequest {
     @NotBlank
     private String listingName;
+    @NotBlank
+    private Double longitude;
+    @NotBlank
+    private Double latitude;
     @NotNull
     @Min(100000)
     private BigDecimal nightlyPrice;

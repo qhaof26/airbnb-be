@@ -14,6 +14,7 @@ public class ListingAvailabilityMapper {
                 .id(listingAvailability.getId())
                 .date(listingAvailability.getDate())
                 .status(listingAvailability.getStatus())
+                .price(listingAvailability.getPrice())
                 .listing(listing)
                 .build();
     };

@@ -5,7 +5,6 @@ import com.project.airbnb.dtos.response.CategoryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.ListingResponseDetail;
 import com.project.airbnb.models.*;
-import com.project.airbnb.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -51,9 +50,9 @@ public class ListingMapper {
             amenities = listing.getAmenities().stream().map(amenityMapper::toAmenityResponse).collect(Collectors.toSet());
         }
 
-        List<String> images = listing.getImages();
-        if(images.isEmpty()){
-            images = null;
+        List<String> images = null;
+        if(!listing.getImages().isEmpty()){
+            images = listing.getImages();
         }
         return ListingResponseDetail.builder()
                 .id(listing.getId())

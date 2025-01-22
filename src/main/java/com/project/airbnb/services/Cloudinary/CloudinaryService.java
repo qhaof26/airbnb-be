@@ -3,13 +3,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.project.airbnb.constants.AppConst;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
-import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.exceptions.FileUploadException;
 import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.User;
-import com.project.airbnb.repositories.ImageRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -30,22 +28,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CloudinaryService {
     private final Cloudinary cloudinary;
-    private final ImageRepository imageRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
 
     @Transactional
     public CloudinaryResponse uploadImage(String objectId, MultipartFile file) throws IOException{
-//        if(objectType.equals(ObjectType.LISTING) && !listingRepository.existsById(objectId)){
-//            throw new AppException(ErrorCode.LISTING_NOT_EXISTED);
-//        } else if(objectType.equals(ObjectType.USER) && !userRepository.existsById(objectId)){
-//            throw new AppException(ErrorCode.USER_NOT_EXISTED);
-//        }
-
-        //assert file.getOriginalFilename() != null;
-        if(file.getOriginalFilename() == null) {
-            throw new FileUploadException(ErrorCode.FILE_ERROR);
-        }
+        file.getOriginalFilename();
         boolean isValid = isAllowedFileType(file.getOriginalFilename());
         if(!isValid){
             throw new FileUploadException(ErrorCode.FILE_ERROR);
@@ -60,12 +48,6 @@ public class CloudinaryService {
         cleanDisk(fileUpload);
         String url = cloudinary.url().generate(publicValue + "." + extension);
 
-//        Image image = Image.builder()
-//                .objectId(objectId)
-//                .isAvatar(isAvatar.getValue())
-//                .url(url)
-//                .build();
-//        imageRepository.save(image);
         if(listingRepository.existsById(objectId)){
             Listing listing = listingRepository.findById(objectId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
             listing.getImages().add(url);
@@ -82,7 +64,7 @@ public class CloudinaryService {
     }
 
     private File convert(MultipartFile file) throws IOException {
-        assert file.getOriginalFilename() != null;
+        file.getOriginalFilename();
         String filePath = generatePublicValue(file.getOriginalFilename() + getFileName(file.getOriginalFilename())[1]);
         File convFile = new File(filePath);
         try(InputStream is = file.getInputStream()) {

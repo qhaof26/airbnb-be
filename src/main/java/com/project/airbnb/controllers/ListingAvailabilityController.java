@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -79,9 +80,10 @@ public class ListingAvailabilityController {
     public APIResponse<Void> createListingAvailabilityForMonth(
             @RequestParam("id") String id,
             @RequestParam("year") int year,
-            @RequestParam("month") int month
+            @RequestParam("month") int month,
+            @RequestParam("price") BigDecimal price
     ){
-        listingAvailabilityService.createListingAvailabilityForMonth(id, year, month);
+        listingAvailabilityService.createListingAvailabilityForMonth(id, year, month, price);
         return APIResponse.<Void>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Created listing availability for month")

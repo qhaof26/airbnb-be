@@ -5,6 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class ListingAvailabilityResponse {
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private ListingAvailabilityStatus status;
+    private BigDecimal price;
     private Listing listing;
 
     @Getter

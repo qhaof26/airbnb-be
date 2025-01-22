@@ -6,7 +6,6 @@ import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.ListingResponseDetail;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.enums.ImageType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

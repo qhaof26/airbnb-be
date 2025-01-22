@@ -17,10 +17,9 @@ public class BookingResponse {
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
     private Listing listing;
-    private BigDecimal nightlyPrice;
-    private BigDecimal serviceFee;
-    private BigDecimal totalPrice;
     private int numGuests;
+    private BigDecimal totalAmount;
+    private String currency;
     private String note;
     private BookingStatus status;
 

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -49,7 +48,7 @@ public class Listing extends AbstractEntity {
     @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "geom", columnDefinition = "geometry(Point, 3857)")
+    @Column(name = "geom", columnDefinition = "geometry(Point, 4326)")
     private Point geom;
 
     @Column(name = "address", unique = true)
@@ -57,7 +56,7 @@ public class Listing extends AbstractEntity {
 
     @Column(name = "images", columnDefinition = "text[]")
     @Type(ListArrayType.class)
-    private List<String> images;
+    private List<String> images = new ArrayList<>();
 
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
@@ -89,7 +88,13 @@ public class Listing extends AbstractEntity {
     private Set<Amenity> amenities = new HashSet<>();
 
     @PrePersist
+    @PostLoad
     public void onCreate(){
-        this.status = ListingStatus.OPEN;
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        if(averageRating == null){
+            averageRating = (float) 0;
+        }
     }
 }

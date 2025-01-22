@@ -4,7 +4,6 @@ import com.project.airbnb.dtos.request.UserCreationRequest;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.UserResponse;
-import com.project.airbnb.enums.ImageType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

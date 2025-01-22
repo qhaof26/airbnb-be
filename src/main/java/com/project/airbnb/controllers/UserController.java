@@ -5,7 +5,6 @@ import com.project.airbnb.dtos.response.APIResponse;
 import com.project.airbnb.dtos.response.CloudinaryResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.UserResponse;
-import com.project.airbnb.enums.ImageType;
 import com.project.airbnb.services.User.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
