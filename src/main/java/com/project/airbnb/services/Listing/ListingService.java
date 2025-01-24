@@ -66,8 +66,7 @@ public class ListingService implements IListingService{
         final LocalDate checkoutDate = (filters.get("checkoutDate") != null && !filters.get("checkoutDate").isEmpty()) ?
                 LocalDate.parse(filters.get("checkoutDate")) : checkinDate.plusDays(7);
         final Integer guests = filters.get("guests") != null ? Integer.parseInt(filters.get("guests")) : 1;
-        final Integer nights = filters.get("nights") != null ? Integer.parseInt(filters.get("nights")) : 1;
-
+        final Long nights = ChronoUnit.DAYS.between(checkinDate, checkoutDate) + 1;
         if(!checkinDate.isAfter(LocalDate.now())){
             throw new IllegalArgumentException("Check-in date must be after today");
         }

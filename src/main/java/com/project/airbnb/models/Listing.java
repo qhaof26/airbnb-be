@@ -79,6 +79,9 @@ public class Listing extends AbstractEntity {
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL)
     private List<Booking> bookings = new ArrayList<>();
 
+    @OneToMany(mappedBy = "listing")
+    private List<Review> reviews = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "listing_amenities",

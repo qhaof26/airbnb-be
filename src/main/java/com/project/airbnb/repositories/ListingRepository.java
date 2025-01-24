@@ -38,9 +38,10 @@ public interface ListingRepository extends JpaRepository<Listing, String> , JpaS
                                    @Param("radius") Double radius,
                                    @Param("checkinDate") LocalDate checkinDate,
                                    @Param("checkoutDate") LocalDate checkoutDate,
-                                   @Param("nights") Integer nights,
+                                   @Param("nights") Long nights,
                                    @Param("guests") Integer guests,
                                    Pageable pageable);
+
 }
 
 

@@ -21,6 +21,7 @@ public class ListingResponseDetail {
     private int numBedrooms;
     private int numBathrooms;
     private int numGuests;
+    private Float averageRating;
     private String description;
     private String address;
     private ListingStatus status;

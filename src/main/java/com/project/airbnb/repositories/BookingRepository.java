@@ -1,6 +1,8 @@
 package com.project.airbnb.repositories;
 
+import com.project.airbnb.enums.BookingStatus;
 import com.project.airbnb.models.Booking;
+import com.project.airbnb.models.Listing;
 import com.project.airbnb.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +19,6 @@ public interface BookingRepository extends JpaRepository<Booking, String>, JpaSp
             "join User u on u.id = l.host.id " +
             "where u.id = :userId")
     Page<Booking> findAllByHost(Long userId, Pageable pageable);
+
+    boolean existsByListingAndUserAndStatus(Listing listing, User user, BookingStatus status);
 }

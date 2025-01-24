@@ -14,6 +14,7 @@ public class ListingResponse {
     private String id;
     private String listingName;
     private BigDecimal nightlyPrice;
+    private Float averageRating;
     private String address;
     private ListingStatus status;
     private String image;

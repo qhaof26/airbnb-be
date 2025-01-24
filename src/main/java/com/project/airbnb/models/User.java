@@ -60,6 +60,9 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews = new ArrayList<>();
+
     @PrePersist
     public void onCreate(){
         if(status == null) {

@@ -40,7 +40,8 @@ public class SecurityConfig {
             "api/v1/listings/{listingId}",
             "api/v1/listing-availabilities/{id}",
             "api/v1/listing-availabilities/listing/{listingId}",
-            "api/v1/listing-availabilities/time/{listingId}"
+            "api/v1/listing-availabilities/time/{listingId}",
+            "api/v1/reviews"
     };
     @Bean
     PasswordEncoder passwordEncoder(){

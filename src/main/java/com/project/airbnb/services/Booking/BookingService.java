@@ -38,13 +38,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookingService implements IBookingService{
-    //CREATE Role: GUEST
-    //Check ListingAvailability
-    //Check num guests <= num guest of Listing
-    //Calculate total price (checkinDate -> checkoutDate). Check price in ListingAvailability
-
-    //GET Role: HOST
-    //Check Listing in Booking -> Check User in Listing -> HOST: get all booking of listing
     private final BookingRepository bookingRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
