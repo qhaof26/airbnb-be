@@ -1,11 +1,11 @@
 spring:
   application:
     name: Airbnb backend
-## Database
+  ## Database
   datasource:
-    url: jdbc:postgresql://localhost:5432/airbnb
-    username: postgres
-    password: 123456
+    url: ${DBMS_CONNECTION}
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
 
@@ -24,8 +24,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: gqhao.dhti15a23hn@sv.uneti.edu.vn
-    password: bhqqmgzwzayojyoz
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -39,12 +39,12 @@ api:
 
 ## JWT
 jwt:
-  signerKey: "vZ0fUpFQ4ctcn0YkHjdpfBqlgSjW0V38vW/peMlzIBjyxO4sQRF2iqh829Lre/jq"
+  signerKey: ${JWT_SIGNERKEY}
   valid-duration: 3600 #in second
   refreshable-duration: 36000 #in second
 
 ## Cloudinary
 cloudinary:
-  cloud_name: "dkxwnkii4"
-  api_key: "122237874773556"
-  api_secret: "GHD93O9ICu6_e3AP3Mp1IvEP_Lk"
+  cloud_name: ${CLOUDINARY_NAME}
+  api_key: ${CLOUDINARY_API_KEY}
+  api_secret: ${CLOUDINARY_API_SECRET}

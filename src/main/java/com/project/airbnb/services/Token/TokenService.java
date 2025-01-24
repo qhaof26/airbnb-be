@@ -62,7 +62,7 @@ public class TokenService implements ITokenService{
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
         JWSObject jwsObject = new JWSObject(header, payload);
-
+        log.info("signer key: {}", SIGNER_KEY);
         try{
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
