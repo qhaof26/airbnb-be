@@ -10,4 +10,5 @@ import java.text.ParseException;
 public interface ITokenService {
     String generateToken(User user);
     IntrospectResponse introspect(IntrospectRequest introspectRequest) throws JOSEException, ParseException;
+    void deleteExpiredTokens();
 }

@@ -52,7 +52,6 @@ public class AuthController {
                 .build();
     }
 
-
     @PostMapping("/log-out")
     public APIResponse<Void> logout(@RequestBody LogoutRequest request)
             throws ParseException, JOSEException {
