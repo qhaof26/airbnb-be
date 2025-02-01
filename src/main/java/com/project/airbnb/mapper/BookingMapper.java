@@ -1,13 +1,12 @@
 package com.project.airbnb.mapper;
 
 import com.project.airbnb.dtos.response.BookingResponse;
-import com.project.airbnb.enums.Currency;
 import com.project.airbnb.models.Booking;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookingMapper {
-    public BookingResponse toBookingResponse(Booking booking){
+    public BookingResponse toBookingResponse(Booking booking) {
         BookingResponse.Listing listing = new BookingResponse.Listing();
         listing.setId(booking.getListing().getId());
         listing.setListingName(booking.getListing().getListingName());

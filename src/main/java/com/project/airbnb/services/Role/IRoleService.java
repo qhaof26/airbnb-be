@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface IRoleService {
     RoleResponse getRoleByName(String roleName); // ADMIN
+
     PageResponse<List<RoleResponse>> getAllRole(int pageNo, int pageSize); // ADMIN
+
     RoleResponse createRole(RoleCreationRequest request); // ADMIN
-    boolean removeRole(String roleId); // ADMIN
+
+    boolean removeRole(Long roleId); // ADMIN
 }

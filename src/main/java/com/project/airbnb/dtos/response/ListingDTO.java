@@ -1,7 +1,5 @@
 package com.project.airbnb.dtos.response;
 
-import com.project.airbnb.enums.ListingStatus;
-
 import java.math.BigDecimal;
 
 public interface ListingDTO {

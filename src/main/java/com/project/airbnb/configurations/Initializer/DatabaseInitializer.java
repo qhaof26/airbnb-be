@@ -1,8 +1,6 @@
 package com.project.airbnb.configurations.Initializer;
 
 import com.project.airbnb.constants.PredefinedRole;
-import com.project.airbnb.exceptions.AppException;
-import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.models.Role;
 import com.project.airbnb.models.User;
 import com.project.airbnb.repositories.RoleRepository;
@@ -35,10 +33,10 @@ public class DatabaseInitializer {
     static final String ADMIN_PASSWORD = "123456";
 
     @Bean
-    public ApplicationRunner initDatabase(){
+    public ApplicationRunner initDatabase() {
         return args -> {
 
-            if(!roleRepository.existsByRoleName(PredefinedRole.ADMIN_ROLE)){
+            if (!roleRepository.existsByRoleName(PredefinedRole.ADMIN_ROLE)) {
                 log.info("In method init role ADMIN");
                 Role adminRole = Role.builder()
                         .roleName(PredefinedRole.ADMIN_ROLE)
@@ -47,7 +45,7 @@ public class DatabaseInitializer {
                 roleRepository.save(adminRole);
                 Set<Role> roles = new HashSet<>();
                 roles.add(adminRole);
-                if(!userRepository.existsByUsername(ADMIN_USERNAME) || !userRepository.existsByEmail(ADMIN_EMAIL)){
+                if (!userRepository.existsByUsername(ADMIN_USERNAME) || !userRepository.existsByEmail(ADMIN_EMAIL)) {
                     User adminUser = User.builder()
                             .firstName("Quoc")
                             .lastName("Hao")
@@ -63,15 +61,15 @@ public class DatabaseInitializer {
             }
 
             Optional<Role> hostRole = roleRepository.findByRoleName(PredefinedRole.HOST_ROLE);
-            if(hostRole.isEmpty()){
+            if (hostRole.isEmpty()) {
                 roleRepository.save(Role.builder()
-                                .roleName(PredefinedRole.HOST_ROLE)
-                                .description("This is host role")
+                        .roleName(PredefinedRole.HOST_ROLE)
+                        .description("This is host role")
                         .build());
             }
 
             Optional<Role> userRole = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE);
-            if(userRole.isEmpty()){
+            if (userRole.isEmpty()) {
                 roleRepository.save(Role.builder()
                         .roleName(PredefinedRole.GUEST_ROLE)
                         .description("This is guest role")

@@ -19,7 +19,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping("/{roleName}")
-    public APIResponse<RoleResponse> fetchRoleById(@PathVariable String roleName){
+    public APIResponse<RoleResponse> fetchRoleById(@PathVariable String roleName) {
         return APIResponse.<RoleResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Fetch role successful")
@@ -30,8 +30,7 @@ public class RoleController {
     @GetMapping()
     public APIResponse<PageResponse<List<RoleResponse>>> fetchAllRole(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = "10", required = false) int pageSize
-    ){
+            @RequestParam(defaultValue = "10", required = false) int pageSize) {
         return APIResponse.<PageResponse<List<RoleResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetch all role successful")
@@ -40,7 +39,7 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public APIResponse<RoleResponse> createRole(@RequestBody RoleCreationRequest request){
+    public APIResponse<RoleResponse> createRole(@RequestBody RoleCreationRequest request) {
         return APIResponse.<RoleResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Created role successful")
@@ -49,7 +48,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{roleId}")
-    public APIResponse<Boolean> removeRole(@PathVariable String roleId){
+    public APIResponse<Boolean> removeRole(@PathVariable Long roleId) {
         return APIResponse.<Boolean>builder()
                 .status(HttpStatus.OK.value())
                 .message("Deleted role")

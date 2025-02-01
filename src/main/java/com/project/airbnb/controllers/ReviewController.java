@@ -3,7 +3,6 @@ package com.project.airbnb.controllers;
 import com.project.airbnb.dtos.request.ReviewRequest;
 import com.project.airbnb.dtos.request.ReviewUpdateRequest;
 import com.project.airbnb.dtos.response.APIResponse;
-import com.project.airbnb.dtos.response.ListingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
 import com.project.airbnb.dtos.response.ReviewResponse;
 import com.project.airbnb.services.Review.ReviewService;
@@ -21,7 +20,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("")
-    public APIResponse<PageResponse<List<ReviewResponse>>> getReviewByListing(@RequestParam Map<Object, String> filters){
+    public APIResponse<PageResponse<List<ReviewResponse>>> getReviewByListing(
+            @RequestParam Map<Object, String> filters) {
         return APIResponse.<PageResponse<List<ReviewResponse>>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetch reviews by listing")
@@ -30,7 +30,7 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
-    public APIResponse<ReviewResponse> createReview(@RequestBody ReviewRequest request){
+    public APIResponse<ReviewResponse> createReview(@RequestBody ReviewRequest request) {
         return APIResponse.<ReviewResponse>builder()
                 .status(HttpStatus.CREATED.value())
                 .message("Created review")
@@ -39,7 +39,7 @@ public class ReviewController {
     }
 
     @PatchMapping("")
-    public APIResponse<ReviewResponse> updateReview(@RequestBody ReviewUpdateRequest request){
+    public APIResponse<ReviewResponse> updateReview(@RequestBody ReviewUpdateRequest request) {
         return APIResponse.<ReviewResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Updated review")
@@ -48,7 +48,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public APIResponse<Boolean> deleteReview(@PathVariable long id){
+    public APIResponse<Boolean> deleteReview(@PathVariable long id) {
         return APIResponse.<Boolean>builder()
                 .status(HttpStatus.OK.value())
                 .message("Deleted review")

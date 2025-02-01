@@ -1,9 +1,5 @@
 package com.project.airbnb.utils;
 
-import com.project.airbnb.exceptions.AppException;
-import com.project.airbnb.exceptions.ErrorCode;
-import com.project.airbnb.models.User;
-import com.project.airbnb.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -35,7 +31,7 @@ public class SecurityUtils {
         return null;
     }
 
-    public static Optional<String> getCurrentUserJwt(){
+    public static Optional<String> getCurrentUserJwt() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                 .filter(authentication -> authentication.getCredentials() instanceof String)

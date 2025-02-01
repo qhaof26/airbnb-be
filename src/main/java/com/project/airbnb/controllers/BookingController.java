@@ -5,7 +5,6 @@ import com.project.airbnb.dtos.request.BookingUpdateRequest;
 import com.project.airbnb.dtos.response.APIResponse;
 import com.project.airbnb.dtos.response.BookingResponse;
 import com.project.airbnb.dtos.response.PageResponse;
-import com.project.airbnb.models.User;
 import com.project.airbnb.services.Booking.BookingService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -18,56 +17,54 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/bookings")
 public class BookingController {
-    private final BookingService bookingService;
+        private final BookingService bookingService;
 
-    @GetMapping("/{bookingId}")
-    public APIResponse<BookingResponse> getBookingById(@PathVariable String bookingId){
-        return APIResponse.<BookingResponse>builder()
-                .status(HttpStatus.OK.value())
-                .message("Get booking by id")
-                .data(bookingService.getBookingById(bookingId))
-                .build();
-    }
+        @GetMapping("/{bookingId}")
+        public APIResponse<BookingResponse> getBookingById(@PathVariable String bookingId) {
+                return APIResponse.<BookingResponse>builder()
+                                .status(HttpStatus.OK.value())
+                                .message("Get booking by id")
+                                .data(bookingService.getBookingById(bookingId))
+                                .build();
+        }
 
-    @GetMapping("/guest")
-    public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingsOfGuest(
-            @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = "10", required = false) int pageSize
-    ){
-        return APIResponse.<PageResponse<List<BookingResponse>>>builder()
-                .status(HttpStatus.OK.value())
-                .message("Get all booking of Guest")
-                .data(bookingService.getBookingsOfGuest(pageNo, pageSize))
-                .build();
-    }
+        @GetMapping("/guest")
+        public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingsOfGuest(
+                        @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
+                        @RequestParam(defaultValue = "10", required = false) int pageSize) {
+                return APIResponse.<PageResponse<List<BookingResponse>>>builder()
+                                .status(HttpStatus.OK.value())
+                                .message("Get all booking of Guest")
+                                .data(bookingService.getBookingsOfGuest(pageNo, pageSize))
+                                .build();
+        }
 
-    @GetMapping("/host")
-    public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingOfHost(
-            @Min(value = 1)@RequestParam(defaultValue = "1", required = false) int pageNo,
-            @RequestParam(defaultValue = "10", required = false) int pageSize
-    ){
-        return APIResponse.<PageResponse<List<BookingResponse>>>builder()
-                .status(HttpStatus.OK.value())
-                .message("Get all booking of host")
-                .data(bookingService.getBookingsOfHost(pageNo, pageSize))
-                .build();
-    }
+        @GetMapping("/host")
+        public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingOfHost(
+                        @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
+                        @RequestParam(defaultValue = "10", required = false) int pageSize) {
+                return APIResponse.<PageResponse<List<BookingResponse>>>builder()
+                                .status(HttpStatus.OK.value())
+                                .message("Get all booking of host")
+                                .data(bookingService.getBookingsOfHost(pageNo, pageSize))
+                                .build();
+        }
 
-    @PostMapping("/create")
-    public APIResponse<BookingResponse> createBooking(@RequestBody BookingCreationRequest request){
-        return APIResponse.<BookingResponse>builder()
-                .status(HttpStatus.CREATED.value())
-                .message("Created booking")
-                .data(bookingService.createBooking(request))
-                .build();
-    }
+        @PostMapping("/create")
+        public APIResponse<BookingResponse> createBooking(@RequestBody BookingCreationRequest request) {
+                return APIResponse.<BookingResponse>builder()
+                                .status(HttpStatus.CREATED.value())
+                                .message("Created booking")
+                                .data(bookingService.createBooking(request))
+                                .build();
+        }
 
-    @PatchMapping("/update")
-    public APIResponse<BookingResponse> updateListing(@RequestBody BookingUpdateRequest request){
-        return APIResponse.<BookingResponse>builder()
-                .status(HttpStatus.OK.value())
-                .message("Update status booking")
-                .data(bookingService.updateBooking(request))
-                .build();
-    }
+        @PatchMapping("/update")
+        public APIResponse<BookingResponse> updateListing(@RequestBody BookingUpdateRequest request) {
+                return APIResponse.<BookingResponse>builder()
+                                .status(HttpStatus.OK.value())
+                                .message("Update status booking")
+                                .data(bookingService.updateBooking(request))
+                                .build();
+        }
 }
