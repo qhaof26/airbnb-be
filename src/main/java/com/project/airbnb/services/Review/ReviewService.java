@@ -16,6 +16,7 @@ import com.project.airbnb.repositories.BookingRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.ReviewRepository;
 import com.project.airbnb.repositories.UserRepository;
+import com.project.airbnb.services.Notification.NotificationService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class ReviewService implements IReviewService{
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final ReviewMapper reviewMapper;
+    private final NotificationService notificationService;
 
     @Override
     public PageResponse<List<ReviewResponse>> getReviewByListing(Map<Object, String> filters) {
@@ -99,6 +101,9 @@ public class ReviewService implements IReviewService{
 
         reviewRepository.save(review);
         listingRepository.save(listing);
+
+        notificationService.sendNotification(listing.getHost(), "New Review !", "Guest: " + getUserLogin().getId() + " has evaluated " + listing.getListingName());
+
         return reviewMapper.toReviewResponse(review);
     }
 

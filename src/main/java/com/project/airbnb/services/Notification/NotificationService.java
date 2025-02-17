@@ -32,7 +32,7 @@ public class NotificationService implements INotificationService{
     @PreAuthorize("isAuthenticated()")
     public PageResponse<List<Notification>> getNotifications(int pageNo, int pageSize) {
         User user = getUserLogin();
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<Notification> notificationPage = notificationRepository.findByUserOrderByCreatedAt(user.getId(), pageable);
         List<Notification> notifications = notificationPage.getContent();
         for(Notification notification : notifications){

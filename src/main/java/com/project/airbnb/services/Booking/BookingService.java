@@ -11,15 +11,13 @@ import com.project.airbnb.enums.ListingAvailabilityStatus;
 import com.project.airbnb.exceptions.AppException;
 import com.project.airbnb.exceptions.ErrorCode;
 import com.project.airbnb.mapper.BookingMapper;
-import com.project.airbnb.models.Booking;
-import com.project.airbnb.models.Listing;
-import com.project.airbnb.models.ListingAvailability;
-import com.project.airbnb.models.User;
+import com.project.airbnb.models.*;
 import com.project.airbnb.repositories.BookingRepository;
 import com.project.airbnb.repositories.ListingAvailabilityRepository;
 import com.project.airbnb.repositories.ListingRepository;
 import com.project.airbnb.repositories.UserRepository;
 import com.project.airbnb.services.Email.EmailService;
+import com.project.airbnb.services.Notification.NotificationService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +41,7 @@ public class BookingService implements IBookingService{
     private final UserRepository userRepository;
     private final ListingAvailabilityRepository availabilityRepository;
     private final EmailService emailService;
+    private final NotificationService notificationService;
     private final BookingMapper bookingMapper;
 
     @Override
@@ -88,7 +87,7 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @Transactional
     public BookingResponse createBooking(BookingCreationRequest request) {
         Listing listing = listingRepository.findById(request.getListing().getId()).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
@@ -129,6 +128,9 @@ public class BookingService implements IBookingService{
         User host = listing.getHost();
         sendVerificationEmail(host.getEmail(), listing, booking);
         sendVerificationEmail(getUserLogin().getEmail(), listing, booking);
+
+        notificationService.sendNotification(host, "New Booking !", "Guest: " + getUserLogin().getId() + " has booked " + listing.getListingName());
+
         return bookingMapper.toBookingResponse(booking);
     }
 
@@ -143,6 +145,9 @@ public class BookingService implements IBookingService{
         booking.setStatus(request.getStatus());
         booking.setUpdatedAt(LocalDateTime.now());
         bookingRepository.save(booking);
+
+        notificationService.sendNotification(booking.getUser(), "Change status booking !", "The host has updated the status of the booking: " + request.getStatus());
+
         return bookingMapper.toBookingResponse(booking);
     }
 
