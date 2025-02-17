@@ -48,7 +48,9 @@ public enum ErrorCode {
     BOOKING_EXISTED(HttpStatus.BAD_REQUEST, "Booking existed !"),
     //REVIEW
     REVIEW_NOT_EXISTED(HttpStatus.BAD_REQUEST, "Review not existed !"),
-    REVIEW_MAX_STAR(HttpStatus.BAD_REQUEST, "Star of review listing must be <= " + AppConst.MAXIMUM_STAR)
+    REVIEW_MAX_STAR(HttpStatus.BAD_REQUEST, "Star of review listing must be <= " + AppConst.MAXIMUM_STAR),
+    //NOTIFICATION
+    NOTIFICATION_NOT_EXISTED(HttpStatus.NOT_FOUND, "Notification not existed !");
     ;
 
     private final HttpStatusCode statusCode;
