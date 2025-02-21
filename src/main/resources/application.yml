@@ -3,9 +3,9 @@ spring:
     name: Airbnb backend
   ## Database
   datasource:
-    url: ${DBMS_CONNECTION}
-    username: ${DBMS_USERNAME}
-    password: ${DBMS_PASSWORD}
+    url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5432/airbnb}
+    username: ${DBMS_USERNAME:postgres}
+    password: ${DBMS_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
 
   jpa:
