@@ -1,12 +1,12 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dtos.response.ListingDTO;
-import com.project.airbnb.dtos.response.AmenityResponse;
-import com.project.airbnb.dtos.response.CategoryResponse;
-import com.project.airbnb.dtos.response.ListingResponse;
-import com.project.airbnb.dtos.response.ListingResponseDetail;
+import com.project.airbnb.dto.response.ListingDTO;
+import com.project.airbnb.dto.response.AmenityResponse;
+import com.project.airbnb.dto.response.CategoryResponse;
+import com.project.airbnb.dto.response.ListingResponse;
+import com.project.airbnb.dto.response.ListingResponseDetail;
 import com.project.airbnb.enums.ListingStatus;
-import com.project.airbnb.models.*;
+import com.project.airbnb.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

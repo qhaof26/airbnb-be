@@ -1,7 +1,7 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dtos.response.ReviewResponse;
-import com.project.airbnb.models.Review;
+import com.project.airbnb.dto.response.ReviewResponse;
+import com.project.airbnb.model.Review;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -101,7 +101,21 @@
 			<artifactId>hypersistence-utils-hibernate-63</artifactId>
 			<version>3.8.3</version>
 		</dependency>
-
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!-- (Redis client) -->
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+		</dependency>
+		<!-- Jackson (used serialize/deserialize object) -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
 		<dependency>
 			<groupId>com.github.javafaker</groupId>

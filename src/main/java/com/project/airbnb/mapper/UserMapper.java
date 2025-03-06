@@ -1,9 +1,9 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dtos.response.RegisterResponse;
-import com.project.airbnb.dtos.response.UserResponse;
-import com.project.airbnb.models.Role;
-import com.project.airbnb.models.User;
+import com.project.airbnb.dto.response.RegisterResponse;
+import com.project.airbnb.dto.response.UserResponse;
+import com.project.airbnb.model.Role;
+import com.project.airbnb.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

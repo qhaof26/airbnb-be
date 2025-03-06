@@ -1,7 +1,7 @@
 package com.project.airbnb.mapper;
 
-import com.project.airbnb.dtos.response.ListingAvailabilityResponse;
-import com.project.airbnb.models.ListingAvailability;
+import com.project.airbnb.dto.response.ListingAvailabilityResponse;
+import com.project.airbnb.model.ListingAvailability;
 import org.springframework.stereotype.Component;
 
 @Component
