@@ -1,4 +1,4 @@
-<h1 align="center">Airbnb - Backend </h1>
+<h1 align="center">AirBnb - Backend </h1>
 
 ## Tech Stack
 Code: <br>
