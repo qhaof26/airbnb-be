@@ -16,6 +16,7 @@ import com.project.airbnb.mapper.ListingMapper;
 import com.project.airbnb.model.*;
 import com.project.airbnb.repository.*;
 import com.project.airbnb.repository.specification.ListingSpecification;
+import com.project.airbnb.service.Cache.ListingCacheService;
 import com.project.airbnb.service.Cloudinary.CloudinaryService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
@@ -48,6 +49,7 @@ public class ListingService implements IListingService{
     private final CategoryRepository categoryRepository;
     private final AmenityRepository amenityRepository;
     private final ListingMapper listingMapper;
+    private final ListingCacheService listingCacheService;
 
     @Override
     public PageResponse<List<ListingResponse>> searchListings(Map<Object, String> filters) {
@@ -147,7 +149,12 @@ public class ListingService implements IListingService{
 
     @Override
     public ListingResponseDetail getListingById(String listingId) {
+        ListingResponseDetail listingResponseDetail = listingCacheService.getListingFromCache(listingId);
+        if(listingResponseDetail != null){
+            return listingResponseDetail;
+        }
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        listingCacheService.cacheListingDetails(listingMapper.toListingResponseDetail(listing));
         return listingMapper.toListingResponseDetail(listing);
     }
 
@@ -254,6 +261,8 @@ public class ListingService implements IListingService{
         listing.setAmenities(amenities);
         listing.setUpdatedAt(LocalDateTime.now());
         listingRepository.save(listing);
+
+        listingCacheService.evictListingCache(listingId);
         return listingMapper.toListingResponseDetail(listing);
     }
 
@@ -263,6 +272,7 @@ public class ListingService implements IListingService{
     public void deleteListing(String listingId) {
         verifyHostOfListing(listingId);
         Listing listing = listingRepository.findById(listingId).orElseThrow(() -> new AppException(ErrorCode.LISTING_NOT_EXISTED));
+        listingCacheService.evictListingCache(listingId);
         listingRepository.delete(listing);
     }
 
