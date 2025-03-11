@@ -231,6 +231,7 @@ public class ListingService implements IListingService{
         if((listing.getImages() != null) && listing.getImages().size() >= AppConst.MAXIMUM_IMAGE_PER_LISTING){
             throw new AppException(ErrorCode.LISTING_IMAGE_MAX_QUANTITY);
         }
+        listingCacheService.evictListingCache(listingId);
         return cloudinaryService.uploadImage(listingId, file);
     }
 
