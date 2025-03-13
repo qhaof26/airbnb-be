@@ -124,8 +124,6 @@ public class AuthenticationService implements IAuthenticationService{
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
             long ttl = redisInvalidTokenService.calculateTtl(expiryTime);
             redisInvalidTokenService.addToBlacklist(jit, ttl);
-
-
         } catch (AppException e){
             log.warn("Token already expired");
         }
