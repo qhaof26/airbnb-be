@@ -17,6 +17,7 @@ import com.project.airbnb.model.User;
 import com.project.airbnb.repository.InvalidatedTokenRepository;
 import com.project.airbnb.repository.RoleRepository;
 import com.project.airbnb.repository.UserRepository;
+import com.project.airbnb.service.Cache.RedisInvalidTokenService;
 import com.project.airbnb.service.Email.EmailService;
 import com.project.airbnb.service.Token.TokenService;
 import com.project.airbnb.utils.SecurityUtils;
@@ -42,7 +43,7 @@ public class AuthenticationService implements IAuthenticationService{
     private final RoleRepository roleRepository;
     private final TokenService tokenService;
     private final UserRepository userRepository;
-    private final InvalidatedTokenRepository invalidatedTokenRepository;
+    private final RedisInvalidTokenService redisInvalidTokenService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final UserMapper userMapper;
@@ -121,11 +122,10 @@ public class AuthenticationService implements IAuthenticationService{
             var signToken = tokenService.verifyToken(request.getToken(), true);
             String jit = signToken.getJWTClaimsSet().getJWTID();
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
-            InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                    .id(jit)
-                    .expiryTime(expiryTime)
-                    .build();
-            invalidatedTokenRepository.save(invalidatedToken);
+            long ttl = redisInvalidTokenService.calculateTtl(expiryTime);
+            redisInvalidTokenService.addToBlacklist(jit, ttl);
+
+
         } catch (AppException e){
             log.warn("Token already expired");
         }

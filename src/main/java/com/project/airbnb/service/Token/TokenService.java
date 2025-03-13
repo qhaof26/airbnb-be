@@ -11,6 +11,7 @@ import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
 import com.project.airbnb.model.User;
 import com.project.airbnb.repository.InvalidatedTokenRepository;
+import com.project.airbnb.service.Cache.RedisInvalidTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -34,6 +35,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TokenService implements ITokenService {
     private final InvalidatedTokenRepository invalidatedTokenRepository;
+    private final RedisInvalidTokenService redisInvalidTokenService;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -123,8 +125,10 @@ public class TokenService implements ITokenService {
         if (!(verified && expiryTime.after(new Date()))) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+
+        if(redisInvalidTokenService.isBlacklisted(signedJWT.getJWTClaimsSet().getJWTID())){
             throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
 
         return signedJWT;
     }
