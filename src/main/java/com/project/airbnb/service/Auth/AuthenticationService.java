@@ -11,10 +11,8 @@ import com.project.airbnb.dto.response.RegisterResponse;
 import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
 import com.project.airbnb.mapper.UserMapper;
-import com.project.airbnb.model.InvalidatedToken;
 import com.project.airbnb.model.Role;
 import com.project.airbnb.model.User;
-import com.project.airbnb.repository.InvalidatedTokenRepository;
 import com.project.airbnb.repository.RoleRepository;
 import com.project.airbnb.repository.UserRepository;
 import com.project.airbnb.service.Cache.RedisInvalidTokenService;
@@ -39,7 +37,7 @@ import java.util.Set;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationService implements IAuthenticationService{
+public class AuthenticationService implements IAuthenticationService {
     private final RoleRepository roleRepository;
     private final TokenService tokenService;
     private final UserRepository userRepository;
@@ -50,11 +48,12 @@ public class AuthenticationService implements IAuthenticationService{
 
     @Override
     public AuthenticationResponse isAuthenticate(AuthenticationRequest request) {
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        if(!authenticated){
+        if (!authenticated) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
@@ -69,8 +68,10 @@ public class AuthenticationService implements IAuthenticationService{
     @Override
     @Transactional
     public RegisterResponse registerAccount(UserCreationRequest request) {
-        if(userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USERNAME_EXISTED);
-        if(userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.EMAIL_EXISTED);
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         String password = passwordEncoder.encode(request.getPassword());
         User newUser = User.builder()
                 .firstName(request.getFirstName())
@@ -92,11 +93,12 @@ public class AuthenticationService implements IAuthenticationService{
     @Transactional
     public boolean verifyAccount(String email, String otp) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        if(user.getStatus().equals(Boolean.TRUE)){
+        if (user.getStatus().equals(Boolean.TRUE)) {
             throw new AppException(ErrorCode.USER_VERIFIED);
         }
-        if(passwordEncoder.matches(otp, user.getOtp())){
-            Role role = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        if (passwordEncoder.matches(otp, user.getOtp())) {
+            Role role = roleRepository.findByRoleName(PredefinedRole.GUEST_ROLE)
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
             Set<Role> roles = new HashSet<>();
             roles.add(role);
 
@@ -124,7 +126,7 @@ public class AuthenticationService implements IAuthenticationService{
             Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
             long ttl = redisInvalidTokenService.calculateTtl(expiryTime);
             redisInvalidTokenService.addToBlacklist(jit, ttl);
-        } catch (AppException e){
+        } catch (AppException e) {
             log.warn("Token already expired");
         }
     }
@@ -133,9 +135,12 @@ public class AuthenticationService implements IAuthenticationService{
     @PreAuthorize("hasRole('GUEST')")
     @Transactional
     public void registerHost() {
-        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get() : "";
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        Role roleHost = roleRepository.findByRoleName("HOST").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        String username = SecurityUtils.getCurrentUserLogin().isPresent() ? SecurityUtils.getCurrentUserLogin().get()
+                : "";
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        Role roleHost = roleRepository.findByRoleName("HOST")
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         Set<Role> roles = user.getRoles();
         roles.add(roleHost);
 
@@ -150,7 +155,7 @@ public class AuthenticationService implements IAuthenticationService{
         return String.valueOf(otpValue);
     }
 
-    private void sendVerificationEmail(String email, String otp){
+    private void sendVerificationEmail(String email, String otp) {
         String subject = "Email verification";
         String body = "Your verification OTP is: " + otp;
         emailService.sendOtpRegister(email, subject, body);

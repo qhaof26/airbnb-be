@@ -1,4 +1,4 @@
-package com.project.airbnb.configuration.Initializer;
+package com.project.airbnb.configuration.AppConfig;
 
 import com.project.airbnb.constant.PredefinedRole;
 import com.project.airbnb.model.Role;
@@ -8,6 +8,7 @@ import com.project.airbnb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +27,15 @@ public class DatabaseInitializer {
     private final PasswordEncoder passwordEncoder;
 
     @NonFinal
-    static final String ADMIN_EMAIL = "admin@gmail.com";
+    @Value("${app.admin.email}")
+    String ADMIN_EMAIL;
+
     @NonFinal
-    static final String ADMIN_USERNAME = "admin";
+    @Value("${app.admin.username}")
+    String ADMIN_USERNAME;
     @NonFinal
-    static final String ADMIN_PASSWORD = "123456";
+    @Value("${app.admin.password}")
+    String ADMIN_PASSWORD ;
 
     @Bean
     public ApplicationRunner initDatabase() {

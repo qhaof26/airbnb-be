@@ -1,4 +1,4 @@
-package com.project.airbnb.configuration;
+package com.project.airbnb.configuration.AppConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
