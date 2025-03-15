@@ -1,27 +1,46 @@
 spring:
   application:
     name: Airbnb backend
-
+  ## Database
   datasource:
     url: ${DBMS_CONNECTION:jdbc:postgresql://localhost:5432/airbnb}
     username: ${DBMS_USERNAME:postgres}
     password: ${DBMS_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
+
+  ## Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
   ## File
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+
+  #OAuth2
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://www.googleapis.com/oauth2/v4/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
 
   ## Email
   mail:
@@ -52,7 +71,7 @@ cloudinary:
   api_key: ${CLOUDINARY_API_KEY}
   api_secret: ${CLOUDINARY_API_SECRET}
 
-# account admin
+# Account admin
 app:
   admin:
     username: ${ADMIN_USERNAME}

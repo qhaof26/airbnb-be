@@ -1,4 +1,4 @@
-package com.project.airbnb.service.Cache;
+package com.project.airbnb.service.Redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -11,7 +11,7 @@ import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
 import com.project.airbnb.model.User;
 import com.project.airbnb.repository.InvalidatedTokenRepository;
-import com.project.airbnb.service.Cache.RedisInvalidTokenService;
+import com.project.airbnb.service.Redis.RedisInvalidTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;

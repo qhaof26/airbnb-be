@@ -14,6 +14,8 @@ public enum ErrorCode {
     //AUTH
     UNAUTHENTICATED(HttpStatus.UNAUTHORIZED,"Unauthenticated"),
     UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission"),
+    OAUTH2_PROVIDER_NOT_SUPPORTED(HttpStatus.BAD_REQUEST, "OAuth2 provider not supported"),
+    EMAIL_NOT_FOUND_FROM_OAUTH2_PROVIDER(HttpStatus.BAD_REQUEST, "Email not found from OAuth2 provider"),
     //ROLE
     ROLE_EXISTED(HttpStatus.BAD_REQUEST, "Role existed !"),
     ROLE_NOT_EXISTED(HttpStatus.NOT_FOUND, "Role not existed !"),

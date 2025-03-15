@@ -1,4 +1,4 @@
-package com.project.airbnb.service.Cache;
+package com.project.airbnb.service.Redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.airbnb.dto.response.ListingResponseDetail;

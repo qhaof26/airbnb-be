@@ -8,11 +8,13 @@ import com.project.airbnb.dto.response.APIResponse;
 import com.project.airbnb.dto.response.AuthenticationResponse;
 import com.project.airbnb.dto.response.RegisterResponse;
 import com.project.airbnb.service.Auth.AuthenticationService;
+import com.project.airbnb.service.OAuth2.OAuth2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +22,22 @@ import java.text.ParseException;
 public class AuthController {
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/log-in")
+    private final OAuth2Service oAuth2Service;
+
+    @PostMapping("/login/{provider}")
+    public APIResponse<AuthenticationResponse> loginWithOAuth2(
+            @PathVariable("provider") String provider,
+            @RequestBody Map<String, Object> userAttributes) {
+
+        AuthenticationResponse response = oAuth2Service.processOAuthLogin(provider, userAttributes);
+        return APIResponse.<AuthenticationResponse>builder()
+                .status(HttpStatus.OK.value())
+                .message("OAuth2 authentication successful")
+                .data(response)
+                .build();
+    }
+
+    @PostMapping("/login")
     public APIResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
         AuthenticationResponse response = authenticationService.isAuthenticate(request);
         return APIResponse.<AuthenticationResponse>builder()

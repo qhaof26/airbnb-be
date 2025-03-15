@@ -26,16 +26,14 @@ public class DatabaseInitializer {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @NonFinal
     @Value("${app.admin.email}")
-    String ADMIN_EMAIL;
+    private String ADMIN_EMAIL;
 
-    @NonFinal
     @Value("${app.admin.username}")
-    String ADMIN_USERNAME;
-    @NonFinal
+    private String ADMIN_USERNAME;
+
     @Value("${app.admin.password}")
-    String ADMIN_PASSWORD ;
+    private String ADMIN_PASSWORD ;
 
     @Bean
     public ApplicationRunner initDatabase() {

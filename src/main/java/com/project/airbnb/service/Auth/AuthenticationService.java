@@ -15,7 +15,7 @@ import com.project.airbnb.model.Role;
 import com.project.airbnb.model.User;
 import com.project.airbnb.repository.RoleRepository;
 import com.project.airbnb.repository.UserRepository;
-import com.project.airbnb.service.Cache.RedisInvalidTokenService;
+import com.project.airbnb.service.Redis.RedisInvalidTokenService;
 import com.project.airbnb.service.Email.EmailService;
 import com.project.airbnb.service.Token.TokenService;
 import com.project.airbnb.utils.SecurityUtils;

@@ -16,7 +16,7 @@ import com.project.airbnb.mapper.ListingMapper;
 import com.project.airbnb.model.*;
 import com.project.airbnb.repository.*;
 import com.project.airbnb.repository.specification.ListingSpecification;
-import com.project.airbnb.service.Cache.ListingCacheService;
+import com.project.airbnb.service.Redis.ListingCacheService;
 import com.project.airbnb.service.Cloudinary.CloudinaryService;
 import com.project.airbnb.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
