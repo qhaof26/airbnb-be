@@ -45,9 +45,9 @@ networks:
   airbnb-network:
     driver: bridge
 
-#volumes:
-#  postgres-data:
-#  redis-data:
+volumes:
+  postgres-data:
+  redis-data:
 
 # => Run multiple containers at the same time
 # Run: docker-compose up -d
