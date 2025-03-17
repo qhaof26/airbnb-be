@@ -71,6 +71,14 @@ cloudinary:
   api_key: ${CLOUDINARY_API_KEY}
   api_secret: ${CLOUDINARY_API_SECRET}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs
+    operationsSorter: method
+  packages-to-scan: com.project.airbnb.controller
+
 # Account admin
 app:
   admin:
