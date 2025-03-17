@@ -27,7 +27,7 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping()
+    @GetMapping
     public APIResponse<PageResponse<List<CategoryResponse>>> getAllCategories(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
@@ -39,7 +39,7 @@ public class CategoryController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public APIResponse<CategoryResponse> createCategory(@RequestBody CategoryRequest request){
         return APIResponse.<CategoryResponse>builder()
                 .status(HttpStatus.CREATED.value())
@@ -48,7 +48,7 @@ public class CategoryController {
                 .build();
     }
 
-    @PatchMapping("/update/{categoryId}")
+    @PatchMapping("/{categoryId}")
     public APIResponse<CategoryResponse> updateCategory(@RequestBody CategoryRequest request, @PathVariable Long categoryId){
         return APIResponse.<CategoryResponse>builder()
                 .status(HttpStatus.OK.value())

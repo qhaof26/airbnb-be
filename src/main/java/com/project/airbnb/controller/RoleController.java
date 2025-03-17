@@ -38,7 +38,7 @@ public class RoleController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public APIResponse<RoleResponse> createRole(@RequestBody RoleCreationRequest request) {
         return APIResponse.<RoleResponse>builder()
                 .status(HttpStatus.CREATED.value())

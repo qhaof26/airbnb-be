@@ -57,7 +57,7 @@ public class ListingAvailabilityController {
                                 .build();
         }
 
-        @PostMapping("/create")
+        @PostMapping
         public APIResponse<ListingAvailabilityResponse> createListing(
                         @RequestBody ListingAvailabilityCreationRequest request) {
                 return APIResponse.<ListingAvailabilityResponse>builder()
@@ -67,7 +67,7 @@ public class ListingAvailabilityController {
                                 .build();
         }
 
-        @PatchMapping("/update/{listingId}")
+        @PatchMapping("/{listingId}")
         public APIResponse<ListingAvailabilityResponse> updateListing(
                         @RequestBody ListingAvailabilityUpdateRequest request, @PathVariable Long listingId) {
                 return APIResponse.<ListingAvailabilityResponse>builder()

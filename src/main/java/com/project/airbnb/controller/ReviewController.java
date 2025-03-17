@@ -19,7 +19,7 @@ import java.util.Map;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @GetMapping("")
+    @GetMapping
     public APIResponse<PageResponse<List<ReviewResponse>>> getReviewByListing(
             @RequestParam Map<Object, String> filters) {
         return APIResponse.<PageResponse<List<ReviewResponse>>>builder()
@@ -29,7 +29,7 @@ public class ReviewController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public APIResponse<ReviewResponse> createReview(@RequestBody ReviewRequest request) {
         return APIResponse.<ReviewResponse>builder()
                 .status(HttpStatus.CREATED.value())
@@ -38,7 +38,7 @@ public class ReviewController {
                 .build();
     }
 
-    @PatchMapping("")
+    @PatchMapping
     public APIResponse<ReviewResponse> updateReview(@RequestBody ReviewUpdateRequest request) {
         return APIResponse.<ReviewResponse>builder()
                 .status(HttpStatus.OK.value())
@@ -47,12 +47,12 @@ public class ReviewController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
-    public APIResponse<Boolean> deleteReview(@PathVariable long id) {
+    @DeleteMapping("/{reviewId}")
+    public APIResponse<Boolean> deleteReview(@PathVariable long reviewId) {
         return APIResponse.<Boolean>builder()
                 .status(HttpStatus.OK.value())
                 .message("Deleted review")
-                .data(reviewService.deleteReview(id))
+                .data(reviewService.deleteReview(reviewId))
                 .build();
     }
 }

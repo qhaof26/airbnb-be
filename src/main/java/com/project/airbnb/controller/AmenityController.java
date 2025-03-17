@@ -27,7 +27,7 @@ public class AmenityController {
                 .build();
     }
 
-    @GetMapping()
+    @GetMapping
     public APIResponse<PageResponse<List<AmenityResponse>>> getAllCategories(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
@@ -39,7 +39,7 @@ public class AmenityController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public APIResponse<AmenityResponse> createCategory(@RequestBody AmenityRequest request){
         return APIResponse.<AmenityResponse>builder()
                 .status(HttpStatus.CREATED.value())
@@ -48,7 +48,7 @@ public class AmenityController {
                 .build();
     }
 
-    @PatchMapping("/update/{amenityId}")
+    @PatchMapping("/{amenityId}")
     public APIResponse<AmenityResponse> updateCategory(@RequestBody AmenityRequest request, @PathVariable Long amenityId){
         return APIResponse.<AmenityResponse>builder()
                 .status(HttpStatus.OK.value())

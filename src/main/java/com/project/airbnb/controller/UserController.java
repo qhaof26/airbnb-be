@@ -17,18 +17,38 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/users")
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/{userId}")
-    public APIResponse<UserResponse> getUserById(@PathVariable Long userId){
+    @PostMapping
+    public APIResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Fetch user")
-                .data(userService.getUserById(userId))
+                .message("Created user successfully")
+                .data(userService.createNewUser(request))
+                .build();
+    }
+
+    @PostMapping("/block/{userId}")
+    public APIResponse<Boolean> blockUser(@PathVariable Long userId){
+        return APIResponse.<Boolean>builder()
+                .status(HttpStatus.OK.value())
+                .message("Blocked user successfully")
+                .data(userService.removeUser(userId))
+                .build();
+    }
+
+    @PatchMapping("/change-status/{userId}")
+    public APIResponse<UserResponse> unBlockUser(@PathVariable Long userId, @RequestParam(required = false) boolean status
+    ){
+        return APIResponse.<UserResponse>builder()
+                .status(HttpStatus.OK.value())
+                .message("Changed status user successfully")
+                .data(userService.changeStatus(userId, status))
                 .build();
     }
 
@@ -82,31 +102,12 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/create")
-    public APIResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+    @GetMapping("/{userId}")
+    public APIResponse<UserResponse> getUserById(@PathVariable Long userId){
         return APIResponse.<UserResponse>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Created user")
-                .data(userService.createNewUser(request))
-                .build();
-    }
-
-    @PatchMapping("/change-status/{userId}")
-    public APIResponse<UserResponse> changeStatus(@PathVariable Long userId, @RequestParam(required = false) boolean status
-            ){
-        return APIResponse.<UserResponse>builder()
-                .status(HttpStatus.OK.value())
-                .message("Change status user")
-                .data(userService.changeStatus(userId, status))
-                .build();
-    }
-
-    @DeleteMapping("/{userId}")
-    public APIResponse<Boolean> removeUser(@PathVariable Long userId){
-        return APIResponse.<Boolean>builder()
-                .status(HttpStatus.OK.value())
-                .message("Deleted user")
-                .data(userService.removeUser(userId))
+                .message("Fetch user successfully")
+                .data(userService.getUserById(userId))
                 .build();
     }
 
@@ -117,7 +118,7 @@ public class UserController {
     ) throws IOException {
         return APIResponse.<CloudinaryResponse>builder()
                 .status(HttpStatus.CREATED.value())
-                .message("Uploaded avatar")
+                .message("Uploaded avatar successfully")
                 .data(userService.uploadAvatar(id, image))
                 .build();
     }

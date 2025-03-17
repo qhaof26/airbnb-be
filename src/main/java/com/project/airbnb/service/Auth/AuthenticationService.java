@@ -1,6 +1,9 @@
 package com.project.airbnb.service.Auth;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.SignedJWT;
 import com.project.airbnb.constant.PredefinedRole;
 import com.project.airbnb.dto.request.AuthenticationRequest;
 import com.project.airbnb.dto.request.LogoutRequest;
@@ -110,11 +113,6 @@ public class AuthenticationService implements IAuthenticationService {
         }
 
         return false;
-    }
-
-    @Override
-    public AuthenticationResponse refreshToken(RefreshToken token) {
-        return null;
     }
 
     @Override

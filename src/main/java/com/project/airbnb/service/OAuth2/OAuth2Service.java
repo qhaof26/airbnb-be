@@ -52,10 +52,7 @@ public class OAuth2Service extends DefaultOAuth2UserService {
 
         Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User user;
-        boolean isNewUser = false;
-
         if(userOptional.isEmpty()) {
-            isNewUser = true;
             user = createNewUser(oAuth2UserInfo);
         } else {
             user = userOptional.get();
@@ -63,13 +60,10 @@ public class OAuth2Service extends DefaultOAuth2UserService {
         }
 
         String token = tokenService.generateToken(user);
-        UserResponse userResponse = userMapper.toUserResponse(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
                 .isAuthenticated(true)
-//                .isNewUser(isNewUser)
-//                .user(userResponse)
                 .build();
     }
 
@@ -103,7 +97,7 @@ public class OAuth2Service extends DefaultOAuth2UserService {
     }
 
     private void updateExistingUser(User user, OAuth2UserInfo oAuth2UserInfo) {
-        // Update user information if needed
+
         if (user.getFirstName() == null || user.getLastName() == null) {
             String name = oAuth2UserInfo.getName();
             if (name != null && name.contains(" ")) {

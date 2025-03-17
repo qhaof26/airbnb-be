@@ -47,7 +47,7 @@ public class ListingController {
                 .build();
     }
 
-    @GetMapping()
+    @GetMapping
     public APIResponse<PageResponse<List<ListingResponse>>> getAllListings(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize
@@ -71,7 +71,7 @@ public class ListingController {
                 .build();
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public APIResponse<ListingResponseDetail> createListing(@RequestBody ListingCreationRequest request){
         return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.CREATED.value())
@@ -92,7 +92,7 @@ public class ListingController {
                 .build();
     }
 
-    @PatchMapping("/update/{listingId}")
+    @PatchMapping("/{listingId}")
     public APIResponse<ListingResponseDetail> updateListing(@RequestBody ListingUpdateRequest request, @PathVariable String listingId){
         return APIResponse.<ListingResponseDetail>builder()
                 .status(HttpStatus.OK.value())
@@ -101,7 +101,7 @@ public class ListingController {
                 .build();
     }
 
-    @DeleteMapping("/delete/{listingId}")
+    @DeleteMapping("/{listingId}")
     public APIResponse<Void> deleteListing(@PathVariable String listingId){
         listingService.deleteListing(listingId);
         return APIResponse.<Void>builder()

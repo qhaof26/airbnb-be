@@ -14,7 +14,6 @@ public interface IAuthenticationService {
     AuthenticationResponse isAuthenticate(AuthenticationRequest request);
     RegisterResponse registerAccount(UserCreationRequest request);
     boolean verifyAccount(String email, String otp);
-    AuthenticationResponse refreshToken(RefreshToken token);
     void logout(LogoutRequest request) throws ParseException, JOSEException;
     void registerHost(); //GUEST -> HOST
 }

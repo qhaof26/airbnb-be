@@ -50,7 +50,7 @@ public class BookingController {
                                 .build();
         }
 
-        @PostMapping("/create")
+        @PostMapping
         public APIResponse<BookingResponse> createBooking(@RequestBody BookingCreationRequest request) {
                 return APIResponse.<BookingResponse>builder()
                                 .status(HttpStatus.CREATED.value())
@@ -59,7 +59,7 @@ public class BookingController {
                                 .build();
         }
 
-        @PatchMapping("/update")
+        @PatchMapping
         public APIResponse<BookingResponse> updateListing(@RequestBody BookingUpdateRequest request) {
                 return APIResponse.<BookingResponse>builder()
                                 .status(HttpStatus.OK.value())

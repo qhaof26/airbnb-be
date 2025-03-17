@@ -17,7 +17,7 @@ import java.util.List;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping("")
+    @GetMapping
     public APIResponse<PageResponse<List<Notification>>> getNotifications(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize

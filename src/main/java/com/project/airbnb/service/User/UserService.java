@@ -46,7 +46,7 @@ public class UserService implements IUserService{
     private final CloudinaryService cloudinaryService;
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public UserResponse getUserById(Long userId) {
         User user = userRepository.findUserActive(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);

@@ -45,6 +45,7 @@ public class BookingService implements IBookingService{
     private final BookingMapper bookingMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public BookingResponse getBookingById(String bookingId) {
         return bookingMapper.toBookingResponse(bookingRepository.findById(bookingId).orElseThrow(()->new AppException(ErrorCode.BOOKING_NOT_EXISTED)));
     }

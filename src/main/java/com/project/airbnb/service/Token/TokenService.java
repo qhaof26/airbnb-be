@@ -6,11 +6,14 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.project.airbnb.dto.request.IntrospectRequest;
+import com.project.airbnb.dto.request.RefreshToken;
+import com.project.airbnb.dto.response.AuthenticationResponse;
 import com.project.airbnb.dto.response.IntrospectResponse;
 import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
 import com.project.airbnb.model.User;
 import com.project.airbnb.repository.InvalidatedTokenRepository;
+import com.project.airbnb.repository.UserRepository;
 import com.project.airbnb.service.Redis.RedisInvalidTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +37,8 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class TokenService implements ITokenService {
-    private final InvalidatedTokenRepository invalidatedTokenRepository;
     private final RedisInvalidTokenService redisInvalidTokenService;
+    private final UserRepository userRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -91,12 +94,25 @@ public class TokenService implements ITokenService {
     }
 
     @Override
-    @Transactional
-    @Scheduled(cron = "0 14 15 26 * ?")
-    public void deleteExpiredTokens() {
-        log.warn("Deleting expired token");
-        List<String> ids = invalidatedTokenRepository.findExpiredToken(LocalDateTime.now());
-        invalidatedTokenRepository.deleteAllById(ids);
+    public AuthenticationResponse refreshToken(RefreshToken request) throws ParseException, JOSEException{
+        var signedToken = verifyToken(request.getToken(), true);
+
+        String jit = signedToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signedToken.getJWTClaimsSet().getExpirationTime();
+
+        long ttl = redisInvalidTokenService.calculateTtl(expiryTime);
+        redisInvalidTokenService.addToBlacklist(jit, ttl);
+
+        String username = signedToken.getJWTClaimsSet().getSubject();
+        if(!userRepository.existsByUsername(username))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .isAuthenticated(true)
+                .build();
     }
 
     private String buildScope(User user) {
