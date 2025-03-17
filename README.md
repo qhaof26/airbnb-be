@@ -1,9 +1,9 @@
 <h1 align="center">AirClone</h1>
 <h4 align="center">Backend system provides restful API for web.</h4>
 
-SonarQube:
+[Sonarcloud](https://sonarcloud.io/project/overview?id=qhaof26_airbnb-be) | 
+[Docker Hub](https://hub.docker.com/r/qhaofdev/airclone-app)
 
-Docker hub:
 ## Introduction
 Developed a full-stack web application inspired by Airbnb using Spring Boot backend with Angular frontend.
 
@@ -41,14 +41,14 @@ Developed a full-stack web application inspired by Airbnb using Spring Boot back
     - Role-based access control (GUEST, HOST, ADMIN).
     - Redis-based token blacklisting for secure logout
 - Core Features :
-    - Property listing management.
     - Booking system.
-    - User profile management.
-    - Search and filter functionalities.
     - Geospatial search for nearby properties.
+    - Search and filter functionalities.
+    - Listing management.
+    - User profile management.
+
 - Technical Highlights :
     - Backend: Spring Boot, Spring Security, JPA/Hibernate
-    - Frontend: Angular
     - Database: PostgreSQL
     - Caching: Redis for performance optimization
     - Email Service: SMTP integration for user verification
@@ -111,7 +111,7 @@ docker-compose up -d
 If you don't want to build the image yourself, you can use the pre-built image from Docker Hub:
 
 ```
-docker pull yourusername/airclone:latest
+docker pull qhaofdev/airclone-app
 ```
 
 ## API Documentation
@@ -123,9 +123,8 @@ The documentation provides detailed information about all available endpoints, r
 
 ## Contact
 
-[//]: # (For any questions or suggestions, please contact:)
+For any questions or suggestions, please contact:
 
-[//]: # ()
-[//]: # (- Email: qhaofdev@gmail.com)
+- Email: qhaofdev@gmail.com
 
-[//]: # (- GitHub: https://github.com/qhaof26)
+- GitHub: https://github.com/qhaof26
