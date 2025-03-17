@@ -85,28 +85,6 @@ public class ListingSpecification {
         };
     }
 
-    // public static Specification<Listing> filterByKeyword(String keyword) {
-    // return (root, query, criteriaBuilder) -> {
-    // if(keyword == null || keyword.isEmpty()){
-    // return criteriaBuilder.conjunction();
-    // }
-    // Join<Listing, Ward> wardJoin = root.join("ward");
-    // Join<Ward, District> districtJoin = wardJoin.join("district");
-    // Join<District, Province> provinceJoin = districtJoin.join("province");
-    //
-    // return criteriaBuilder.or(
-    // criteriaBuilder.like(criteriaBuilder.lower(root.get("listingName")), "%" +
-    // keyword.toLowerCase() + "%"),
-    // criteriaBuilder.like(criteriaBuilder.lower(provinceJoin.get("name")), "%" +
-    // keyword.toLowerCase() + "%"),
-    // criteriaBuilder.like(criteriaBuilder.lower(districtJoin.get("name")), "%" +
-    // keyword.toLowerCase() + "%"),
-    // criteriaBuilder.like(criteriaBuilder.lower(wardJoin.get("name")), "%" +
-    // keyword.toLowerCase() + "%")
-    // );
-    // };
-    // }
-
     public static Specification<Listing> filterListings(String keyword, String categoryName, Set<String> amenityNames,
             Integer numBeds, Integer numBedrooms, Integer numBathrooms, Integer guestCount,
             BigDecimal minPrice, BigDecimal maxPrice) {

@@ -21,9 +21,6 @@ public class UserSpecification {
             }
             root.fetch("roles", JoinType.LEFT);
             return criteriaBuilder.equal(root.get("roles").get("roleName"), roleName);
-
-            // Join<User, Role> roles = root.join("roles"); n+1 query problems
-            // return criteriaBuilder.equal(roles.get("roleName"), roleName);
         };
     }
 

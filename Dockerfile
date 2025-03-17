@@ -1,17 +1,20 @@
-FROM openjdk:17
+FROM maven:3.9.8-amazoncorretto-17 AS build
 
-ARG FILE_JAR=target/airbnb-0.0.1-SNAPSHOT.jar
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
 
-ADD ${FILE_JAR} api-airbnb.jar
+RUN mvn package -DskipTests
 
-ENTRYPOINT ["java", "-jar", "api-airbnb.jar"]
+FROM amazoncorretto:17.0.14
 
-EXPOSE 8080
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Create image
-# docker build -t my-airbnb-app .
+# docker build -t airbnb-app .
 
-#Run container from image
+# Run container from image
 # docker run -p 8080:8080 airbnb
-
-# => Define image Docker

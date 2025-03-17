@@ -1,5 +1,5 @@
 ## JWT
-jwt:
-  signerKey: "ZinhHS7ljmOlQ7DVWYNngT0GwTgnrXxttwh8HZNKUVvmQE6I2Wzgwnx8rEt+/Tgp"
-  valid-duration: 7200 #in second
-  refreshable-duration: 72000 #in second
+#jwt:
+#  signerKey: "ZinhHS7ljmOlQ7DVWYNngT0GwTgnrXxttwh8HZNKUVvmQE6I2Wzgwnx8rEt+/Tgp"
+#  valid-duration: 7200 #in second
+#  refreshable-duration: 72000 #in second
