@@ -6,6 +6,8 @@ import com.project.airbnb.dto.response.APIResponse;
 import com.project.airbnb.dto.response.BookingResponse;
 import com.project.airbnb.dto.response.PageResponse;
 import com.project.airbnb.service.Booking.BookingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/bookings")
+@Tag(name = "Booking")
 public class BookingController {
         private final BookingService bookingService;
 
+        @Operation(summary = "Get booking detail", description = "Send a request via this API to get booking information")
         @GetMapping("/{bookingId}")
         public APIResponse<BookingResponse> getBookingById(@PathVariable String bookingId) {
                 return APIResponse.<BookingResponse>builder()
@@ -28,6 +32,7 @@ public class BookingController {
                                 .build();
         }
 
+        @Operation(summary = "Get booking of the guest", description = "Send a request via this API to get booking of the guest")
         @GetMapping("/guest")
         public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingsOfGuest(
                         @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
@@ -39,6 +44,7 @@ public class BookingController {
                                 .build();
         }
 
+        @Operation(summary = "Get booking of the host", description = "Send a request via this API to get booking of the host")
         @GetMapping("/host")
         public APIResponse<PageResponse<List<BookingResponse>>> getAllBookingOfHost(
                         @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
@@ -50,6 +56,7 @@ public class BookingController {
                                 .build();
         }
 
+        @Operation(summary = "Add new booking", description = "Send a request via this API to add new booking")
         @PostMapping
         public APIResponse<BookingResponse> createBooking(@RequestBody BookingCreationRequest request) {
                 return APIResponse.<BookingResponse>builder()
@@ -59,6 +66,7 @@ public class BookingController {
                                 .build();
         }
 
+        @Operation(summary = "Update status of booking", description = "Send a request via this API to update status of booking")
         @PatchMapping
         public APIResponse<BookingResponse> updateListing(@RequestBody BookingUpdateRequest request) {
                 return APIResponse.<BookingResponse>builder()

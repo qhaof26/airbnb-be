@@ -4,10 +4,8 @@ import com.project.airbnb.constant.PredefinedRole;
 import com.project.airbnb.dto.request.OAuth2UserInfo;
 import com.project.airbnb.dto.request.OAuth2UserInfoFactory;
 import com.project.airbnb.dto.response.AuthenticationResponse;
-import com.project.airbnb.dto.response.UserResponse;
 import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
-import com.project.airbnb.mapper.UserMapper;
 import com.project.airbnb.model.Role;
 import com.project.airbnb.model.User;
 import com.project.airbnb.repository.RoleRepository;
@@ -35,7 +33,6 @@ public class OAuth2Service extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final TokenService tokenService;
-    private final UserMapper userMapper;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

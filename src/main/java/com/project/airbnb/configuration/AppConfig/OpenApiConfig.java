@@ -15,7 +15,7 @@ import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
-    //http://localhost:8080/swagger-ui/index.html
+    //http://localhost:8080/api-docs
     @Bean
     public OpenAPI customOpenAPI() {
         Server devServer = new Server();

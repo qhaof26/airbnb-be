@@ -5,6 +5,8 @@ import com.project.airbnb.dto.response.APIResponse;
 import com.project.airbnb.dto.response.PageResponse;
 import com.project.airbnb.dto.response.RoleResponse;
 import com.project.airbnb.service.Role.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/roles")
+@Tag(name = "Role")
 public class RoleController {
     private final RoleService roleService;
 
+    @Operation(summary = "Get role by role name", description = "Send a request via this API to get role by role name")
     @GetMapping("/{roleName}")
     public APIResponse<RoleResponse> fetchRoleById(@PathVariable String roleName) {
         return APIResponse.<RoleResponse>builder()
@@ -27,7 +31,8 @@ public class RoleController {
                 .build();
     }
 
-    @GetMapping()
+    @Operation(summary = "Get list of role", description = "Send a request via this API to get list of role")
+    @GetMapping
     public APIResponse<PageResponse<List<RoleResponse>>> fetchAllRole(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
             @RequestParam(defaultValue = "10", required = false) int pageSize) {
@@ -38,6 +43,7 @@ public class RoleController {
                 .build();
     }
 
+    @Operation(summary = "Create new role", description = "Create new role")
     @PostMapping
     public APIResponse<RoleResponse> createRole(@RequestBody RoleCreationRequest request) {
         return APIResponse.<RoleResponse>builder()
@@ -47,6 +53,7 @@ public class RoleController {
                 .build();
     }
 
+    @Operation(summary = "Delete role permanently", description = "Send a request via this API to delete role permanently")
     @DeleteMapping("/{roleId}")
     public APIResponse<Boolean> removeRole(@PathVariable Long roleId) {
         return APIResponse.<Boolean>builder()

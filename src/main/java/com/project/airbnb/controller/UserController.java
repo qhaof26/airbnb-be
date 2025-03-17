@@ -6,6 +6,8 @@ import com.project.airbnb.dto.response.CloudinaryResponse;
 import com.project.airbnb.dto.response.PageResponse;
 import com.project.airbnb.dto.response.UserResponse;
 import com.project.airbnb.service.User.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,11 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/users")
+@Tag(name = "User")
 public class UserController {
     private final UserService userService;
 
+    @Operation(summary = "Create new user", description = "Send a request via this API to create new user")
     @PostMapping
     public APIResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
         return APIResponse.<UserResponse>builder()
@@ -33,7 +37,8 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/block/{userId}")
+    @Operation(summary = "Block user", description = "Send a request via this API to block user")
+    @PatchMapping("/block/{userId}")
     public APIResponse<Boolean> blockUser(@PathVariable Long userId){
         return APIResponse.<Boolean>builder()
                 .status(HttpStatus.OK.value())
@@ -42,6 +47,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Change status user", description = "Send a request via this API to change status user")
     @PatchMapping("/change-status/{userId}")
     public APIResponse<UserResponse> unBlockUser(@PathVariable Long userId, @RequestParam(required = false) boolean status
     ){
@@ -52,6 +58,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get list of user active", description = "Send a request via this API to get list of user active")
     @GetMapping("/active")
     public APIResponse<PageResponse<List<UserResponse>>> getAllUserActive(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
@@ -65,6 +72,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get list of user block", description = "Send a request via this API to get list of user block")
     @GetMapping("/block")
     public APIResponse<PageResponse<List<UserResponse>>> getAllUserBlock(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
@@ -78,6 +86,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Search user by keyword", description = "Send a request via this API to search user by keyword")
     @GetMapping("/search")
     public APIResponse<PageResponse<List<UserResponse>>> searchUserByKeyword(
             @Min(value = 1) @RequestParam(defaultValue = "1", required = false) int pageNo,
@@ -93,6 +102,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Filter user by keyword, role,...", description = "Send a request via this API to filter user by keyword, role,...")
     @GetMapping("/filters")
     public APIResponse<PageResponse<List<UserResponse>>> filterUsers(@RequestParam Map<Object, String> filters){
         return APIResponse.<PageResponse<List<UserResponse>>>builder()
@@ -102,6 +112,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Get user detail", description = "Send a request via this API to get user detail")
     @GetMapping("/{userId}")
     public APIResponse<UserResponse> getUserById(@PathVariable Long userId){
         return APIResponse.<UserResponse>builder()
@@ -111,6 +122,7 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "Upload avatar", description = "Send a request via this API to upload avatar")
     @PostMapping("/images")
     public APIResponse<CloudinaryResponse> uploadImage(
             @RequestParam("id") Long id,
