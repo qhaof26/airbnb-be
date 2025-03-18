@@ -12,24 +12,19 @@ import com.project.airbnb.dto.response.IntrospectResponse;
 import com.project.airbnb.exception.AppException;
 import com.project.airbnb.exception.ErrorCode;
 import com.project.airbnb.model.User;
-import com.project.airbnb.repository.InvalidatedTokenRepository;
 import com.project.airbnb.repository.UserRepository;
 import com.project.airbnb.service.Redis.RedisInvalidTokenService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
