@@ -18,3 +18,5 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Run container from image
 # docker run -p 8080:8080 airbnb
+
+# docker build -t qhaofdev/airclone-app:1.0.1 .

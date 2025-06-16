@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
+    image: qhaofdev/airclone-app:1.0.1
     container_name: airbnb-backend
     ports:
       - "8080:8080"
