@@ -1,6 +1,7 @@
-#target
-#.idea/
-#*.iml
 #*.iws
-#target/
 #node_modules/
+target/
+.git/
+.idea/
+*.iml
+*.log
